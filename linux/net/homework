@@ -1,0 +1,55 @@
+OSI七层参考模型
+TCP/IP四(五)层参考模型
+TCP/IP协议栈
+
+硬件地址    MAC地址 00-00-00-00-00-00
+IP地址      
+    点分法表示： 192.168.0.123
+    s = "192.168.123.56";
+    atoi(s) << 24 | atoi(strchr(s, '.') + 1) << 16 | atoi(strchr(strchr(s, '.') + 1, '.') + 1) << 8 | atoi(strrchr(s, '.') + 1);
+    二进制表示： 192 << 24 | 168 << 16 ｜ 0 <<　８|　123
+     == 1100 0000 1010 1000 0000 0000 0111 1011
+     == 3232235643
+
+    网络部分  主机部分
+    IP地址分类  A B C D E
+    特殊IP地址  网络地址 广播地址 回环地址 本机本身
+    inet_addr()     点分法转化二进制
+    inet_ntoa()     二进制转化点分法
+
+子网掩码    255.255.255.0 继续划分子网
+
+端口号  16位无符号的整型
+    1024以内的端口为系统保留
+
+字节序
+    大端        网络传输使用大端字节序
+    小端
+    htons htonl ntohs ntohl
+
+网络工具使用：
+    ping ifconfig netstat arp 
+    tcpdump wireshark(GUI)
+
+    安装：yum install wrieshark*
+
+套接字socket:
+    socket
+    bind
+    recvfrom
+    sendto
+udp tcp local 
+broadcast select/poll
+
+1.网络传输文件
+    1. 数据是否到达目的地   接收和发送回应数据包
+    2. 服务器要支持同时处理多个客户端 开线程
+    3. 多个客户端连接数据错乱   给每个客户端创建独立套接字
+    4. 套接字缓冲区溢出会覆盖数据,丢失数据
+
+        接收和发送回应数据包，同步操作
+    实现scp功能 客户端 服务器(TCP)
+        ./a.out 2.2.2.9:/tftpboot/OS.rmvb ./OS.rmvb
+        password:
+
+2.把五子棋改成网络版(UDP)

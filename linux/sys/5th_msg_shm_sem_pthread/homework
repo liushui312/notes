@@ -1,0 +1,7 @@
+1. 测试线程函数
+
+2. 完善管道两个终端聊天
+
+3. 实现mplayer编程接口封装
+    cp fa.wmv /tftpboot/
+    ./mp

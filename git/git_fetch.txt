@@ -1,0 +1,5 @@
+更新远程代码到本地仓库
+
+  1. git fetch origin master:temp
+  2. git diff temp
+  3. git merge temp

@@ -1,0 +1,13 @@
+手工制作U盘启动
+
+1. 用 fdisk 分一个区, 如， /dev/sdb2
+
+2. 烧写mbr
+    dd if=mbr.bin of=/dev/sdb size=446 count=1
+
+3. 解压ubuntu镜像， 复制 casper .disk isolinux 和 ubuntu镜像到分区
+
+4. 将isoliunx/ 改成 syslinux/, isolinux/目录下的 isolinux.bin、 isolinux.cfg 改成 syslinux.bin、syslinux.cfg 
+
+5. 安装syslinux 引导加载程序
+    syslinux --install /dev/sdb2

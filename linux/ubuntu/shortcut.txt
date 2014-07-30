@@ -1,0 +1,21 @@
+
+终端的快捷键:
+Ctrl + Shift + T: 在 Nautilus 打开新的 Tab
+Ctrl + Shift + W: 关闭当前 Nautilus 窗口
+
+Ctrl+C：结速当前终端执行的程序
+Ctrl+A：将光标移动到命令行的开始处。
+Ctrl+E：将光标移动到命行令的结尾处。
+Ctrl+U：删除行首到光标出的字符。
+Ctrl+Z：把当前进程送到后台处理。
+Ctrl+PagUp：
+Ctrl+PagDn：
+Ctrl+Alt+F1：切换到第一个文本终端。在Linux下你可以有多达六个不同的终端。
+Ctrl+Alt+F7：切换到第一个图形用户界面（一般来说X-window在第七个终端）。
+CTRL+INSERT ：复制
+SHIFT+INSERT：粘贴 
+
+Ctrl+Shift"+"：放大文字。
+Ctrl+"-"：缩小文字
+
+Gnome下的快捷键：

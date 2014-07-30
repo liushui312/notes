@@ -1,0 +1,27 @@
+推送远程仓库：
+$ git push [remoteName] [localBranchName];
+
+$git push origin test:master    // 提交本地test分支作为远程的master分支
+$git push origin test:test      // 提交本地test分支作为远程的test分支
+
+git config http.postBuffer [bytes];  524288000
+
+
+1.issue
+
+1）git push错误；fatal: The remote end hung up unexpectedly
+
+原因：git clone git://xxx，这是一种只读方式来获取代码，无法进行git push。
+解决方法：用git clone git@xxx，这是一种可以进行读和代码提交（git push）的方式获取源码，但需要进行密码确认。
+
+
+2）error: RPC failed; result=22,HTTP code = 411
+
+If you attempt to push a large set of changes to a Git repository with HTTP or HTTPS, you may get an error message such as error: RPC failed; result=22, HTTP code = 411. This is caused by a Git configuration default which limits certain HTTP operations to 1 megabyte.
+
+git config http.postBuffer *bytes*.  524288000
+
+
+Does the push operation take longer than the configured timeout of your webserver? Or is the size of the data to push larger than the maximum post size configured in your webserver
+
+

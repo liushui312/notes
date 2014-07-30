@@ -1,0 +1,8 @@
+1.获取root权限
+
+2.下载或编译busybox的binary 
+http://www.busybox.net/downloads/binaries 
+ 
+3.执行android_busybox.sh脚本
+
+

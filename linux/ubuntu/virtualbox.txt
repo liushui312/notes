@@ -1,0 +1,60 @@
+创建虚拟机: http://www.linuxidc.com/Linux/2010-09/28435.htm
+
+共享文件夹:
+  1. Host+D
+  2. 先关闭虚拟机，打开虚拟机设置，切换到共享文件夹，点击右边的添加按钮
+  3. 打开虚拟机，选择映射网络驱动器，文件夹：\\vboxsvr\xx 
+
+------------------------------------------------------------------------
+开启usb设备支持
+  1. 安装扩展包
+  2. sudo adduser liushui vboxusers
+ 
+
+  1.增加一个名为usbfs的用户组,  sudo groupadd usbfs
+  2.增加当前用户到工作组, sudo adduser liushui usbfs
+  3.得到usbfs组的id, cat /etc/group | grep usbfs
+  4.修改 /etc/fstab 文件, sudo vim /etc/fstab 在文件的末尾增加一行
+      none /sys/bus/usb usbfs devgid=1001,devmode=664 0 0
+      其中 devgid 为 vboxusers组id
+  5.为 /sys/bus/usb 增加权限
+      sudo chmod 777 /proc/bus/usb
+      sudo chown liushui /proc/bus/usb
+  6.重启电脑
+  7.获取usb设备的VendorId和ProductId	
+	VBoxManage list usbhost
+  8.配置virtualbox
+	开启usb控制器和usb2.0控制器，然后点击“从设备列表中添加筛选器”
+相关设置会自动的添加到筛选器列表中。
+
+---------------------------------------------------------------------------
+设备-> 共享粘帖板-> 双向
+---------------------------------------------------------------------------
+
+设备：
+  Host+D               安装增强功能
+
+控制：
+  Host+F               全屏模式(F)
+  Host+L               无缝模式(l)
+  Host+A               自动调整窗口大小(A)
+  Host+G               自动调整显示尺寸(G)
+  Host+I               禁止自动捕获鼠标(M)
+  Host+Del             发送 Ctrl-Alt-Del (E)
+  Host+S               生成备份(S)
+  Host+N               运行状态(n)
+  Host+R               重启(R)
+  Host+P               暂停(P)
+  Host+H               正常关闭(H)
+  Host+Q               退出(C)
+
+视图：
+  Host+C               切换到自动缩放模式           ***
+
+  Host+F               切换到全屏模式
+  Host+L               切换到无缝模式
+  Host+A               切换到自动调整窗口大小
+  Host+G               切换到自动调整显示尺寸
+
+（以上操作，按一次切换到相应的模式，再按一次则退回到窗口模式，非窗口模式下的菜单是隐藏的，即看不到“控制”，“视图”，“设备”，“帮助”这四个按钮。）
+

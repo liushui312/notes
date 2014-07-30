@@ -1,0 +1,91 @@
+
+######################################################################################
+
+主机操作:
+
+写u-boot到SD卡:
+	cp ~/up6410/tools/sd_write /sbin
+	
+	umount /dev/sdb1
+	sd_write /dev/sdb ~/up6410/images/u-boot-sd.bin
+	sync
+
+minicom:
+	配置:
+		minicom -s
+		Serial port setup
+			
+			| A -    Serial Device      : /dev/ttyS0 或 /dev/ttyUSB0      	    	|
+			| B - Lockfile Location     : /var/lock                                 |
+			| C -   Callin Program      :                                           |
+			| D -  Callout Program      :                                           |
+			| E -    Bps/Par/Bits       : 115200 8N1                                |
+			| F - Hardware Flow Control : No                                        |
+			| G - Software Flow Control : No                                        |
+			|                                                                       |
+			|    Change which setting?                                              |
+		
+		Save setup as dfl
+
+		Exit from Minicom
+	
+	启动:
+		minicom
+
+	命令:
+		ctrl a + q   quit		
+		ctrl a + w   lineWrap
+		ctrl a + z   help
+
+
+配置tftp服务器:
+	setup 
+	chkconfig tftp on
+	vim /etc/xinetd.d/tftp
+		disable         = no
+
+	vim /etc/xinetd.d/tftp
+		-s /tftpboot
+		或者
+		-s /var/lib/tftpboot
+
+	service xinetd restart
+	cp ~/up6410/images/* /tftpboot
+
+解压根文件系统
+	mkdir /rootfs
+	chmod 777 rootfs
+	tar xf ~/up6410/src/qt_rootfs.tar -C /rootfs
+
+
+配置nfs服务器:
+	vim /etc/exports
+		/rootfs *(rw,sync,no_root_squash)
+	chkconfig nfs on
+	service nfs restart
+
+######################################################################################
+
+u-boot操作:
+
+
+设置内核启动参数:
+	setenv bootargs root=/dev/nfs rw nfsroot=主机IP:/nfsroot ip=开发板IP console=ttySAC0,115200 mem=128M
+	save
+	注意： 主机IP和开发板IP
+
+
+从主机下载内核到内存：
+	tftp 0x50008000 zImage
+
+
+启动内核:	
+	bootm 0x50008000
+
+
+自动启动:
+	set bootcmd tftp 0x50008000 zImage\; bootm 0x50008000
+	save
+
+
+

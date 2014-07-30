@@ -1,0 +1,53 @@
+
+git config <section>.<key> <value>
+
+git config --system
+系统级配置文件：/etc/gitconfig
+
+git config --global
+全局设置文件：~/.gitconfig
+
+git config
+单个设置文件：.git/config
+
+----------------------------------------------------------------------
+更改上一次提交的作者信息
+1.修改但当前作者信息
+2.git commit --amend --allow-empty --reset-author
+    --amend        修改上一次提交
+    --allow-empty  允许空白提交 
+    --reset-author 
+
+-----------------------------------------------------------------------
+版本库 .git (工作区的根目录)
+工作区
+
+显示版本库.git所在的位置：git rev-parse --git-dir
+在工作区的子目录中执行git命令时，会依次向上递归查找.git目录
+
+.git/
+  index记录了工作区文件的状态(实际上是暂存区的状态)
+
+------------------------------------------------------------------------
+
+工作区
+  |
+  | git add <file>
+  |
+暂存区
+  |                   
+  | git commit                 
+  |
+版本库
+
+git diff                    工作区和暂存区的差异
+git diff HEAD               工作区和HEAD(当前分支)的差异
+git diff --cached/--staged  暂存区和版本库的差异
+
+git checkout -- <file>      撤销文件中尚未提交的修改
+
+执行git status/git diff命令，扫描工作区改动时，先根据.git/index文件中记录的
+时间戳、长度等信息判断工作区文件是否改变
+    1.如果时间戳改变，说明文件可能被改变            -> 打开文件比较
+    2.如果没改变，则将该文件的新的时间戳记录到index
+

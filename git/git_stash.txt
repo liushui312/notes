@@ -1,0 +1,17 @@
+
+1）想pull最新代码，又不想加新commit，或者另外一种情况.
+2）为了fix 一个紧急的bug, 先stash, 返回到自己上一个commit, 改完bug之后再stash pop, 继续原来的工作.
+
+git stash：将当前未提交的工作存入Git工作栈中，时机成熟的时候再应用回来.
+
+$git stash save -a "message"
+$do some work
+$git stash pop
+
+
+git stash list; 打印当前的Git栈信息
+git stash pop stash@{id}
+
+删除stash。git stash drop <stash@{id}>
+如果不加stash编号，默认的就是删除最新的，也就是编号为0的
+git  stash clear 是清除所有stash

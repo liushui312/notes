@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+
+<!-- Automatically compile the remote source code. -->
+<project name="compile" default="sshexec" basedir=".">  
+
+
+<!--        kernel build config
+     platform:       board:            module:                        
+     0. android      0. polaris-c1     1. boot                         
+     1. dragonboard  1. polaris-c2     2. buildroot                    
+     2. linux        2. polaris-evb    3. kernel                       
+                     3. polaris-p1     4. uboot             
+                     4. polaris-p1gms  5. clean             
+                     5. polaris-p2     6. mrproer           
+                     6. polaris-p4     7. distclean         -->
+    <property name="chip" value="sun8iw3p1"/>
+    <property name="platform" value="android"/>  
+    <property name="board" value="polaris_p4"/>
+    <property name="kernel" value="linux-3.4"/>
+    <property name="module" value="all"/>
+
+    <!-- android build config -->
+    <property name="lunch" value="polaris_p4-eng"/>
+
+    <!-- compile server config -->
+    <property name="serverip" value="172.20.1.86"/>
+    <property name="username" value="zhengjinyong"/>
+    <property name="password" value="tobemyself"/>
+    <property name="path" value="~/a23_test"/>
+    <property name="cmd" value="cd ${path}/lichee;repo sync;cp linux-3.4/arch/arm/configs/sun8iw3p1smp_android_defconfig linux-3.4/.config;./build.sh;cd ../android;repo sync;source build/envsetup.sh;lunch ${lunch};extract-bsp;make -j16;pack -d"/>
+
+    <target name="scp_buildconfig">  
+
+        <replaceregexp byline="true"> 
+            <regexp pattern="platform=.*"/> 
+            <substitution expression="platform=${platform}"/> 
+            <fileset file=".buildconfig"/> 
+        </replaceregexp>
+        <replaceregexp byline="true"> 
+            <regexp pattern="board=.*"/> 
+            <substitution expression="board=${board}"/> 
+            <fileset file=".buildconfig"/> 
+        </replaceregexp>
+        <replaceregexp byline="true"> 
+            <regexp pattern="module=.*"/> 
+            <substitution expression="module=${module}"/> 
+            <fileset file=".buildconfig"/> 
+        </replaceregexp>
+
+        <scp file=".buildconfig" todir="${username}:${password}@${serverip}:${path}/lichee/buildroot/scripts"  trust="true"/>
+    </target>
+
+    <target name="sshexec" depends="scp_buildconfig">
+
+	    <sshexec host="${serverip}" username="${username}" 
+            password="${password}" trust="true" command="${cmd}"/>
+
+    </target>
+    
+</project>  

@@ -1,0 +1,22 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+
+[user]
+    name = jinyong.zheng
+    email = jinyong.zheng@timehold.com.hk
+    
+[alias]
+    br = branch
+    co = checkout
+    ci = commit
+    st = status
+    af = am --ignore-whitespace --3way
+
+[color]
+    ui = auto
+
+[http]
+	postBuffer = 524288000

@@ -1,0 +1,11 @@
+git clean 删除未跟踪文件
+
+-f 删除文件
+-d 删除目录和文件
+-n 察看将执行的动作
+
+git clean -fn   <==> git clean -n
+git clean -dfn  <==> git clean -dn
+
+git clean -f 
+git clean -df   <==> git clean -d

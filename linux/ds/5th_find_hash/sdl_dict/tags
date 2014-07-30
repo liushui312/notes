@@ -1,0 +1,89 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.6	//
+DEBUG0	llist.h	31;"	d	language:C++
+DEBUG0	sdl.h	31;"	d	language:C++
+DEBUG1	llist.h	32;"	d	language:C++
+DEBUG1	sdl.h	32;"	d	language:C++
+ERRP	llist.h	34;"	d	language:C++
+ERRP	sdl.h	34;"	d	language:C++
+ERR_INIT	sdl.h	12;"	d	language:C++
+ERR_MIXER	sdl.h	15;"	d	language:C++
+ERR_TTF	sdl.h	14;"	d	language:C++
+ERR_VIDEO	sdl.h	13;"	d	language:C++
+FALSE	sdl.h	10;"	d	language:C++
+LLIST	llist.h	/^typedef struct llist_t LLIST;$/;"	t	language:C++	typeref:struct:llist_t
+MAGIC	llist.h	43;"	d	language:C++
+MIXER_CHUNK	sdl.h	29;"	d	language:C++
+MIXER_DISABLE	sdl.h	27;"	d	language:C++
+MIXER_MUSIC	sdl.h	28;"	d	language:C++
+NUM	main.c	4;"	d	language:C	file:
+TRUE	sdl.h	9;"	d	language:C++
+__KYO_SDL_H__	sdl.h	2;"	d	language:C++
+__LLIST_H__	llist.h	2;"	d	language:C++
+bpp	sdl.h	/^    Uint32 bpp;$/;"	m	language:C++	struct:sdl_t
+cn	main.c	/^    char *cn;$/;"	m	language:C	struct:data_t	file:
+data	llist.h	/^    void *data;$/;"	m	language:C++	struct:node_t
+data_t	main.c	/^struct data_t {$/;"	s	language:C	file:
+del_node	llist.c	/^static struct node_t *del_node(struct node_t *val, llist_destroy_t *destroy)$/;"	f	language:C	file:	signature:(struct node_t *val, llist_destroy_t *destroy)
+destroy	llist.h	/^    llist_destroy_t *destroy;$/;"	m	language:C++	struct:llist_t
+dict_destroy	main.c	/^void dict_destroy(const void *data)$/;"	f	language:C	signature:(const void *data)
+dict_exit	main.c	/^void dict_exit(struct dict_t *dict)$/;"	f	language:C	signature:(struct dict_t *dict)
+dict_init	main.c	/^int dict_init(const char *path, struct dict_t *dict)$/;"	f	language:C	signature:(const char *path, struct dict_t *dict)
+dict_t	main.c	/^struct dict_t {$/;"	s	language:C	file:
+dis	main.c	/^    SDL_Surface *dis[NUM]; $/;"	m	language:C	struct:dict_t	file:
+draw_box	sdl.c	/^void draw_box(SDL_Surface *dst, Uint32 x, Uint32 y, Uint32 w, Uint32 h, Uint32 border, Uint32 color, Uint32 border_color)$/;"	f	language:C	signature:(SDL_Surface *dst, Uint32 x, Uint32 y, Uint32 w, Uint32 h, Uint32 border, Uint32 color, Uint32 border_color)
+draw_circle	sdl.c	/^void draw_circle(SDL_Surface *dst, Uint32 x, Uint32 y, Uint32 r, Uint32 color)$/;"	f	language:C	signature:(SDL_Surface *dst, Uint32 x, Uint32 y, Uint32 r, Uint32 color)
+draw_pixel	sdl.c	/^void draw_pixel(SDL_Surface *dst, Uint32 x, Uint32 y, Uint32 size, Uint32 color)$/;"	f	language:C	signature:(SDL_Surface *dst, Uint32 x, Uint32 y, Uint32 size, Uint32 color)
+draw_rect	sdl.c	/^void draw_rect(SDL_Surface *dst, Uint32 x, Uint32 y, Uint32 w, Uint32 h, Uint32 color)$/;"	f	language:C	signature:(SDL_Surface *dst, Uint32 x, Uint32 y, Uint32 w, Uint32 h, Uint32 color)
+en	main.c	/^    char *en;$/;"	m	language:C	struct:data_t	file:
+find	llist.h	/^    LLIST *find;$/;"	m	language:C++	struct:llist_t
+font	main.c	/^    TTF_Font *font;$/;"	m	language:C	struct:dict_t	file:
+fullscreen	sdl.h	/^    Uint32 fullscreen:1;$/;"	m	language:C++	struct:sdl_t
+handle	main.c	/^    LLIST *handle;$/;"	m	language:C	struct:dict_t	file:
+head	llist.h	/^    struct node_t head;$/;"	m	language:C++	struct:llist_t	typeref:struct:llist_t::node_t
+height	sdl.h	/^    Uint32 height;$/;"	m	language:C++	struct:sdl_t
+init_data	llist.c	/^static struct node_t *init_data(void *data, int size)$/;"	f	language:C	file:	signature:(void *data, int size)
+input	main.c	/^    char input[128];$/;"	m	language:C	struct:dict_t	file:
+llist_cmp_t	llist.h	/^typedef int (llist_cmp_t)(const void *, const void *);$/;"	t	language:C++
+llist_create	llist.c	/^LLIST *llist_create(int size, llist_destroy_t *destroy, llist_store_t *store)$/;"	f	language:C	signature:(int size, llist_destroy_t *destroy, llist_store_t *store)
+llist_delete	llist.c	/^int llist_delete(void *key, llist_cmp_t *cmp, LLIST *handle)$/;"	f	language:C	signature:(void *key, llist_cmp_t *cmp, LLIST *handle)
+llist_delete_all	llist.c	/^int llist_delete_all(void *key, llist_cmp_t *cmp, LLIST *handle)$/;"	f	language:C	signature:(void *key, llist_cmp_t *cmp, LLIST *handle)
+llist_destroy	llist.c	/^void llist_destroy(LLIST **handle)$/;"	f	language:C	signature:(LLIST **handle)
+llist_destroy_t	llist.h	/^typedef void (llist_destroy_t)(const void *);$/;"	t	language:C++
+llist_find	llist.c	/^void *llist_find(void *key, llist_cmp_t *cmp, LLIST *handle)$/;"	f	language:C	signature:(void *key, llist_cmp_t *cmp, LLIST *handle)
+llist_find_all	llist.c	/^LLIST *llist_find_all(void *key, llist_cmp_t *cmp, LLIST *handle)$/;"	f	language:C	signature:(void *key, llist_cmp_t *cmp, LLIST *handle)
+llist_find_travel	llist.c	/^void llist_find_travel(llist_op_t *op, LLIST *handle)$/;"	f	language:C	signature:(llist_op_t *op, LLIST *handle)
+llist_insert_append	llist.c	/^int llist_insert_append(void *data, LLIST *handle)$/;"	f	language:C	signature:(void *data, LLIST *handle)
+llist_insert_prepend	llist.c	/^int llist_insert_prepend(void *data, LLIST *handle)$/;"	f	language:C	signature:(void *data, LLIST *handle)
+llist_insert_sort	llist.c	/^int llist_insert_sort(void *data, llist_cmp_t *cmp, LLIST *handle)$/;"	f	language:C	signature:(void *data, llist_cmp_t *cmp, LLIST *handle)
+llist_load	llist.c	/^LLIST *llist_load(const char *path, llist_load_t *load)$/;"	f	language:C	signature:(const char *path, llist_load_t *load)
+llist_load_t	llist.h	/^typedef int (llist_load_t)(void *, FILE *fp);$/;"	t	language:C++
+llist_op_t	llist.h	/^typedef void (llist_op_t)(const void *);$/;"	t	language:C++
+llist_set	llist.c	/^void llist_set(llist_destroy_t *destroy, llist_store_t *store, LLIST *handle)$/;"	f	language:C	signature:(llist_destroy_t *destroy, llist_store_t *store, LLIST *handle)
+llist_sort	llist.c	/^int llist_sort(llist_cmp_t *cmp, LLIST *handle)$/;"	f	language:C	signature:(llist_cmp_t *cmp, LLIST *handle)
+llist_store	llist.c	/^int llist_store(const char *path, LLIST *handle)$/;"	f	language:C	signature:(const char *path, LLIST *handle)
+llist_store_t	llist.h	/^typedef int (llist_store_t)(const void *, FILE *fp);$/;"	t	language:C++
+llist_t	llist.h	/^struct llist_t {$/;"	s	language:C++
+llist_travel	llist.c	/^void llist_travel(llist_op_t *op, LLIST *handle)$/;"	f	language:C	signature:(llist_op_t *op, LLIST *handle)
+load_dict	main.c	/^LLIST *load_dict(const char *path)$/;"	f	language:C	signature:(const char *path)
+main	main.c	/^int main(void)$/;"	f	language:C	signature:(void)
+mixer	sdl.h	/^    Uint32 mixer:2;$/;"	m	language:C++	struct:sdl_t
+next	llist.h	/^    struct node_t *next;$/;"	m	language:C++	struct:node_t	typeref:struct:node_t::node_t
+node_t	llist.h	/^struct node_t {$/;"	s	language:C++
+num	llist.h	/^    int num;$/;"	m	language:C++	struct:llist_t
+pic_load	sdl.c	/^SDL_Surface *pic_load(const char *path)$/;"	f	language:C	signature:(const char *path)
+prev	llist.h	/^    struct node_t *prev;$/;"	m	language:C++	struct:node_t	typeref:struct:node_t::node_t
+screen	sdl.h	/^    SDL_Surface *screen;$/;"	m	language:C++	struct:sdl_t
+sdl	main.c	/^    struct sdl_t sdl;$/;"	m	language:C	struct:dict_t	typeref:struct:dict_t::sdl_t	file:
+sdl_exit	sdl.c	/^void sdl_exit(struct sdl_t *sdl)$/;"	f	language:C	signature:(struct sdl_t *sdl)
+sdl_init	sdl.c	/^int sdl_init(struct sdl_t *sdl)$/;"	f	language:C	signature:(struct sdl_t *sdl)
+sdl_t	sdl.h	/^struct sdl_t {$/;"	s	language:C++
+show	main.c	/^void show(const void *data)$/;"	f	language:C	signature:(const void *data)
+size	llist.h	/^    int size;$/;"	m	language:C++	struct:llist_t
+store	llist.h	/^    llist_store_t *store;$/;"	m	language:C++	struct:llist_t
+ttf	sdl.h	/^    Uint32 ttf:1;$/;"	m	language:C++	struct:sdl_t
+width	sdl.h	/^    Uint32 width;$/;"	m	language:C++	struct:sdl_t

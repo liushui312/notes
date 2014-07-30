@@ -1,0 +1,1488 @@
+
+裸板驱动开发;
+内核驱动开发;
+
+app -> open -> /dev/* -> kernel -> driver -> 
+	   write   /dev/fb			   fb_driver
+	   								open_fb
+	   read	   /dev/usb			   usb_driver
+	   ioctl   ...					read_usb
+									ioctl_usb
+									...
+
+-> set_pix    -> lcd
+   set_272*480	 ....
+   set_....		 RGB
+				 I80
+				 601
+
+bootloader: grub 
+			vivi
+			redboot
+			u-boot
+			myboot
+
+==========================================
+1. 产品定位;(调研)
+   lcd sound usb MMC/SD ....
+2. 设计板子;  
+	选芯片; cpu arm -> arm7 arm9 arm11 ...
+			s3c6410 
+	选外设; LCD 272*480 RGB I80 ...
+			USB	....
+			TS  ....
+			MMC ....
+			WIFI....
+			CAM ....
+3. bootloader 
+
+x86:
+	EEPROM							   RAM 
+	bios -> 上电自检 -> 显卡 -> usb -> coms ->
+			电源;
+			内存;
+			硬盘;
+			....;
+			蜂鸣器报警;
+	启动方式 ->	第一个扇区 -> grub -> root -> 
+	硬盘;			0x55AA	
+	光驱;		512
+	usb;
+	网络;
+	...
+	
+	kernel -> 所有驱动初始化 -> swapper 0 ->
+
+	initrd.img -> /sbin/ -> init 1 -> ... -> 
+	
+	...
+
+arm:
+	s3c6410: nand flash		V
+			 SD				V
+			 nor flash
+			 one nand flash
+
+SD:
+	ROM(32K) -> MMC/SD初始化 -> COPY_FROM_SD 
+	-> SRAM(8K) -> 电源,时钟,内存,硬盘,串口,
+	-> COPY_FROM_SD -> DDR(128M) ->网卡,声卡...
+	-> root # -> kernel -> driver_init -> 
+	-> swapper -> init 1 -> ...
+
+NAND:
+	NAND CONTRL -> COPY_FROM_NAND -> SRAM(8K)
+	-> 电源,时钟,内存,硬盘,串口.. -> 
+	-> COPY_FROM_NAND -> DDR(128M) -> ....
+	-> root # -> kernel -> driver_init -> 
+	-> swapper -> init 1 -> ...
+
+JTAG OPENOCD OPENJTAG ICE
+
+
+chkconfig tftp on
+setup
+vim /etc/xinetd.d/tftp
+service xinetd restart
+
+u-boot:
+	tftp 0x50008000 zImage
+	bootm
+
+====================================
+开发环境:
+u-boot-sd.bin	--> sd
+zImage			--> tftp 
+					tftp 0x50008000 zImage
+					bootm
+rootfs			--> nfs
+nfsroot
+
+
+/dev/sdb1 -> 
+/dev/sdb
+	 sdc
+	 sda
+
+sd_write /dev/sdb u-boot-sd.bin
+				  ...
+done	...
+sync
+
+sd_write --> open read write --> 
+write --> kernel --> do_write -->
+sync
+
+bootsel --> sd
+
+minicom 	/dev/ttyUSB0
+
+minicom -s	
+
+==============================
+tftp 0x50008000 zImage
+bootm == goto 0x50008000
+bootargs --> 给内核传递参数(文件系统位置)
+
+setenv bootargs "root=/dev/nfs rw nfsroot=192.168.1.254:/nfs_root ip=192.168.1.253 console=ttySAC0,115200 mem=128M"
+
+=====================================
+x86 <- 01010101 
+	   add
+
+arm <- 01010101
+	   sub
+arm7 arm9 arm11
+armv1 armv2 armv3 armv4 armv5 armv6
+
+x86 -> gcc
+	   x86-linux-gcc
+arm -> gcc
+	   arm-linux-gcc
+
+交叉编译环境:
+	pc:编译程序;	
+	arm:执行程序;
+
+??
+arm: 编译;
+arm: 执行;
+
+/root/.bashrc		--> bash 
+/root/.bash_profile --> 
+/home/tmp/.bashrc	--> ..
+/etc/bashrc			--> 
+/etc/rc.local		--> 
+...
+
+arm-linux-gcc 
+
+1. 配置; 告诉makefile我们需要编译什么?
+
+2. 怎么编译? arm-linux-gcc
+   告诉makefile用什么编译工具编译??
+    CROSS_COMPILE = arm-linux-
+
+3. 编译; 安装; 
+	make 
+
+U-BOOT:
+	make up6410_sd_config or up6410_nand_config
+    CROSS_COMPILE = arm-linux-
+	make
+	
+KERNEL:
+	(make menuconfig/make xconfig/make gconfig...)
+	cp up6410_config .config
+	ARCH            := arm
+	CROSS_COMPILE	:= arm-linux-
+	make zImage
+
+
+	vmlinux.o -> ld -> vmlinux -> objcopy 
+	-> Image -> gzip -> zImage 	
+	-> uImage
+
+===========================
+busybox编译:
+   make clean
+   make distclean
+1. make menuconfig
+   make defconfig
+2. CROSS_COMPILE ?= arm-linux-
+   ARCH	= arm
+3. make 
+   make install
+
+===============================
+u-boot.bin 		--> nand flash
+kernel(zImage) 	--> nand flash
+rootfs     		--> nand flash
+
+1 -> 1		2^0
+10-> 2		2^1
+100-> 4		2^2
+1000-> 8	2^3
+10000-> 16	2^4
+0b1 00 0000 0000	2^10		1K
+0b1 0000 0000 0000 0000 0000 2^20	1M
+
+nand flash:
+	nand scrub	
+	nand bad
+	u-boot-nand.bin
+
+1. 先擦除;
+	nand scrub
+	nand erase
+2. 坏块;
+	nand bad
+3. 跳过坏块; u-boot.bin zImage 
+	nand bad
+	nand write ... offset + 0x20000
+4. 操作系统平台不用管坏块; 
+5. ECC校验;		1 bit
+				2 bit
+				...;
+
+u-boot:
+nand erase 0x0 		0x40000
+		   offset	size
+tftp 0x50000000 u-boot-nand.bin
+nand write 0x50000000 0x0 		0x40000
+		   addr		  offset	size
+
+kernel:
+nand erase 0x40000 0x200000 发现坏块;
+bad block 0xa0000
+nand erase 0xc0000 0x200000	跳过坏块;
+tftp 0x50000000 zImage
+nand write 0x50000000 0xc0000 0x200000
+
+启动时读kernel:
+setenv bootcmd nand read 0x50008000 0xc0000 0x200000 \; bootm 0x50008000
+
+======================================
+dd if=/dev/zero of=rootImage bs=1024 count=102400
+rootImage : 100M
+mkfs.ext2 rootImage
+mount -t ext2 rootImage /mnt -o loop
+cp ... /mnt 
+
+tftp 0x50000000 rootImage
+nand write 0x50000000 0x400000 ....
+-----------------------------------------
+为什么学习汇编?
+1. stack未初始化前,必须使用汇编;
+2. 使用与平台相关的指令,必须使用汇编;
+3. 提高代码有效率,减少冗余; 优化代码;
+	8K
+
+.c
+.c -> main() -> printf() -> gets() -> ...
+	
+	main 
+	int i;
+		printf
+		int i;
+			putchar
+			int i;		stack
+		printf
+	main
+
+	c: stack (10M) DDR
+
+DDR_INIT -> stack -> C
+
+.c ->	-E	#include #define #if #ifdef ...
+		-S	.s
+		-c	.o
+	ld	.o  a.out
+
+.s -> stack_init stdin stdout stderr 
+	  env argv ...
+	  goto main
+main -> 
+	  ...
+_start
+
+.c --> 
+	=
+	*
+	ldmfd  64 -> ddr
+	mrs	   arm11 <- cpsr
+.c --> .s
+	
+--------------------------
+
+arm-linux-gcc -S 1.c
+1.s
+	.cpu arm10tdmi	
+	.file   "1.c"
+
+伪指令:	
+	.cpu
+	.file
+	-c	1.o(elf)
+	
+	.section    .rodata
+	定义一个段	.rodata;
+	
+	.section	AAA
+		AAA
+	.section	BBB
+		BBB
+	.section	CCC
+		CCC
+	.text
+		代码段;
+
+	.align  2
+	地址对齐;	2^2
+			3	2^3
+			4	2^4
+
+	1. 效率;
+	2. arm是定长指令集; 	4;精简指令集;
+	   thumb		  ;		2;...
+	   x86是不定长指令集;	?;复杂指令集;
+	
+
+	.LC0:	符号;标签; 地址;
+
+	.ascii:	定义了一个字符串;	
+	.ascii	"hello arm\000"
+			"hello arm\0x00"
+			"hello arm\0b00"
+			"hello arm\0"
+	.asciz	"hello arm"		
+	.string	"hello arm"
+
+	.text
+	.align  2
+	.global main	导出 符号main;
+
+
+	b 	puts跳转指令; pc = puts
+	b 	func
+	b	main
+	bl	puts跳转指令;跳前,保存返回地址到lr;
+
+	r0 r1 r2 r3 r4 .... r15 
+	r0-r10	r11-r15
+
+	r14: lr
+	r15: pc
+
+	r0 r1 r2 r3	-> printf puts  
+
+	ldr r0, .L3		==>  r0 = *(.L3);
+
+	.word	.LC0	
+	定义一个int类型;	.LC0数据;.LC0字符串首地址;
+
+===============================
+分支指令:
+	b	符号;
+	bl	
+
+内存访问指令:
+	ldr	
+	push
+	pop
+
+数据处理指令:
+mov mvn add sub and orr eor ...
+
+mov:
+mov	r1, #?
+	^
+	r?
+mov r2, r1
+mov r2, r1, LSL #2
+			ASL
+			LSR
+			ASR
+			LSL r3
+
+mov r1, #0xffffffff
+==>
+mvn r1, #0
+mov r1, #(100*2-35+17)
+
+add:
+add	r1, r2, r3
+	r1 = r2 + r3;	
+add	r1, r2, #?
+	r1 = r2 + #?
+		      #200
+			  #(100*2-34)
+add r1, r2, r3, LSL #2
+add	r1, #1
+==>
+add	r1, r1, #1
+
+sub	r1, r2, r3
+			#?
+			r3, LSL #?
+sub	r1, #1
+==>
+sub r1, r1, #1
+
+mov 	=
+mvn		~
+add		+
+sub		-
+and		&
+orr		|
+eor		^
+bic		&~
+rsb		反-
+adc		+ c
+sbc		- c
+rsc		反- c
+
+j = i - 99;
+sub r2, r1, #99
+j = 99 - i;
+sub r2, #99, r1	X
+rsb r2, r1, #99
+
+乘法指令:
+mul:		*
+mul	r3, r1, r2
+	r3 = r1 + r2;
+			  #?	X
+	r3, r1, r2, LSL r1	X
+mul	r3, r3, r2	X
+
+mul		*
+mla		* + 
+mull	*
+mlal	* +
+============================
+.rodata
+.bss
+.data
+.text
+
+.section	AAA		
+
+ld连接脚本:
+	1. *.o(及*.o中的各个段)在可执行文件中的位置;
+	2. a.out在内存中运行的地址;	
+
+顺序结构:
+	...
+循环结构:
+	...
+	b	
+分支结构:
+
+
+循环结构:
+	while(...)
+	{
+		...
+			break;
+	}
+
+	for(i = 0; i < 10; i++)
+		...
+
+cmp	r0, r1	--> cpsr (当前程序状态寄存器)
+				[31 30 29 28]
+beq	out
+
+b	out
+	
+	al
+	eq	==
+	ne	!=
+	lt	<
+	le	<=
+	gt	>
+	ge	>=
+
+条件执行:
+	arm所有指令都支持条件执行;
+
+=======================
+练习:
+1. 产生100个1024内的随机数,打印其中的奇数;
+
+2. 99乘法表;
+	for(i = 1; i < 10; i++)
+	{
+		for(j = 1; j <= i; j++)
+			printf("%d * %d = %d ", i, j, i*j);
+		printf("\n");
+	}
+
+=======================
+for();
+while();
+do{
+	....
+}while();
+goto	b	
+
+if()
+	...
+
+if()
+	...
+else
+	...
+
+if()cmp
+	...			gt
+	...			gt
+	...	10000	gt
+	...			gt
+	...			gt
+else
+	...			le
+	...			le
+	...	10000	le
+	...			le
+	...			le
+
+	cmp	
+	...gt
+	...gt
+	...gt
+	...le
+	...le
+	...le
+
+指令周期:
+取指	译码	执行	cpsr
+		le				[N Z C V]
+		add
+		r1
+		r2
+		r3
+if()
+	...
+else if()
+	...
+else if()
+	...
+else if()
+	...
+else
+	...
+
+if(i > 0 && i < 5)
+		 ^^
+cmp	r1, #0
+cmpgt	r1, #5		X
+blt
+
+cmp	X lt le gt ge
+
+if(i < 0 || i > 100)
+		 ^^
+cmp	r1, #0
+blt	...
+cmp	r1, #100
+bgt	...
+
+ch --> int
+switch(ch)
+		^
+{
+	case 1:
+		...
+	case 2:
+		...
+	...
+}
++ --> add
+= --> mov
+- --> sub
+词法解析;
+语法解析;
+语意解析;
+
+编译器实现优化;	1. 删除 2. 语句位置改了;
+				3. orr add 
+				   mul <<
+排序:
+查找:
+1		187
+  ....
+
+50		63
+  ....
+data -> key -> index
+=====================================
+1. 1-10
+	*
+
+	*
+   ***
+    *
+	
+	*
+   ***
+  *****
+   ***
+    *
+
+2. 1-10
+*
+
+*
+**
+*
+
+*
+**
+***
+**
+*
+
+*
+**
+***
+****
+***
+**
+*
+1:
+	b	2f
+	b	1b
+2:
+=========================
+内存访问指令: 
+ldr:
+ldr r0, [r1]		r0 = *(r1)
+ldr r0, [r1], #4	r0 = *(r1)
+					r1 += 4
+ldr r0, [r1, #4]	r0 = *(r1+4)
+ldr r0, [r1, #4]!	r0 = *(r1+4)
+					r1 += 4
+ldr r0, [r1, #(1+1*2+1)]
+ldr r0, [r1, r2]	r0 = *(r1+r2)
+ldr r0, [r1, r2, LSL #2]	
+					r0 = *(r1+r2<<2)
+ldrb	char
+ldrh	short
+ldr		int
+
+伪指令:
+ldr r0, .L0+1
+ldr r0, .L0			r0 = *(.L0)
+==>
+ldr r0, [pc, #?]
+			 ^ 编译器(汇编器)计算得到;
+
+ldr r0, =.LC0		r0 = .LC0
+==>
+	@ldr r0, .L0
+	ldr r0, [pc, #?]
+	....
+.L0:
+	.word	.LC0		可以跨段跨文件;
+			0x8400	
+			^ 连接器替换的;
+
+adr	r2, .L0			r2 = .L0 
+					(不能跨段,不能跨文件)
+==>
+add r2, pc, #12
+sub	r2, pc, #?
+			^ 编译器(汇编器)计算得到;
+-----------------------------------
+str:
+str r1, [r0]		*(r0) = r1
+str r1, [r0, #4]	*(r0+4) = r1
+str r1, [r0, r2]	*(r0+r2) = r1
+str r1, [r0, r2]!	*(r0+r2) = r1
+					r0 += r2
+str r1, [r0], #4	*(r0) = r1
+					r0 += 4
+str r1, [r0, r2, LSL #2]	
+					*(r0+r2<<2) = r1
+str r1, [r0, r2, LSL r3]	
+					*(r0+r2<<r3) = r1
+strb	char
+strh	short
+str		int
+
+str
+
+sp : 栈指针(指向栈底部)
+fd : 满递减栈;
+	 递减满栈;
+
+fp : r11
+ip : r12
+sp : r13
+lr : r14
+pc : r15
+
+============================
+1. 练习: 
+int ar[100];
+int br[100];
+srandom(getpid());
+for(i = 0; i < 100; i++)
+	ar[i] = random() % 255;
+
+for(i = 0; i < 100; i++)
+	br[i] = ar[i];
+
+for(i = 0; i < 100; i++)
+	printf("ar[%d] = %d br[%d] = %d \n",
+		i, ar[i], i, br[i]);
+
+ldr
+str
+
+ldm		4*word	25
+stm
+
+fd: stmfd 	ldmfd
+fa: stmfa	ldmfa
+ed: stmed	ldmed
+ea: stmea	ldmea
+===========================
+100MHZ
+300MHZ	
+600MHZ
+...
+
+3 5 7 8 
+	  arm11
+pc => exec + 8
+
+mov r1, #10
+add	r1, r2, r3
+sub	r1, r2, r3, LSL #2
+ldr r1, [r2]
+CPU -> ADDR -> DRAMC -> ADDR -> DDR
+	   DATA			 <-	DATA <-
+ldmfd sp!, {r1-r8}
+						sp
+CPU -> ADDR -> DRAMC -> ADDR -> DDR
+	   DATA			 <-	DATA <-
+	   				........
+	   DATA			 <-	DATA <-
+
+=============================
+for(....)
+	if()
+	...
+	else
+	...
+
+if()
+	for();
+else
+	for();
+
+...		10000000	-> 3+10000000
+...
+...
+
+for(10000000)		30000000
+	a++
+
+for(1000000)		3000000+1000000*10	
+{
+	a++
+	a++
+	a++
+	..
+	10				指令周期;
+}
+
+cpu: enable cache
+	cache / pid 
+提高取指周期的速度;
+
+sub	
+mov
+b	
+分支预测;
+1. 静态预测;
+2. 动态预测;
+
+for(10000000)
+	ldr
+	str
+
+for(1000000)
+	ldm
+	stm
+
+ldmfd sp!, {lr}
+stmfd sp!, {lr}
+
+DMA
+========================
+movne r4, #123
+0001 001 1101 0 0000 0100 0000 0111 1011 
+0x1  3    a     0    4    0    7    b 
+
+movne r4, #0xff000000
+0001 001 1101 0 0000 0100 0100 1111 1111
+
+movlt r1, r2, LSL #2
+1011 000 1101 0 0000 0001 00010 000 0010
+
+movgt r1, r4
+1100 000 1101 0 0000 0001 0000 0000 0100
+
+add	r1, r2, r3
+1110 000 0100 0 0010 0001 0000 0000 0011
+
+	b	loop
+	add	r1, #1
+	cmp	r1, #2
+	mullt	r1, r2, r3
+loop:
+	mov r1, #20
+	
+相对跳转:	pc +/- 32M
+b	loop
+1110 101 0 0000 0000 0000 0000 0000 0010 
+0xe	 a     0    0    0    0    0    2
+
+绝对跳转:
+ldr pc, =loop
+
+========================
+mullt r2, r3, r4
+1011 0000 000 0 0010 0000 0100 1001 0011
+mlalt r2, r4, r5, r6
+1011 0000 001 0 0010 0110 0101 1001 0100
+rsbgt r1, r3, #194
+1100 00 1 0011 0 0011 0001 0000 1100 0010
+andle r2, r3, r5, ROR #2
+1101 00 0 0000 0 0011 0010 00010 110 0101
+
+ldr r0, [pc, #?]
+			 ^
+			 12	-> 4K
+.L0
+============================
+a.bin -> cpu(arm11) -> 控制器 -> 外设;
+		[		 soc		]
+soc -> 外设连接;
+424
+S3C6410X.pdf
+
+冯诺依曼体系结构:
+独立编址:	ddr:  0x0 ... 
+			bios: eeprom 0x0
+			coms: ram	 0x0
+			地址和数据不分离;
+
+哈佛体系结构:
+统一编址:	0-2G	
+地址和数据分离;
+	0x0 	: none		boot image area
+			  Irom
+0x08000000	: Irom		Internal memory area
+	32K
+0x0c000000	: Isram(NANDFC)
+	8K
+0x10000000	: SROM		static memory area
+0x18000000	: SROM
+0x20000000	: SROM
+0x28000000	: SROM
+0x30000000	: SROM
+0x38000000	: SROM
+0x40000000  : NONE		dynamic memory area
+0x48000000  : NONE		 
+0x50000000	: DRAM	DRAM
+	地址空间: 256M
+	数据空间: 128M	64M*2
+0x60000000	: DRAM
+
+0x7000_0000 to 0x7FFF_FFFF	
+	外设寄存器;
+
+SOC
+s3c6410 = arm11 + 总线 + 各种控制器 
+		  处理器		 微处理器	
+arm11 -> 总线 -> 控制器 -> 外设(ddr,nand,..)
+				 [			  ]
+
+控制器初始化 GPIO
+外设初始化	 led
+			 通信,控制,...
+
+GPIO: 187 gpio
+	  17 port	GPA -> GPQ
+	  127 EINT
+
+GPMCON	0x7F008820
+	[3:0]	0001
+	[7:4]	0001
+	[11:8]	0001
+	[15:12]	0001
+GPMDAT	0x7F008824
+	[3:0]	0000
+
+rootfs:
+	led.s		X	/dev/?
+u-boot-sd.bin:
+	led.s
+	tftp 0x50000000 led.bin 
+	go 0x50000000
+Irom:
+	led.s	--> SD
+	Irom : 32K 
+	8K Iram
+Iram:
+	led.s	--> nand flash
+
+arm-linux-gcc -c led.s
+arm-linux-ld led.o -o led
+arm-linux-objcopy -O binary led led.bin
+cp led.bin /tftpboot
+
+1. led.bin 关灯;
+2. led.bin 闪灯;
+3. key.bin key1 -> led1 on
+		   key1 -> led1 off
+
+s2 s3 s4 s5 s6 s7
+
+GPNCON 0x7F008830
+	[1:0]	00
+GPNDAT 0x7F008834
+	[0]		0: 按下;
+			1: 抬起;
+
+1. 找元器件; led1 s2
+2. 找底板原理图; led1 s2
+3. 找核心板原理图; NLED1 KEYINT1
+	GPM0
+	GPN0
+4. 找手册;s3c6410X.pdf
+	GPMCON	GPMDAT
+	GPNCON	GPNDAT
+5. led.s key.s 运行环境;
+
+led.s
+key.s
+bell.s
+
+bell:
+	GPFCON	0x7F0080A0
+		[31:30]	01
+	GPFDAT	0x7F0080A4
+		[15]	1 
+				0
+
+u-boot-sd.bin
+	start.bin
+SD:
+	start.bin
+NAND:
+	start.bin	执行失败了;
+
+u-boot-sd.bin > SD (rom 32K) > NAND (12M)
+
+=============================
+1. 	key1 -> led1
+	key2 -> led2
+	key3 -> led3
+	key4 -> led4
+	key5 -> bell_on
+	key6 -> bell_off
+	nand flash
+
+2. led流水灯;
+	nand flash	
+
+nand:
+u-boot:
+	tftp 0x50000000 start.bin
+	nand erase 0x0 0x20000
+	nand write 0x50000000 0x0 0x20000
+
+u-boot-sd.bin > sd > nand
+
+mov r0, #0xff0000	
+bl	delay
+取指	译码	执行
+^
+DRAM:	ddr		AHB
+gpio: 
+
+
+clock cpu ddr
+	  gpio
+	  ...
+
+ARMCLK	533MHZ
+HCLK	133MHZ
+PCLK	66MHZ
+
+ARMCLK	200MHZ
+HCLK	50MHZ
+PCLK	10MHZ
+
+CLK_SRC	0x7E00F01C
+	[0]	1
+	[1]	1
+OTHERS	0x7E00F900
+	[6]		0
+MISC_CON	0x7E00F838
+	[19]	0
+
+CLK_DIV0	0x7E00F020
+	[15:12]	9	
+	[11:9]	0
+	[8]		1
+HCLK_GATE	0x7E00F030
+	[29:0]	111....
+PCLK_GATE	0x7E00F034
+	[24:23]	1....
+
+FOUT = MDIV X FIN / (PDIV X 2^SDIV)
+200M   100	  12M	 3		  1
+100M   100	  12M	 3		  2
+ APLL_CON	0x7E00_F00C
+	[31]	1
+	[25:16]	100
+	[13:8]	3
+	[2:0]	1
+MPLL_CON	0x7E00_F010
+	[31]	1
+	[25:16]	100
+	[13:8]  3
+	[2:0]   2
+EPLL_CON0	0x7E00_F014
+EPLL_CON1	0x7E00_F018
+
+================================
+1.
+ARMCLK  533MHZ
+HCLK    133MHZ
+PCLK    66MHZ
+
+2. 
+改成c实现;
+
+OM[4:0]
+[0]
+12MHZ -> APLL -> P,M,S -> 分频 -> ARMCLK -> ARM11(533MHZ/667MHZ)
+12MHZ -> MPLL -> P,M,S -> 分频 -> HCLK*2 -> 分频 -> PCLK / HCLK / ?
+12MHZ -> EPLL -> P,M,S,K -> 分频 -> UART/LCD/AUDIO/..
+
+
+clock.s -> gcc -> gcc -c clock.s
+clock.S -> gcc -> gcc -E clock.S -> gcc -c clock.s
+
+=======================================
+set_port close_wtd clock_init uart_init
+
+uart_init: 后面所有代码运行情况可以通过uart显示;
+
+uart -> com -> usb -> pc -> minicom
+
+uart ->uart0
+	 ->uart1
+	 ->uart2
+	 ->uart3
+
+1. 原器件;
+2. 底板;
+3. 核心;
+4. 手册;
+	GPACON
+	UCON0	PCLK
+	UBRDIV0	UDIVSLOT0	115200
+	ULCON0	8N1
+	UTXH0	URXH0
+	UTRSTAT0
+5. 环境;
+
+====================
+作业:
+mputc();
+mgetc();
+mgets();
+mputs();
+mprintf();
+...
+
+ARM链接脚本
+
+================================
+连接地址
+运行地址
+
+与地址相关代码;
+ldr	r0, =.LC0	--> 0x865c
+
+与地址无关代码;
+b	.LC0		--> 相对跳转;
+adr	r0, .LC0	--> add 
+					sub
+
+连接脚本:
+1. 文件中位置;
+2. 内存中位置;
+
+start.bin
+0x0			8K
+0x50000000	128M
+
+.bss : 不占文件空间;
+.data: 占文件空间;
+.text: 占文件空间;
+.rodata: 占文件空间;
+
+=====================================
+set_port close_wtd clock_init uart_init ddr_init nand_init 
+
+ddr:
+1. 控制器初始化;
+	S3C6410.pdf
+2. 外设初始化;
+	K4X51163PC.pdf
+3. 通讯reset;
+		
+ROM
+EEPROM
+RAM
+SRAM
+DRAM
+SDRAM
+	DDR SDRAM
+	SDR SDRAM
+	MOBILE DDR SDRAM
+	MOBILE SDR SDRAM
+
+	   0x52345678			   0x6 -> CSN1
+CPU -> ADDR -> AXI -> DRAMC -> 0x5 -> CSN0
+
+-> 0x2345678 -> DDR SDRAM 
+			 <- 32BIT DATA WEN
+			 -> 32BIT DATA WEN
+
+0010 0011 0100 0101 0110 0111 1000
+^
+256M
+
+BANK: 01 
+ROW: 0 0011 0100 0101
+COL: 0110 0111 10
+
+XM1_DQS0 1 2 3
+XM1_DQM0 1 2 3
+
+================================
+nand_init
+
+flash:
+	nand flash
+		MLC
+		SLC
+	nor flash
+		onenand flash
+
+GPO0 1
+GPP3 4 5 6 7
+
+1. 手册: s3c6410X.pdf
+	NFCONF	时序
+	NFCONT	控制
+2. 手册: K9F2G08.pdf
+	时序
+	CMD
+	ADDR
+
+tftp 0x51000000 abc
+nand erase 0x20000 0x800
+nand write 0x51000000 0x20000 0x800
+
+run wnf
+..
+reset:			p42
+	0xff
+page read:		p23
+	0x0 0x30
+page write:		p25
+	0x80 0x10
+block erase:	p28
+	0x60 0xd0
+read id:		p31
+	0x90 
+	0x0(addr)
+	0xec 0x44 0x10 0xec 0x44
+===================================
+u-boot: 单任务;
+MMU: 内存管理单元;
+
+./a.out	-> 4G
+./b.out -> 4G
+
+mmu_enable:	[0] 1
+MRC p15, 0, <Rd>, c1, c0, 0
+MCR p15, 0, <Rd>, c1, c0, 0
+
+ttb:	[31:14]
+MRC p15, 0, <Rd>, c2, c0, 0
+MCR p15, 0, <Rd>, c2, c0, 0
+
+domain:	[31:0]	0xffffffff
+MRC p15, 0, <Rd>, c3, c0, 0
+MCR p15, 0, <Rd>, c3, c0, 0
+======================
+1. 
+	mmu2都改成2级页表映射;
+2. 
+	运行环境在u-boot下;
+	mmu_enable;
+	mmu2同样可以正常运行;
+
+0x57e00000 -> u-boot.bin
+0x57f00000 - 0x57ffffff -> u-boot sp
+
+0x52345678 -> 0xc3445678
+
+===========================
+
+pid1:
+	u32 * p = 0xc2332458;
+	*p ==> 0x11223344
+
+	clear_tlb();
+	change_ttb();
+pid2:
+	u32 * p = 0xc2332458;
+	*p ==> 0x55667788
+
+p354
+p355
+
+ARM11 -> ADDR -> DRAMC -> DDR
+					   <- DATA	
+
+ARM11 -> ADDR -> MMU -> TTB[?] -> DDR
+					 <- PA
+				     -> PA     -> DDR
+					 <- DATA
+
+ARM11 -> ADDR -> MMU -> TTB[?] -> DDR
+					 <- TTB2
+				     -> TTB2[?]-> DDR
+					 <- PA
+					 -> PA 	   -> DDR
+					 <- DATA
+
+for(i = 0; i < 1000w; i++) 6000w
+	...
+
+缓存:
+TLB: 存虚拟地址和物理地址的映射关系;
+	 减少了查表的次数;
+ITLB:指令TLB; 
+DTLB:数据TLB;
+
+for(i = 0; i < 1000w; i++) 2000w
+	...
+
+CACHE: 存物理地址和数据的关系;
+	   减少内存的访问次数;
+ICACHE:指令..;
+DCACHE:数据..;
+
+=======================================
+虚拟地址; 4G
+mmu: va -> pa 多任务实现;
+
+./a.out -> bash -> fork -> exec -> timer 
+-> pc+=4... -> 异常(中断) -> 保存环境 
+-> 切换页表 -> 
+
+./b.out -> timer -> 恢复环境 -> pc+=4...
+-> 异常(中断) -> 保存环境 -> 切换页表 ->
+
+./c.out -> 
+
+
+用户态		内核态
+user		kernel
+0-3G		3G-4G
+main		sp -> 3G-4G
+sp			lr
+lr			cpsr
+cpsr
+
+工作模式:(7种)
+user system svc abort undef irq firq
+[		  ] [		异常模式	   ]
+
+cpsr[4:0]
+user -X> svc 
+cpsr[N Z C V]
+
+user -> 系统调用 -> svc 
+
+异常:(7种)
+reset -> svc -> pc=0x0	pc=0xffff0000
+	硬件复位: key
+	软件复位: wtd
+Undefined instructions 未定义指令(译码)
+	  -> Undefined-> pc=0x4 pc=0xffff0004
+Software interrupt (SWI) 汇编swi
+	  -> svc -> pc = 0x8 pc=0xffff0008
+	swi num -> num -> kernel -> open
+								read
+								write 
+Prefetch Abort (instruction fetch memory abort)	
+	  -> abort -> pc=0xc pc=0xffff000c
+	pc=? mmu 		
+
+Data Abort (data access memory abort) 
+	  -> abort -> pc=0x10 pc=0xffff0010
+	p=? *p	mmu 
+
+IRQ (interrupt) -> IRQ->pc=0x18 0xffff0018
+	控制器<-外设
+FIQ (fast interrupt) -> FIQ
+	  ->pc=0x1c 0xffff001c
+	控制器<-外设
+
+0x0
+0x4
+0x8
+0xc
+0x10
+nop
+0x18
+0x1c
+
+IRQ (interrupt) -> IRQ->pc=0x18 0xffff0018
+	控制器<-外设
+
+==================================
+1.
+	wtd --> 1s	34章;
+2. 
+	vic.c -> 封装;
+	irq_num, pri, sel, func
+3.
+	key1 2 3 4 5 	  6 
+	led1 2 3 4 bellon belloff
+	
+	P359
+	EINT0CON0 0x7F008900
+	EINT0MASK 0x7F008920
+	EINT0PEND 0x7F008924
+
+内嵌汇编:
+
+w1.c
+	char * p = "hello world";
+	char ch;
+	int num;
+
+	asm ();
+
+	printf("num = %d \n", num);
+	printf("ch = %c \n", ch);
+
+======================================
+adc -> 5v/3.3v -> 10bit/12bit
+ts	-> down/up
+
+1. 
+	down 到 up
+	中间移动坐标打印出来;
+	...;
+
+	down adc_start adc_start adc_start up
+	flag=1
+
+down		adc adc adc adc adc	  up 
+   flag=1	  up  up  up  up  up	flag=0
+
+down		adc adc adc adc adc	  up 
+   timer	  up  up  up  up  up	timer
+   enable							close
+
+显示屏;	
+触摸屏;	
+
+lcd:
+	VD0-VD23	GPI0-15 GPJ0-7
+	HSYNC		GPJ8
+	VSYNC		GPJ9
+	VDEN		GPJ10
+	VCLK		GPJ11
+	BL_EN		GPB6		1
+	PWREN_LCD	GPF14		1
+
+练习:
+1. 显示图形
+	24 -> 32
+	16 -> 16 
+2. 弹球程序
+	...;
+3. ascii;	
+	mputcc(x, y, ch, col);
+
+==============================
+arm11 -> 控制器 -> 外设;
+		 ts/adc/lcd/uart/gpio..
+
+arm11 -> SROMC	-> dm9000 -> 外设;
+		 (控制器)  (控制器)
+				   寄存器..
+
+0x18000000 - 0x1fffffff -> (CSN1)dm9000
+0x18000000
+0x18000004	0x18234567
+
+dm9000:
+0x18000000 -> CSN1 -> DM9000
+		   -> ADDR2-> DM9000
+		   	  0(INDEX)
+
+0x18000004 -> CSN1 -> DM9000
+		   -> ADDR2-> DM9000
+		   	  1(DATA)
+eg: 访问dm9000内0xff寄存器,写入0x12;
+	*(u8*)0x18000000 = 0xff;
+	*(u8*)0x18000004 = 0x12;
+
+	从dm9000内0xfe寄存器中读出内容;
+	*(u8*)0x18000000 = 0xfe;
+	data = *(u8*)0x18000004;
+
+ARMCLK 	0.5ns
+HCLK 	7.5ns		
+8ns ? = 10us
+
+u-boot:
+	......;
+	vim cpu/s3c64xx/start.S	(_start)
+	cd /share/up6410/src/u-boot-1.1.6
+	ctags -R	(tags)
+	vim /etc/vimrc
+	set tags+=/share/up6410/src/u-boot-1.1.6/tags
+	ctrl + ]
+	ctrl + o
+	
+.u_boot_cmd:
+cmd_tbl_t __u_boot_cmd_go
+cmd_tbl_t __u_boot_cmd_setenv
+cmd_tbl_t __u_boot_cmd_getenv
+cmd_tbl_t __u_boot_cmd_ping
+...
+
+mboot:
+env_init
+setenv
+printenv
+saveenv
+ping 
+md 
+nand read
+nand write
+nand erase 
+tftp 
+
+
+WM9714:
+
+
+
+
+
+
+
+
+

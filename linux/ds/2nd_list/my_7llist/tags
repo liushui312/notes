@@ -1,0 +1,43 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+APPEND	llist.h	44;"	d	language:C++
+DEBUG0	llist.h	31;"	d	language:C++
+DEBUG1	llist.h	32;"	d	language:C++
+ERRP	llist.h	34;"	d	language:C++
+LLIST	llist.h	/^typedef struct llist_t LLIST;$/;"	t	language:C++	typeref:struct:llist_t
+MAGIC	llist.h	47;"	d	language:C++
+PREPEND	llist.h	43;"	d	language:C++
+SORT	llist.h	45;"	d	language:C++
+__LLIST_H__	llist.h	2;"	d	language:C++
+data	llist.h	/^    void *data;$/;"	m	language:C++	struct:node_t
+destroy	llist.h	/^    llist_destroy_t *destroy;$/;"	m	language:C++	struct:llist_t
+find	llist.h	/^    LLIST *find;$/;"	m	language:C++	struct:llist_t
+head	llist.h	/^    struct node_t head;$/;"	m	language:C++	struct:llist_t	typeref:struct:llist_t::node_t
+llist_cmp_t	llist.h	/^typedef int (llist_cmp_t)(const void *, const void *);$/;"	t	language:C++
+llist_create	llist.c	/^LLIST *llist_create(int size, llist_destroy_t *destroy, llist_file_t *store, llist_file_t *load)$/;"	f	language:C	signature:(int size, llist_destroy_t *destroy, llist_file_t *store, llist_file_t *load)
+llist_delete	llist.c	/^int llist_delete(void *key, llist_cmp_t *cmp, LLIST *handle)$/;"	f	language:C	signature:(void *key, llist_cmp_t *cmp, LLIST *handle)
+llist_destroy	llist.c	/^void llist_destroy(LLIST **handle)$/;"	f	language:C	signature:(LLIST **handle)
+llist_destroy_t	llist.h	/^typedef void (llist_destroy_t)(const void *);$/;"	t	language:C++
+llist_file_t	llist.h	/^typedef int (llist_file_t)(FILE *fp, void *);$/;"	t	language:C++
+llist_find	llist.c	/^void *llist_find(void *key, llist_cmp_t *cmp, LLIST *handle)$/;"	f	language:C	signature:(void *key, llist_cmp_t *cmp, LLIST *handle)
+llist_findall	llist.c	/^LLIST *llist_findall(void *key, llist_cmp_t *cmp, LLIST *handle)$/;"	f	language:C	signature:(void *key, llist_cmp_t *cmp, LLIST *handle)
+llist_insert	llist.c	/^int llist_insert(void *data, int index, LLIST *handle)$/;"	f	language:C	signature:(void *data, int index, LLIST *handle)
+llist_load	llist.c	/^LLIST *llist_load(const char *path, llist_destroy_t *destroy, llist_file_t *store, llist_file_t *load)$/;"	f	language:C	signature:(const char *path, llist_destroy_t *destroy, llist_file_t *store, llist_file_t *load)
+llist_num	llist.c	/^int llist_num(LLIST *handle)$/;"	f	language:C	signature:(LLIST *handle)
+llist_op_t	llist.h	/^typedef void (llist_op_t)(const void *, void *);$/;"	t	language:C++
+llist_size	llist.c	/^int llist_size(LLIST *handle)$/;"	f	language:C	signature:(LLIST *handle)
+llist_sort	llist.c	/^void llist_sort(llist_cmp_t *cmp, LLIST *handle)$/;"	f	language:C	signature:(llist_cmp_t *cmp, LLIST *handle)
+llist_store	llist.c	/^int llist_store(const char *path, LLIST *handle)$/;"	f	language:C	signature:(const char *path, LLIST *handle)
+llist_t	llist.h	/^struct llist_t {$/;"	s	language:C++
+llist_travel	llist.c	/^void llist_travel(llist_op_t *op, void *arg, LLIST *handle)$/;"	f	language:C	signature:(llist_op_t *op, void *arg, LLIST *handle)
+load	llist.h	/^    llist_file_t *load;$/;"	m	language:C++	struct:llist_t
+next	llist.h	/^    struct node_t *next;$/;"	m	language:C++	struct:node_t	typeref:struct:node_t::node_t
+node_t	llist.h	/^struct node_t {$/;"	s	language:C++
+num	llist.h	/^    int num;$/;"	m	language:C++	struct:llist_t
+prev	llist.h	/^    struct node_t *prev;$/;"	m	language:C++	struct:node_t	typeref:struct:node_t::node_t
+size	llist.h	/^    int size;$/;"	m	language:C++	struct:llist_t
+store	llist.h	/^    llist_file_t *store;$/;"	m	language:C++	struct:llist_t

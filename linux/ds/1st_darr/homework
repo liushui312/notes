@@ -1,0 +1,13 @@
+1. 完善存储加载函数
+    fopen
+        fread/fwrite
+
+2. 实现学生成绩管理系统
+    struct stu_t {
+        //char *name;
+        char name[128];
+        char sex;
+        int age;
+        int en;
+        int cn;
+    };

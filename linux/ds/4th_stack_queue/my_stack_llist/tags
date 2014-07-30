@@ -1,0 +1,30 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.6	//
+DEBUG0	stack.h	8;"	d	language:C++
+DEBUG1	stack.h	9;"	d	language:C++
+ERRP	stack.h	11;"	d	language:C++
+MAX	test.c	3;"	d	language:C	file:
+STACK	stack.h	/^}STACK;$/;"	t	language:C++	typeref:struct:stack_t
+__STACK_H__	stack.h	2;"	d	language:C++
+data	stack.h	/^   void *data; $/;"	m	language:C++	struct:node_t
+end	stack.h	/^    int end;$/;"	m	language:C++	struct:stack_t
+head	stack.h	/^    struct node_t head;$/;"	m	language:C++	struct:stack_t	typeref:struct:stack_t::node_t
+main	test.c	/^int main(void)$/;"	f	language:C	signature:(void)
+max	stack.h	/^    int max;$/;"	m	language:C++	struct:stack_t
+next	stack.h	/^   struct node_t *next;$/;"	m	language:C++	struct:node_t	typeref:struct:node_t::node_t
+node_t	stack.h	/^struct node_t{$/;"	s	language:C++
+prev	stack.h	/^   struct node_t *prev;$/;"	m	language:C++	struct:node_t	typeref:struct:node_t::node_t
+size	stack.h	/^    int size;$/;"	m	language:C++	struct:stack_t
+stack_creat	stack.c	/^STACK *stack_creat(int size, int max)$/;"	f	language:C	signature:(int size, int max)
+stack_destroy	stack.c	/^void stack_destroy(STACK **handle)$/;"	f	language:C	signature:(STACK **handle)
+stack_isempty	stack.c	/^int stack_isempty(STACK *handle)$/;"	f	language:C	signature:(STACK *handle)
+stack_isfull	stack.c	/^int stack_isfull(STACK *handle)$/;"	f	language:C	signature:(STACK *handle)
+stack_op_t	stack.h	/^typedef void (stack_op_t)(void const *data);$/;"	t	language:C++
+stack_pop	stack.c	/^void *stack_pop(STACK *handle)$/;"	f	language:C	signature:(STACK *handle)
+stack_push	stack.c	/^int stack_push(STACK *handle, void *data)$/;"	f	language:C	signature:(STACK *handle, void *data)
+stack_t	stack.h	/^typedef struct stack_t{$/;"	s	language:C++
+stack_travel	stack.c	/^void stack_travel(STACK *handle, stack_op_t *op)$/;"	f	language:C	signature:(STACK *handle, stack_op_t *op)

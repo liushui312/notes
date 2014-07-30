@@ -1,0 +1,7 @@
+APT (Advanced Package Tool)  
+dpkg (Debian package) 
+
+dpkg -l *apache*
+dpkg -L exuberant-ctags
+sudo apt-get remove apache2 --purge
+

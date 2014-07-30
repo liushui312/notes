@@ -1,0 +1,7 @@
+
+1）su：认证失败
+允许 su 到 root
+ sudo passwd 设置root密码
+
+允许root登录
+   gksu /usr/sbin/gdmsetup

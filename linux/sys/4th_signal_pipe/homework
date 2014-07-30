@@ -1,0 +1,31 @@
+1. 封装系统定时器使之支持使用多个定时器(不能创建进程)
+    struct node_t {
+        int t;
+        int count;
+        void (*func)(void *);
+        void *data;
+        int flag;
+        struct node_t *next;
+        struct node_t *prev;
+    };
+
+    struct node_t *tail;
+    tail->func(tail->data);
+
+    init_timer();
+    add_timer(3, hello, NULL, 0);
+    add_timer(3, test, NULL, 0);
+    exit_timer();
+
+2. 实现cat /etc/passwd | grep root功能
+    if (fork() == 0)
+    {
+        execl("cat", "cat", "/etc/passwd", NULL);
+        exit(0);
+    }
+    execl("grep", "grep", "root", NULL);
+
+3. 实现两个终端聊天程序
+    实时聊天
+    支持退出
+    合并文件

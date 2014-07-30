@@ -1,0 +1,430 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3c.org/TR/1999/REC-html401-19991224/loose.dtd">
+<!-- saved from url=(0063)http://linux.chinaunix.net/techdoc/net/2009/05/04/1109928.shtml -->
+<HTML xmlns="http://www.w3.org/1999/xhtml"><HEAD><TITLE>TFTP协议详解 - 技术文档 - 网络技术 Linux时代 - 开源、自由、共享 - 中国最大的Linux技术社区</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=gb2312">
+<META content="TFTP协议详解 - 技术文档 - 网络技术 Linux时代 - 开源、自由、共享 - 中国最大的Linux技术社区" 
+name=keywords>
+<META content="TFTP协议详解 - 技术文档 - 网络技术  网络技术 Linux 技术文档" name=description><LINK 
+href="TFTP协议详解 - 技术文档 - 网络技术 Linux时代 - 开源、自由、共享 - 中国最大的Linux技术社区.files/all.css" 
+type=text/css rel=stylesheet>
+<STYLE type=text/css>.STYLE1 {
+	COLOR: #ff0000
+}
+.STYLE2 {
+	FONT-SIZE: 14px
+}
+</STYLE>
+
+<META content="MSHTML 6.00.2900.3698" name=GENERATOR></HEAD>
+<BODY>
+<TABLE cellSpacing=0 cellPadding=0 width=950 align=center border=0>
+  <TBODY>
+  <TR>
+    <TD height=27>
+      <TABLE style="BORDER-COLLAPSE: collapse" cellSpacing=0 cellPadding=0 
+      width="100%" border=0>
+        <TBODY>
+        <TR>
+          <FORM name=login 
+          action=http://linux.chinaunix.net/bbs/logging.php?action=login 
+          method=post>
+          <TD>
+            <SCRIPT language=javascript 
+            src="TFTP协议详解 - 技术文档 - 网络技术 Linux时代 - 开源、自由、共享 - 中国最大的Linux技术社区.files/loginbox.htm"></SCRIPT>
+          </TD></FORM>
+          <TD align=right>·<A class=list1 
+            href="http://www.chinaunix.net/">ChinaUnix首页</A> ·<A class=list1 
+            href="http://bbs.chinaunix.net/">论坛</A> ·<A class=list1 
+            href="http://blog.chinaunix.net/">博客</A>&nbsp; 
+    </TD></TR></TBODY></TABLE></TD></TR>
+  <TR>
+    <TD bgColor=#cccccc height=1></TD></TR>
+  <TR>
+    <TD>
+      <TABLE cellSpacing=0 cellPadding=0 width="100%" border=0>
+        <TBODY>
+        <TR>
+          <TD height=84><IMG 
+            src="TFTP协议详解 - 技术文档 - 网络技术 Linux时代 - 开源、自由、共享 - 中国最大的Linux技术社区.files/logo.jpg"></TD>
+          <TD align=right><IFRAME 
+            src="TFTP协议详解 - 技术文档 - 网络技术 Linux时代 - 开源、自由、共享 - 中国最大的Linux技术社区.files/iframe.htm" 
+            frameBorder=0 width=750 scrolling=no 
+        height=80></IFRAME></TD></TR></TBODY></TABLE></TD></TR>
+  <TR>
+    <TD>
+      <TABLE cellSpacing=0 cellPadding=0 width="100%" border=0>
+        <TBODY>
+        <TR>
+          <TD width=3><IMG height=26 
+            src="TFTP协议详解 - 技术文档 - 网络技术 Linux时代 - 开源、自由、共享 - 中国最大的Linux技术社区.files/bgtop1.jpg" 
+            width=3></TD>
+          <TD class=whitetop width=944 
+          background="TFTP协议详解 - 技术文档 - 网络技术 Linux时代 - 开源、自由、共享 - 中国最大的Linux技术社区.files/bgtop2.gif"><A 
+            href="http://linux.chinaunix.net/" target=_blank>Linux首页</A> | <A 
+            href="http://linux.chinaunix.net/news/">Linux新闻</A> | <A 
+            style="COLOR: red" href="http://linux.chinaunix.net/bbs" 
+            target=_blank><B>Linux论坛</B></A> | <A 
+            href="http://linux.chinaunix.net/techdoc/">Linux文档</A> | <A 
+            href="http://download.chinaunix.net/disc/linux/" 
+            target=_blank>Linux下载</A> | <A 
+            href="http://blog.chinaunix.net/techart.php?frmid=6" 
+            target=_blank>Linux博客</A> | <A href="http://search.chinaunix.net/" 
+            target=_blank>Linux搜索</A> | <A 
+            href="http://linux.chinaunix.net/bbs/index.php?gid=68" 
+            target=_blank>开源项目孵化平台</A> | <A style="COLOR: red" 
+            href="http://linux.chinaunix.net/ebook/" target=_blank>《开源时代》</A></TD>
+          <TD align=right width=3><IMG height=26 
+            src="TFTP协议详解 - 技术文档 - 网络技术 Linux时代 - 开源、自由、共享 - 中国最大的Linux技术社区.files/bgtop3.jpg" 
+            width=3></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE>
+<TABLE cellSpacing=0 cellPadding=0 width=950 align=center border=0>
+  <TBODY>
+  <TR>
+    <TD class=BlkLightblue vAlign=bottom><A 
+      href="http://linux.chinaunix.net/techdoc/beginner/" target=_blank>新手入门</A> 
+      | <SPAN lang=zh-cn><A href="http://linux.chinaunix.net/techdoc/install/" 
+      target=_blank>安装启动</A> | </SPAN><A 
+      href="http://linux.chinaunix.net/techdoc/system/" target=_blank>管理员指南</A> 
+      | <A href="http://man.chinaunix.net/" target=_blank>开发手册</A> | <A 
+      href="http://linux.chinaunix.net/techdoc/desktop/" target=_blank>桌面应用</A> 
+      | <A href="http://linux.chinaunix.net/techdoc/develop/" 
+      target=_blank>程序开发</A> | <A 
+      href="http://linux.chinaunix.net/techdoc/database/" target=_blank>数据库</A> 
+      | <SPAN lang=zh-cn><A href="http://linux.chinaunix.net/techdoc/net/" 
+      target=_blank>网络技术</A>| <A 
+      href="http://linux.chinaunix.net/topics/2007-01-25/15/index.shtml" 
+      target=_blank>CentOS</A></SPAN> | <A 
+      href="http://linux.chinaunix.net/search2.php?key=fedora&amp;id=0" 
+      target=_blank>Fedora</A> <SPAN lang=zh-cn>| </SPAN><A 
+      href="http://linux.chinaunix.net/search2.php?key=mysql&amp;id=0" 
+      target=_blank>MySQL</A> <SPAN lang=zh-cn>| </SPAN><A 
+      href="http://linux.chinaunix.net/search2.php?key=apache&amp;id=0" 
+      target=_blank>Apache</A> <SPAN lang=zh-cn>| </SPAN><A 
+      href="http://linux.chinaunix.net/search2.php?key=ubuntu&amp;id=0" 
+      target=_blank><FONT color=#ff0000>Ubuntu</FONT></A> <SPAN lang=zh-cn>| 
+      </SPAN><A 
+      href="http://linux.chinaunix.net/topics/2008-07-10/18/index.shtml" 
+      target=_blank><FONT color=#ff0000>Gentoo</FONT></A>| </SPAN><B><A 
+      href="http://linux.chinaunix.net/topics/2008-07-30/19/index.shtml" 
+      target=_blank><FONT color=#ff0000>OSCON08</FONT></A></B> </TD></TR>
+  <TR>
+    <TD></TD></TR>
+  <TR>
+    <TD vAlign=bottom height=30>&nbsp;&nbsp;<A 
+      href="http://linux.chinaunix.net/">Linux时代</A> &gt;&gt; <A class=list1 
+      href="http://linux.chinaunix.net/techdoc/">技术文档</A> &gt;&gt; <A 
+      class=list1 href="http://linux.chinaunix.net/techdoc/net/">网络技术</A></TD></TR>
+  <TR>
+    <TD bgColor=#cccccc height=1></TD></TR>
+  <TR>
+    <TD height=8></TD></TR></TBODY></TABLE>
+<TABLE cellSpacing=0 cellPadding=0 width=950 align=center border=0>
+  <TBODY>
+  <TR>
+    <TD class=BLKtext vAlign=top>
+      <TABLE cellSpacing=0 cellPadding=0 width=660 align=center border=0>
+        <TBODY>
+        <TR>
+          <TD height=8>&nbsp;</TD></TR>
+        <TR>
+          <TD class=Ftext1 height=30>TFTP协议详解</TD></TR>
+        <TR>
+          <TD>
+            <TABLE cellSpacing=0 cellPadding=0 width="80%" align=center 
+border=0>
+              <TBODY>
+              <TR>
+                <TD bgColor=#cccccc height=1></TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD align=middle height=40>来源: ChinaUnix博客 　日期： 2009.05.04 
+            12:34　(共有<SPAN class=STYLE1 id=postcount></SPAN>条评论) <A 
+            href="http://linux.chinaunix.net/bbs/thread-1109928-1-1.html" 
+            target=_blank>我要评论</A></TD></TR>
+        <TR>
+          <TD>&nbsp;</TD></TR>
+        <TR>
+          <TD class=F14><BR>1. 
+            目的<BR>TFTP是一个传输文件的简单协议，通常使用UDP协议而实现，但tftp并没有要求实现的具体协议，在特殊需求的场合可以同tcp实现。此协议设计的时候是进行小文件传输的。因此它不具备通常的FTP的许多功能，它只能从文件服务器上获得或写入文件，不能列出目录，不进行认证，它传输8位数据。传输中有三种模式：netascii，这是8位的ASCII码形式，另一种是octet，这是8位源数据类型；最后一种mail已经不再支持，它将返回的数据直接返回给用户而不是保存为文件。<BR>2. 
+            概况<BR>任何传输起自一个读取或写入文件的请求，这个请求也是连接请求。如果服务器批准此请求，则服务器打开连接，数据以定长512字节传输。每个数据包包括一块数据，服务器发出下一个数据包以前必须得到客户对上一个数据包的确认。如果一个数据包的大小小于512字节，则表示传输结构。如果数据包在传输过程中丢失，发出方会在超时后重新传输最后一个未被确认的数据包。通信的双方都是数据的发出者与接收者，一方传输数据接收应答，另一方发出应答接收数据。大部分的错误会导致连接中断，错误由一个错误的数据包引起。这个包不会被确认，也不会被重新发送，因此另一方无法接收到。如果错误包丢失，则使用超时机制。错误主要是由下面三种情况引起的：不能满足请求，收到的数据包内容错误，而这种错误不能由延时或重发解释，对需要资源的访问丢失（如硬盘满）。TFTP只在一种情况下不中断连接，这种情况是源端口不正确，在这种情况下，指示错误的包会被发送到源机。这个协议限制很多，这是都是为了实现起来比较方便而进行的。通过下边的图片来了解tftp协议的通信流程：<BR><IMG 
+            onmousewheel="return imgzoom(this);" 
+            onmouseover="if(this.width>screen.width*0.7) {this.resized=true; this.width=screen.width*0.7; this.style.cursor='hand'; this.alt='Click here to open new window\nCTRL+Mouse wheel to zoom in/out';}" 
+            onclick="if(!this.resized) {return true;} else {window.open('http://blog.chinaunix.net/photo/94039_090504123554.jpg');}" 
+            alt="" 
+            src="TFTP协议详解 - 技术文档 - 网络技术 Linux时代 - 开源、自由、共享 - 中国最大的Linux技术社区.files/94039_090504123554.jpg" 
+            onload="if(this.width>screen.width*0.7) {this.resized=true; this.width=screen.width*0.7; this.alt='Click here to open new window\nCTRL+Mouse wheel to zoom in/out';}" 
+            border=0><BR>
+            <UL><BR>
+              <LI><BR>TFTP协议概述<BR>1.简单文件传送协议(Trivial File Trhansfer 
+              Protocol)<BR>2.最初用于引导无盘系统，被设计用来传输小文件<BR>3.基于UDP协议实现，但也可以由其他协议实现<BR>4.不具备FTP的许多功能<BR>5.只能从服务器获取或写入文件，不能列出目录<BR>6.不进行认证<BR>
+              <LI><BR>数据传输模式<BR>1.netascii：文本模式<BR>2.octet：二进制模式<BR>3.mail：已经不再支持<BR>
+              <LI><BR><B>协议结构</B><BR>基本 TFTP 协议头结构：<BR>16 bits<BR>String<BR>16 
+              bits<BR>String<BR>16 
+              bits<BR>Opcode<BR>Filename<BR>0<BR>Mode<BR>0<BR>Opcode：操作代码或命令。以下为 
+              TFTP 
+              命令：<BR><B>Opcode</B><BR><B>Command</B><BR><B>Description</B><BR>1<BR>Read 
+              Request<BR>Request to read a file<BR>2<BR>Write Request<BR>Request 
+              to write to a file<BR>3<BR>File Data<BR>Transfer of file 
+              data<BR>4<BR>Data Acknowledge<BR>Acknowledgement of file 
+              data<BR>5<BR>Error<BR>Error 
+              indication<BR>Filename：传送的字段名称。<BR>Mode：数据模式。协议传输的文件数据格式。可以是 
+              NetASCII，也可以是标准 ASCII，八位二进制数据或邮件标准 
+              ASCII。<BR>我们通过图片来详细看看tftp报文的格式：<BR><IMG 
+              onmousewheel="return imgzoom(this);" 
+              onmouseover="if(this.width>screen.width*0.7) {this.resized=true; this.width=screen.width*0.7; this.style.cursor='hand'; this.alt='Click here to open new window\nCTRL+Mouse wheel to zoom in/out';}" 
+              onclick="if(!this.resized) {return true;} else {window.open('http://blog.chinaunix.net/photo/94039_090505083340.jpg');}" 
+              alt="" 
+              src="TFTP协议详解 - 技术文档 - 网络技术 Linux时代 - 开源、自由、共享 - 中国最大的Linux技术社区.files/94039_090505083340.jpg" 
+              onload="if(this.width>screen.width*0.7) {this.resized=true; this.width=screen.width*0.7; this.alt='Click here to open new window\nCTRL+Mouse wheel to zoom in/out';}" 
+              border=0><BR>
+              <LI><BR>在看看tftp的简单超时处理机制：<BR>
+              <LI><BR><BR><IMG onmousewheel="return imgzoom(this);" 
+              onmouseover="if(this.width>screen.width*0.7) {this.resized=true; this.width=screen.width*0.7; this.style.cursor='hand'; this.alt='Click here to open new window\nCTRL+Mouse wheel to zoom in/out';}" 
+              onclick="if(!this.resized) {return true;} else {window.open('http://blog.chinaunix.net/photo/94039_090505083527.jpg');}" 
+              alt="" 
+              src="TFTP协议详解 - 技术文档 - 网络技术 Linux时代 - 开源、自由、共享 - 中国最大的Linux技术社区.files/94039_090505083527.jpg" 
+              onload="if(this.width>screen.width*0.7) {this.resized=true; this.width=screen.width*0.7; this.alt='Click here to open new window\nCTRL+Mouse wheel to zoom in/out';}" 
+              border=0><BR></LI></UL><BR>好了，tftp的内容就这些了，下边是一个完整的tftp通信的报文：<BR><IMG 
+            onmousewheel="return imgzoom(this);" 
+            onmouseover="if(this.width>screen.width*0.7) {this.resized=true; this.width=screen.width*0.7; this.style.cursor='hand'; this.alt='Click here to open new window\nCTRL+Mouse wheel to zoom in/out';}" 
+            onclick="if(!this.resized) {return true;} else {window.open('http://blog.chinaunix.net/photo/94039_090505083653.jpg');}" 
+            alt="" 
+            src="TFTP协议详解 - 技术文档 - 网络技术 Linux时代 - 开源、自由、共享 - 中国最大的Linux技术社区.files/94039_090505083653.jpg" 
+            onload="if(this.width>screen.width*0.7) {this.resized=true; this.width=screen.width*0.7; this.alt='Click here to open new window\nCTRL+Mouse wheel to zoom in/out';}" 
+            border=0><BR><BR><BR><B>本文来自ChinaUnix博客，如果查看原文请点：</B><A 
+            href="http://blog.chinaunix.net/u3/94039/showart_1917630.html" 
+            target=_blank>http://blog.chinaunix.net/u3/94039/showart_1917630.html</A> 
+          </TD></TR>
+        <TR>
+          <TD align=right height=20>　 <A 
+            href="http://linux.chinaunix.net/bbs/thread-1109928-1-1.html" 
+            target=_blank>发表评论</A> <A 
+            href="http://linux.chinaunix.net/bbs/thread-1109928-1-1.html" 
+            target=_blank>查看评论</A>(共有<SPAN class=STYLE1 
+            id=postcount2></SPAN>条评论) <A 
+            href="http://linux.chinaunix.net/bbs/forum-4-1.html" 
+            target=_blank>我要提问</A> </TD></TR>
+        <TR>
+          <TD>&nbsp;</TD></TR></TBODY></TABLE></TD>
+    <TD width=8>&nbsp;</TD>
+    <TD vAlign=top width=245 bgColor=#fff9eb>
+      <CENTER><BR>
+      <FORM action=/search2.php method=get><INPUT size=15 name=key><INPUT 
+      type=hidden value=0 name=id><INPUT type=submit value=搜索> 
+      </FORM><BR></CENTER>
+      <TABLE cellSpacing=0 cellPadding=0 width="100%" border=0>
+        <TBODY>
+        <TR>
+          <TD class=F13 
+          background="TFTP协议详解 - 技术文档 - 网络技术 Linux时代 - 开源、自由、共享 - 中国最大的Linux技术社区.files/bg245.jpg" 
+          height=27>
+            <TABLE width="100%">
+              <TBODY>
+              <TR>
+                <TD class=F13>最新资讯</TD>
+                <TD align=right><A href="http://linux.chinaunix.net/news" 
+                  target=_blank>更多&gt;&gt;</A>&nbsp;</TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD class=BLKtext vAlign=top bgColor=#ffffff>
+            <TABLE cellSpacing=0 cellPadding=0 width="97%" align=center 
+border=0>
+              <TBODY>
+              <TR>
+                <TD height=5></TD></TR>
+              <TR>
+                <TD>· <A title=2010Bossie大奖:十佳开源平台和中间件 
+                  href="http://linux.chinaunix.net/news/2010/09/09/1170773.shtml" 
+                  target=_blank>2010Bossie大奖:十佳开源平台和..</A><BR>· <A 
+                  title=埃里森面试赫德内容曝光：甲骨文战略针对IBM 
+                  href="http://linux.chinaunix.net/news/2010/09/09/1170774.shtml" 
+                  target=_blank>埃里森面试赫德内容曝光：甲骨..</A><BR>· <A 
+                  title=Mozilla云计算HTML5文本编辑器即将面世 
+                  href="http://linux.chinaunix.net/news/2010/09/09/1170775.shtml" 
+                  target=_blank>Mozilla云计算HTML5文本编辑器..</A><BR>· <A 
+                  title=甲骨文渐露“铁血”本色开源遭遇挑战 
+                  href="http://linux.chinaunix.net/news/2010/09/09/1170776.shtml" 
+                  target=_blank>甲骨文渐露“铁血”本色开源遭..</A><BR>· <A 
+                  title="Python 3.2 alpha 2 发布" 
+                  href="http://linux.chinaunix.net/news/2010/09/08/1170700.shtml" 
+                  target=_blank>Python 3.2 alpha 2 发布</A><BR>· <A 
+                  title="Debian 7.0代号出炉" 
+                  href="http://linux.chinaunix.net/news/2010/09/08/1170701.shtml" 
+                  target=_blank>Debian 7.0代号出炉</A><BR>· <A 
+                  title="Debian 5.0.6 发布" 
+                  href="http://linux.chinaunix.net/news/2010/09/08/1170702.shtml" 
+                  target=_blank>Debian 5.0.6 发布</A><BR>· <A 
+                  title=[图]惠普发布基于Android的一体打印机 
+                  href="http://linux.chinaunix.net/news/2010/09/08/1170703.shtml" 
+                  target=_blank>[图]惠普发布基于Android的一体..</A><BR>· <A 
+                  title="Android 3.5版本或于明年推出 代号蜂巢" 
+                  href="http://linux.chinaunix.net/news/2010/09/08/1170704.shtml" 
+                  target=_blank>Android 3.5版本或于明年推出 ..</A><BR>· <A 
+                  title=雅虎专家称对Hadoop社区贡献率达70% 
+                  href="http://linux.chinaunix.net/news/2010/09/07/1170660.shtml" 
+                  target=_blank>雅虎专家称对Hadoop社区贡献率..</A><BR></TD></TR>
+              <TR>
+                <TD height=5></TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD bgColor=#ffffff height=10></TD></TR>
+        <TR></TR></TBODY></TABLE>
+      <TABLE cellSpacing=0 cellPadding=0 width="100%" border=0>
+        <TBODY>
+        <TR>
+          <TD class=F13 
+          background="TFTP协议详解 - 技术文档 - 网络技术 Linux时代 - 开源、自由、共享 - 中国最大的Linux技术社区.files/bg245.jpg" 
+          height=27>
+            <TABLE width="100%">
+              <TBODY>
+              <TR>
+                <TD class=F13>论坛热点</TD>
+                <TD align=right><A href="http://linux.chinaunix.net/bbs" 
+                  target=_blank>更多&gt;&gt;</A>&nbsp;</TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD class=BLKtext vAlign=top bgColor=#ffffff>
+            <TABLE cellSpacing=0 cellPadding=0 width="97%" align=center 
+border=0>
+              <TBODY>
+              <TR>
+                <TD height=5></TD></TR>
+              <TR>
+                <TD>· <A title=Linxu命令大全下载 
+                  href="http://linux.chinaunix.net/bbs/thread-1170478-1-1.html" 
+                  target=_blank>Linxu命令大全下载</A><BR>· <A title=内核定时器与软中断 
+                  href="http://linux.chinaunix.net/bbs/thread-1170605-1-1.html" 
+                  target=_blank>内核定时器与软中断</A><BR>· <A title="求助 ip-mac 绑定问题" 
+                  href="http://linux.chinaunix.net/bbs/thread-1170594-1-1.html" 
+                  target=_blank>求助 ip-mac 绑定问题</A><BR>· <A 
+                  title=真耗时间，LFS完成了，走了一次弯路，内核编译为2.6.34，启动不超过7秒,.config在附件 
+                  href="http://linux.chinaunix.net/bbs/thread-1170598-1-1.html" 
+                  target=_blank>真耗时间，LFS完成了，走了一..</A><BR>· <A 
+                  title="Linux 学习过程，拜师学艺" 
+                  href="http://linux.chinaunix.net/bbs/thread-1170638-1-1.html" 
+                  target=_blank>Linux 学习过程，拜师学艺</A><BR>· <A 
+                  title=history命令保存的最大数？困惑~~ 
+                  href="http://linux.chinaunix.net/bbs/thread-1170622-1-1.html" 
+                  target=_blank>history命令保存的最大数？困..</A><BR>· <A 
+                  title=useradd的使用，请帮忙看下，谢谢！ 
+                  href="http://linux.chinaunix.net/bbs/thread-1170486-1-1.html" 
+                  target=_blank>useradd的使用，请帮忙看下，..</A><BR>· <A 
+                  title=硬盘卸下以后，再安装上去，导致linux无法启动 
+                  href="http://linux.chinaunix.net/bbs/thread-1170483-1-1.html" 
+                  target=_blank>硬盘卸下以后，再安装上去，..</A><BR>· <A title=关于交换机端口镜像,应用级 
+                  href="http://linux.chinaunix.net/bbs/thread-1170631-1-1.html" 
+                  target=_blank>关于交换机端口镜像,应用级</A><BR>· <A 
+                  title="发现个yum 命令，感觉不错。。。。" 
+                  href="http://linux.chinaunix.net/bbs/thread-1170435-1-1.html" 
+                  target=_blank>发现个yum 命令，感觉不错。..</A><BR></TD></TR>
+              <TR>
+                <TD height=5></TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD bgColor=#ffffff height=10></TD></TR>
+        <TR></TR></TBODY></TABLE>
+      <TABLE cellSpacing=0 cellPadding=0 width="100%" border=0>
+        <TBODY>
+        <TR>
+          <TD class=F13 
+          background="TFTP协议详解 - 技术文档 - 网络技术 Linux时代 - 开源、自由、共享 - 中国最大的Linux技术社区.files/bg245.jpg" 
+          height=27>
+            <TABLE width="100%">
+              <TBODY>
+              <TR>
+                <TD class=F13>文档更新</TD>
+                <TD align=right><A href="http://linux.chinaunix.net/techdoc" 
+                  target=_blank>更多&gt;&gt;</A>&nbsp;</TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD class=BLKtext vAlign=top bgColor=#ffffff>
+            <TABLE cellSpacing=0 cellPadding=0 width="97%" align=center 
+border=0>
+              <TBODY>
+              <TR>
+                <TD height=5></TD></TR>
+              <TR>
+                <TD>· <A title=一些基本用户管理以及基本安装方法 
+                  href="http://linux.chinaunix.net/techdoc/beginner/2010/03/24/1160550.shtml" 
+                  target=_blank>一些基本用户管理以及基本安装方法</A><BR>· <A 
+                  title=菜鸟学习linux笔记与练习-----第二天。一些基本命令以及初级网络配置 
+                  href="http://linux.chinaunix.net/techdoc/beginner/2010/03/23/1160525.shtml" 
+                  target=_blank>菜鸟学习linux笔记与练习-----第..</A><BR>· <A 
+                  title=菜鸟学习linux笔记与练习-----第一天。一些初级命令以及基本用户管理 
+                  href="http://linux.chinaunix.net/techdoc/beginner/2010/03/23/1160523.shtml" 
+                  target=_blank>菜鸟学习linux笔记与练习-----第..</A><BR>· <A 
+                  title=服务器配置：Squid配置详解 
+                  href="http://linux.chinaunix.net/techdoc/beginner/2010/03/22/1160427.shtml" 
+                  target=_blank>服务器配置：Squid配置详解</A><BR>· <A title=linux下u盘使用 
+                  href="http://linux.chinaunix.net/techdoc/install/2010/01/29/1156159.shtml" 
+                  target=_blank>linux下u盘使用</A><BR>· <A 
+                  title="ubuntu dynamips 绑定网卡到虚拟机" 
+                  href="http://linux.chinaunix.net/techdoc/install/2010/01/29/1156155.shtml" 
+                  target=_blank>ubuntu dynamips 绑定网卡到虚拟机</A><BR>· <A 
+                  title=虚拟机Debian中网卡无法启动 
+                  href="http://linux.chinaunix.net/techdoc/install/2010/01/29/1156154.shtml" 
+                  target=_blank>虚拟机Debian中网卡无法启动</A><BR>· <A 
+                  title="剖析SUSE Linux Tomcat自动启动" 
+                  href="http://linux.chinaunix.net/techdoc/install/2010/01/29/1156149.shtml" 
+                  target=_blank>剖析SUSE Linux Tomcat自动启动</A><BR>· <A 
+                  title=Linux启动过程综述 
+                  href="http://linux.chinaunix.net/techdoc/install/2010/01/29/1156138.shtml" 
+                  target=_blank>Linux启动过程综述</A><BR>· <A title=分区大小调整完全手册 
+                  href="http://linux.chinaunix.net/techdoc/beginner/2010/01/29/1156146.shtml" 
+                  target=_blank>分区大小调整完全手册</A><BR></TD></TR></TBODY></TABLE></TD></TR>
+        <TR></TR></TBODY></TABLE></TD></TR></TBODY></TABLE>
+<SCRIPT 
+src="TFTP协议详解 - 技术文档 - 网络技术 Linux时代 - 开源、自由、共享 - 中国最大的Linux技术社区.files/threadcount.htm"></SCRIPT>
+
+<TABLE cellSpacing=0 cellPadding=0 width=950 align=center border=0>
+  <TBODY>
+  <TR>
+    <TD>&nbsp;</TD></TR></TBODY></TABLE>
+<TABLE cellSpacing=0 cellPadding=0 width=950 align=center border=0>
+  <TBODY>
+  <TR>
+    <TD bgColor=#308cf6 height=2></TD></TR>
+  <TR>
+    <TD align=middle height=30><A 
+      href="http://www.chinaunix.net/about/index.shtml" target=_blank>关于我们</A> | 
+      <A href="http://www.chinaunix.net/about/connect.html" 
+      target=_blank>联系方式</A> | <A 
+      href="http://www.chinaunix.net/about/service.html" target=_blank>广告合作</A> 
+      | <A href="http://www.chinaunix.net/about/hr.html" target=_blank>诚聘英才</A> 
+      | <A href="http://www.chinaunix.net/about/channel.html" 
+      target=_blank>网站地图</A> | <A 
+      href="http://www.chinaunix.net/about/friend.html" target=_blank>友情链接</A> | 
+      <A href="http://linux.chinaunix.net/bbs/register.php" 
+      target=_blank>免费注册</A></TD></TR>
+  <TR>
+    <TD bgColor=#308cf6 height=2></TD></TR>
+  <TR>
+    <TD align=middle>
+      <P>Copyright &copy; 2001-2009 ChinaUnix.net All Rights Reserved</P>
+      <P>感谢所有关心和支持过ChinaUnix的朋友们<BR>
+      <P><A href="http://www.it168.com/images/icp.jpg" 
+      target=_blank>京ICP证:060528号</A></P></TD></TR></TBODY></TABLE><!-- 统计 START -->
+<SCRIPT 
+src="TFTP协议详解 - 技术文档 - 网络技术 Linux时代 - 开源、自由、共享 - 中国最大的Linux技术社区.files/pv.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT>
+function sendPV(){
+    var pvTrack = new PvTrack();
+    pvTrack.type = 10; // 频道类别ID
+    pvTrack.channel = 22; // 频道ID
+   
+    pvTrack.pageType = 0;
+    pvTrack.track();
+}
+window.setTimeout("sendPV()", 0);
+</SCRIPT>
+
+<SCRIPT language=javascript 
+src="G:\tftp\TFTP协议详解 - 技术文档 - 网络技术 Linux时代 - 开源、自由、共享 - 中国最大的Linux技术社区.files\pv(1).js" 
+type=text/javascript></SCRIPT>
+<!-- 统计 END -->
+<SCRIPT type=text/javascript>
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</SCRIPT>
+
+<SCRIPT type=text/javascript>
+try {
+var pageTracker = _gat._getTracker("UA-11982772-4");
+pageTracker._trackPageview();
+} catch(err) {}</SCRIPT>
+</BODY></HTML>

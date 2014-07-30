@@ -1,0 +1,4 @@
+#!/bin/bash
+
+sudo mount -t cifs -o username=zhengjinyong,password=tobemyself,noperm //172.20.1.86/zhengjinyong /home/liushui/server/86/
+

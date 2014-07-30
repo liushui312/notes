@@ -1,0 +1,18 @@
+系统架构
+  Android系统是按层次、分模块来设计的。整个系统划分内核空间和用户空间两部分。
+  内核空间:
+	进程管理
+	内存管理
+	设备驱动程序模块等，其中包括Android专用驱动Binder、Logger和Ashmem
+  用户空间:
+	硬件抽象层（HAL）
+	外部库和运行时库层（External Libraries & Android Runtime）
+	应用程序框架层（Application Framework）
+	应用程序层（Applications）
+  
+  先学习Android硬件抽象层
+----------------------------------------------------------------------------------------
+Android的硬件抽象层，简单来说，就是对Linux内核驱动程序的封装，向上提供接口，屏蔽低层的实现细节。
+
+1.在Ubuntu上为Android系统编写Linux内核驱动程序 
+

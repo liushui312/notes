@@ -1,0 +1,34 @@
+1.遥控器：在/amloigc/mx_0428/device/amlogic/g18ref下的remote.conf修改键值，相对照Vendor_0001_Product_0001.kl
+
+2.开机logo/动画更换修改：amlogic/mx_1225/out/target/product/g18ref/system/media/bootanimation.zip
+
+3.HDMI,MboxLauncher2解压后编译还是出错，修改哪个文件？
+	修改：mx_1225/vendor/amlogic/prebuilt/Android.mk
+	设置：mx_1225/package/amlogic/MboxSetting/src/com/mbx/settingsmbox  
+		vi HdmiManager.java
+
+	    
+
+4.ddr模式配置：amlogic/mx_1225/uboot/customer/board/configs
+
+	添加一个宏定义  if
+	m6_mbx_v1.h
+
+	#define M6_DDR3_4Gbx2 2pcs
+	//#define M6_DDR3_4Gbx2   4pcs
+
+
+5.gpio设置修改：amlogic/mx_1225/common/arch/arm/mach-meson6/include/mach/gpio_data.h
+
+	a,设置GPIO输入输出状态
+	b,设置GPIO电平状态
+		return ‘1’ 表高电平
+		return ‘0’ 表低电平
+	修改：
+		kernel：common/customer/boards  vi board-m6g18.c
+
+6.mac/userid等写入读出
+
+7.wifi配置
+
+

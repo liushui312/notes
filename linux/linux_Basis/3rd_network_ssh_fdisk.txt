@@ -1,0 +1,495 @@
+Linux磁盘管理
+   
+    一、系统基本命令
+                      
+        file                                查看文件类型
+
+        uname                               查看系统基本信息
+            
+            -r                              内核版本
+            -s                              什么内核
+            -o                              什么操作系统
+            -n                              什么发行版
+            -m                              什么平台
+            -a                              查看所有信息
+
+        cal                                 打印日历
+            cal 2005                        打印2005年日历
+
+        bc                                  支持超大数的文本计算器
+            quit                            退出
+
+        date                                时间日期命令 
+            
+            +%Y                             年
+            +%m                             月
+            +%d                             日
+            +%H                             小时
+            +%M                             分
+            +%S                             秒
+            ......
+
+        echo                                打印字符串
+
+            -n                              不换行
+            -e                              支持\t\n等
+
+        shutdown -r                         重启
+        suutdown -c                         取消计划中的关机或重启
+        shutdown -p                         直接关闭电源
+        shutdown -h                         关机
+        shutdown -h 30 "30秒后就要关机"     计划关机并给所有终端提示
+
+        init                                改变系统运行级别
+            
+            0                               关机
+            1                               单用户模式，没有用户和密码验证
+            2                               不带网络的文本模式
+            3                               带网络的文本模式
+            4                               保留
+            5                               带图形界面的模式
+            6                               重启电脑
+
+        runlevel                            查看当前运行级别
+
+        sync                                同步磁盘
+
+        cat /etc/issue                      查看linux系统发行版本信息
+        
+        运行程序：
+
+            ./command                       运行程序 
+            
+            ./command &                     &代表后台运行
+
+            ctrl+z                          把当前运行的程序放到后台暂停
+
+            fg                              放回前台运行,后面可以跟数字，指定哪个后台程序
+
+            ctrl+c                          强制关闭当前运行的程序
+
+
+===============================================================================
+
+    二、网络基本配置
+        
+        mii-tool                            查看网卡连接
+            no link                         网线不通
+            NO-MII....                      网卡模块没有加裁或网卡和主板连接问题
+
+        ifconfig                            查看所有网卡信息
+            
+            ifconfig eth0                   查看eth0网卡信息
+            ifconfig eth0 down              临时关闭eth0网卡,可以简写 ifdown eth0
+            ifconfig eth0 up                临时开启eth0网卡,可以简写 ifup eth0
+            ifconfig eth0 2.2.2.12          临时设置eth0网卡IP地址,重启电脑或重启网络服务失效
+            ifconfig eth0 2.2.2.12 netmask 255.255.255.0 临时设置eth0网卡IP地址和子网掩码
+            ifconfig eth0 hw ether 00:11:22:33:44:55    修改网卡硬件地址，这个永久生效
+
+            永久修改IP地址：
+                vim /etc/sysconfig/network-scripts/ifcfg-eth0
+                    
+                    DEVICE=eth0                 指定设备号
+                    BOOTPROTO=dhcp              指定IP分配方式，dhcp为动态分配，static为静态分配
+                    HWADDR=00:23:CD:94:B5:92    物理地址,这里不是修改网卡硬件地址，只是起个绑定作用，可不写
+                    IPADDR=2.2.2.12             IP地址
+                    NETMASK=255.255.255.0       子网掩码
+                    GATEWAY=2.2.2.1             网关
+                    ONBOOT=yes                  是否启用这个网卡
+
+                service network restart         重启网络服务，使配置生效
+
+                图形配置：
+                    system-config-network 
+
+        ping                                检测网络的连通性
+            
+            -c                              指定ping多少次
+            
+        hostname                            查看或临时修改主机名,主机名最好是域名形式
+            
+            hostname kyo.uplooking.com      修改主机名，立即生效
+
+            永久修改主机名：
+                
+                vim /etc/sysconfig/network  
+                    HOSTNAME=kyo.uplooking.com      永久修改
+
+                vim /etc/hosts                      在hosts文件里写上IP地址和主机名对应，不写会影响X server
+                    2.2.2.12  kyo.uplooking.com     
+
+
+        vim /etc/resolv.conf                指定DNS服务器IP地址，最多支持三个，写多无效
+
+            nameserver 2.2.2.1
+            nameserver 202.96.128.166
+
+
+
+===============================================================================
+
+    三、常用网络工具
+    
+        route                               路由表设定和查看
+            
+            -n                              不把IP地址转为域名输出，会快很多
+
+            route add default gw 2.2.2.1    添加网关
+            route del default gw 2.2.2.1    删除网关
+            route add -net 2.2.2.0  netmask 255.255.255.0 dev eth0  添加一个路由条目
+            route del -net 2.2.2.0  netmask 255.255.255.0 删除一个路由条目
+        
+        cat /proc/net/dev                   监控网卡数据流量
+            
+            bytes                           接收或者发送的数据量的总大小
+            packets                         接收和发送的数据包的个数
+            errs                            被驱动程序检测到是错误的包个数
+            drop                            由于资源的限制，来的不处理丢掉的包
+            fifo                            缓存出现
+            colls                           冲突包次数
+
+        netstat                             显示网络连接情况
+
+            netstat  -r -n                  显示路由表
+            netstat  -i -e                  显示网卡信息
+            netstat  -a                     查看所有类型的连接信息
+            netstat  -nt                    查看所有的tcp的连接信息(-t),-n不把IP转换成域名
+            netstat  -ntl                   只查看tcp连接并且是处于listen状态
+            netstat  -utl                   只查看udp连接并且是处于listen状态
+            netstat  -ntlp                  显示打开的连接对应的程序，-p 显示程序的路径
+
+        tcpdump                             抓包工具
+            
+            tcpdump  arp                    捕捉arp协议的数据包
+            tcpdump  tcp                    捕捉tcp协议的所有数据包
+            tcpdump  udp                    捕捉udp协议的所有数据包
+            tcpdump  tcp port 22            捕捉tcp协议并且是端口22的数据包
+            tcpdump  tcp port 22 -vv        同上并且把数据包的详细信息都记录下来
+            tcpdump  tcp src port 22        只记录源端口是22的数据包
+            tcpdump  dst 2.2.2.10           只记录目的IP是2.2.2.10的数据包
+            tcpdump  tcp dst port 80        只记录访问本机80端口的数据包
+            tcpdump  tcp dst port 80 -vv -w /tmp/test/http.cap   把记录保存到文件中
+
+
+        ssh                                 远程登录
+            
+            vim /etc/ssh/sshd_config        ssh服务的主配置文件
+                
+                Port 22                     默认使用的端口,为了安装一般把这端口改变，用-p后接端口,scp就要用-P指定端口
+                PermitRootLogin yes         允许root用户登录
+                Permitemptypasswords yes    允许空密码登录
+
+            设置好重启下ssh服务
+                
+                /etc/init.d/sshd restart
+
+            --------------------------------------------------------------------------------
+
+            ssh 2.2.2.100                   远程登录2.2.2.100，以当前登录用户去登录2.2.2.100，第一次登录需要确认，然后输入对方用户密码登录
+
+            ssh kyo@2.2.2.100               以kyo用户去登录2.2.2.100
+
+            ssh 2.2.2.100 -l kyo            同上
+
+            ssh 2.2.2.100 -l kyo -p 2222    以kyo登录2.2.2.100,并且指定端口号
+
+            ssh 2.2.2.100 -Y                登录后可以调用2.2.2.100这台机的图形程序到本地来显示
+
+            ssh 2.2.2.100 -X firefox        直接调用2.2.2.100的firefox程序
+
+             一个ssh错误的情况:
+            ssh 2.2.2.100
+            @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+            @    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @
+            @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+            IT IS POSSIBLE THAT SOMEONE IS DOING SOMETHING NASTY!
+            Someone could be eavesdropping on you right now (man-in-the-middle attack)!
+            It is also possible that the RSA host key has just been changed.
+            The fingerprint for the RSA key sent by the remote host is
+            de:d5:ea:a8:34:d2:86:97:af:44:26:56:f9:84:3a:e4.
+            Please contact your system administrator.
+            Add correct host key in /root/.ssh/known_hosts to get rid of this message.
+            Offending key in /root/.ssh/known_hosts:3
+            RSA host key for 10.1.0.100 has changed and you have requested strict checking.
+            Host key verification failed.
+
+
+            --遇到此错误，有可能是因为100这个IP换了另一台主机在使用；解决方法：把/root/.ssh/known_hosts里关于100的那一行RSA　KEY信息给删除掉，保存退出后就可以再连
+
+            --------------------------------------------------------------------------------
+
+            ssh 等效性的配置（ 也就是ssh对方不要密码）
+
+                第一步： ssh-keygen 	--输入这个命令后，敲三次回车，产生一对密钥
+
+                第二步： scp /root/.ssh/id_rsa.pub 2.2.2.100:/root/.ssh/authorized_keys	--把公钥scp给对方的/root/.ssh 目录下，并改名为authorized_keys
+
+                    或者：
+
+                        scp-copy-id /root/.ssh/id_rsa.pub root@2.2.2.100
+
+                再ssh 2.2.2.100就不需要密码了
+                如果要多台机对一台机ssh没有密码，就要把新产生的id_rsa.pub，复制粘贴到对方机的authorized_keys
+                
+                如果互相可以等效性
+                    
+                在另台机上运行ssh-keygen -t dsa  再把文件复制回来即可
+
+                如果多台机之间设置等效性，不要再用scp复制，用复制粘贴或追加到authorized_keys文件里
+
+        --------------------------------------------------------------------------------
+
+        远程拷贝　　scp	--拷目录的话记住加上-r参数
+
+        从本地拷到远程
+            scp /share/iso/rhel-5.5-server-i386-dvd.iso 2.2.2.100:/root/Desktop/
+
+        从远程拷到本地
+            scp 2.2.2.100:/root/Desktop/123 /root   
+
+            scp /root/Desktop/isocp.sh kyo.com:/root/Desktop/	--也可以使用主机名去代替IP表示远程主机，但要加到/etc/hosts里才可以
+
+
+===============================================================================
+
+    四、在线用户管理和消息命令
+        
+        users                               简单显示谁在线登录
+
+        who                                 简单显示用户的在线情况，包括使用的终端，登录时间等
+
+        w                                   更详细的显示在线情况
+
+            21:55:44 up  1:49,  5 users,  load average: 0.38, 0.35, 0.23
+            USER     TTY      FROM              LOGIN@   IDLE   JCPU   PCPU WHAT
+            root     tty7     :0               20:06    1:49m  1:52   0.12s gnome-session
+            root     pts/2    :0.0             20:24   33.00s  0.10s  0.10s bash
+            root     pts/3    :0.0             21:37   11:18   0.02s  0.02s bash
+
+            用户名  登录终端    从哪里登录过来  登录时间        
+            
+            踢掉一个远程登录过来的用户
+
+                ps -aux | grep pts/5        pts/5是远程登录的终端,查看终端对应的PID
+
+                kill -9 3236                3236是上面查到的pts/5的PID
+
+        last                                显示登录成功的日志，读取的是/var/log/wtmp
+
+               file /var/log/wtmp           查看文件类型为data，所以不能用cat等阅读命令去看，只能用last命令去读取 
+
+        lastb                               显示登录失败的日志，读取的是/var/log/btmp
+
+        lastlog                             显示每个用户的最后一次登录信息，读取的是/var/log/lastlog
+
+        wall                                给每个在线用户和终端发送住处，用于通知等情况
+
+            mesg    y|n                     n为关闭广播消息，y为授受广播消息，临时生效，退出终端失效，管理员发的广播消息不能关闭,如果关闭广播消息，本终端也发不了消息
+
+        write                               指定用户终端发送消息
+            
+            write kyo tty1                  给tty1的kyo用户发送消息，按ctrl+d结束
+
+
+
+===============================================================================
+
+    五、磁盘管理
+         
+        fdisk                               磁盘管理命令
+
+            fdisk -l                        显示所有磁盘分区详细信息
+
+            fdisk /dev/sda                  对/dev/sda硬盘修改分区
+
+                m                           帮助
+                n                           新建一个分区
+                    p                       创建主分区
+                    e                       创建扩展分区
+                    l                       创建逻辑分区
+                d                           删除一个分区
+                p                           打印分区表
+                t                           修改分区的类型
+                l                           列出所有的分区类型ID
+                w                           保存当前对分区的修改
+                q                           退出
+
+        partprobe                           刚分区保存后，重新生成设备文件 ，重启也能生成设备文件
+
+
+        小练习：
+            1、验证只能分四个主分区
+            2、验证最大只能分15个区
+                --注意用fdisk来做的时候，不要用w保存，做完试验后，按q退出不保存
+          
+    
+        分区的思路：
+            1、根据需要指定分区方案；
+            2、进行分区，确定分区没错保存退出
+            3、更新设备文件  partprobe
+            4、对新建的分区格式化
+            5、对新区进行挂载
+
+
+        格式化分区：
+            
+            mkfs.文件格式  设备文件路径  
+
+            例：
+
+                mkfs.ext3 /dev/sda5         mkfs -t ext3 /dev/sda5
+
+                mkfs -t vfat /dev/sda6      格式化成fat32    
+
+                mkfs -t vfat /dev/sda6 -L /data     格式化成fat32并且设置卷标/data
+
+
+        挂载分区：     
+            
+            mount                           查看当前系统挂载情况 
+                
+                -t                          指定挂载的文件系统格式
+
+                -o                          指定挂载的选项
+
+                    rw / ro                 读写或只读挂载
+                    suid / nosuid           允许不允许设置特权位
+                    exec / noexec           可不可以执行可执行文件
+                    auto / noauto           系统启动或用mount -a时挂载还是不挂载
+                    user / nouser           普通用户可不可以挂载
+                    sync / async            同步还是异步存储
+                    dev / nodev             是不是字符设备或块设备
+                    loop                    通过/dev/loop*设备文件挂载普通文件,例iso文件
+                    remount                 重新挂载
+                    defaults                默认为rw,suid,exec,auto,nouser,async,dev
+
+                -a                          读/etc/fstab挂载列表所有
+
+                用法:
+                    
+                    mount -t ext3 /dev/sda5 /mnt                把硬盘第五个分区挂载到/mnt目录
+                    mount -t vfat -o ro /dev/sda6 /sda6         把硬盘的第六个分区以只读形式挂载到/sda6目录
+                    mount -o loop -t iso9660 rhel.iso /mnt      把rhel.iso文件挂载到/mnt目录下
+                    mount -o ro /dev/cdrom /mnt                 把光驱挂载到/mnt目录下
+                    mount --bind /usr/share /share              绑定/usr/share和/share目录
+
+                    以上挂载全是临时挂载，重启会失效
+
+                    同一个目录可以被mount多次，但是访问看到的内容是最后mount的，所以umount也要相应多次
+                    /dev ,/bin, /boot 这些系统重要的目录不能用于挂载
+ 
+
+
+            umount                          卸载
+                
+                -f                          强制卸载
+                -l                          绝对强制卸载
+                -a                          按照/etc/fstab的内容卸载
+            
+            --------------------------------------------------------------------------------
+
+            如果想一开机就自动挂载，就要修改 vim /etc/fstab
+        
+                LABEL=/         /             ext3         defaults                   1 1
+                LABEL=/boot     /boot         ext3         defaults                   1 2
+                tmpfs           /dev/shm      tmpfs        defaults                   0 0       在内存上挂载
+                devpts          /dev/pts      devpts       gid=5,mode=620             0 0       虚拟终端挂载
+                sysfs           /sys          sysfs        defaults                   0 0       内存信息反应 
+                proc                          /proc        defaults                   0 0       同上
+                LABEL=SWAP-sda3 swap          swap         defaults                   0 0       挂载交换分区
+
+                原设备的设备路径/标签       挂载路径        文件系统的格式   挂载选项
+
+                挂载选项为mount的选项
+
+                第一个0代表不能使用dump备份，如果是1就能使用dump备份
+                第二个0代表是否开机进行分区检查 ，非0就是启动开机数据检测，规则，根分区必须是1，其它分区只能用2以上
+
+
+            fstab排错：
+                
+                如果fstab文件分区检查的分区挂载项写错?
+                    效果：
+                        在开机的时候会出现Ctrl+D等，提示让输入root密码
+
+                    解决：
+                        输入root用户密码
+                        mount -o remount,rw /dev/sda3 /     重新以可读可写选项挂载根分区，否则修改不了fstab文件
+                        把fstab修改到正确
+
+                如果fstab文件丢失?
+                    效果：
+                        可以进系统，但是进来后操作不了
+                    
+                    解决：
+                        以光盘或网络启动linux rescue抢修模式
+                        chroot /mnt/sysimage    挂载自己的根重新写fstab，写到正确为止 
+
+
+        df -h                               查看磁盘挂载分区使用情况
+
+        e2label                             给分区设置标签
+            
+            e2label  /dev/sda7              查看/dev/sda7标签
+
+            e2label /dev/sda7 /soft         设置/dev/sda7的标签为/soft
+
+      
+        free                                查看内存使用情况
+            
+            -m                              以M为单位显示
+
+        du                                  查看文件大小
+            
+            du -h  *                        查看当前文件夹所有文件大小
+
+        
+        fuser                               管理文件系统进程
+            
+            -vm /dev/sda1 或 /mnt           查看使用/dev/sda1的进程
+            
+            -km /dev/sda1 或 /mnt           杀死使用/dev/sda1的进程
+
+
+        --------------------------------------------------------------------------------
+
+        交换分区
+
+            mkswap                          格式化交换分区
+
+            swapon                          启动交换分区
+
+                swapon -a                   启动所有的交换分区，读/etc/fstab
+                swapon -s                   查看当前交换分区的信息
+
+            swapoff                         关闭交换分区
+                
+                swapoff -a                  关闭所有交换分区，读/etc/fstab
+
+
+            增加交换分区方法一：
+                
+                fdisk /dev/sda              修改磁盘分区 
+                    n                       新建一个2G的分区
+                    t                       改变分区类为交换分区 交换分区为 82
+                    w                       保存修改的分区表
+
+                partprobe                   刷新设备文件
+
+                mkswap /dev/sda6            把新分的分区格式化，格式化成交换分区格式
+
+                swapon /dev/sda6            启动新分的交换分区
+                    
+                free -m                     查看交换分区大小是否改变,如果改变证明增加swap分区成功
+
+
+            增加交换分区方法二：
+
+                dd if=/dev/zero of=/swapfile bs=1M count=1000   做一个1G的空文件
+
+                mkswap /swapfile            把此文件格式化为交换分区格式
+
+                swapon /swapfile            启动swapfile为交换分区使用
+
+
+===============================================================================

@@ -1,0 +1,175 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+BACKSPACE	glist/dict.c	18;"	d	language:C	file:
+BACKSPACE	glist_dict/dict.c	18;"	d	language:C	file:
+CLR_BACK	glist/vt.h	6;"	d	language:C++
+CLR_BACK	glist_dict/vt.h	6;"	d	language:C++
+CLR_LINE	glist/vt.h	5;"	d	language:C++
+CLR_LINE	glist_dict/vt.h	5;"	d	language:C++
+CLR_SCREEN	glist/vt.h	4;"	d	language:C++
+CLR_SCREEN	glist_dict/vt.h	4;"	d	language:C++
+DEBUG	glist/vt.h	8;"	d	language:C++
+DEBUG	glist_dict/vt.h	8;"	d	language:C++
+END	1_tree.c	/^enum {FRO, MID, END, LEV};$/;"	e	language:C	enum:__anon1	file:
+END	t1.c	/^enum {FRO, MID, END, LEV};$/;"	e	language:C	enum:__anon2	file:
+ENTER	glist/dict.c	17;"	d	language:C	file:
+ENTER	glist_dict/dict.c	17;"	d	language:C	file:
+ERROR	glist/dict.c	19;"	d	language:C	file:
+ERROR	glist_dict/dict.c	19;"	d	language:C	file:
+ERRP	glist/dict.c	7;"	d	language:C	file:
+ERRP	glist_dict/dict.c	7;"	d	language:C	file:
+ESC	glist/dict.c	16;"	d	language:C	file:
+ESC	glist_dict/dict.c	16;"	d	language:C	file:
+FRO	1_tree.c	/^enum {FRO, MID, END, LEV};$/;"	e	language:C	enum:__anon1	file:
+FRO	t1.c	/^enum {FRO, MID, END, LEV};$/;"	e	language:C	enum:__anon2	file:
+LEN	glist/dict.c	21;"	d	language:C	file:
+LEN	glist_dict/dict.c	21;"	d	language:C	file:
+LEV	1_tree.c	/^enum {FRO, MID, END, LEV};$/;"	e	language:C	enum:__anon1	file:
+LEV	t1.c	/^enum {FRO, MID, END, LEV};$/;"	e	language:C	enum:__anon2	file:
+MAX	1_tree.c	4;"	d	language:C	file:
+MAX	glist/dict.c	22;"	d	language:C	file:
+MAX	glist_dict/dict.c	22;"	d	language:C	file:
+MAX	t1.c	4;"	d	language:C	file:
+MID	1_tree.c	/^enum {FRO, MID, END, LEV};$/;"	e	language:C	enum:__anon1	file:
+MID	t1.c	/^enum {FRO, MID, END, LEV};$/;"	e	language:C	enum:__anon2	file:
+__VT_H__	glist/vt.h	2;"	d	language:C++
+__VT_H__	glist_dict/vt.h	2;"	d	language:C++
+add_word	glist/dict.c	/^void add_word(struct node_t *head, int i, char *buf)$/;"	f	language:C	signature:(struct node_t *head, int i, char *buf)
+add_word	glist_dict/dict.c	/^void add_word(struct node_t *head, int i, char *buf)$/;"	f	language:C	signature:(struct node_t *head, int i, char *buf)
+balance	1_tree.c	/^void balance(struct node_t **root)$/;"	f	language:C	signature:(struct node_t **root)
+balance	t1.c	/^void balance(struct node_t **root)$/;"	f	language:C	signature:(struct node_t **root)
+clean	glist/vt.c	/^void clean(int flag)$/;"	f	language:C	signature:(int flag)
+clean	glist_dict/vt.c	/^void clean(int flag)$/;"	f	language:C	signature:(int flag)
+cn	2_glist.c	/^    char *cn;$/;"	m	language:C	struct:node_t	file:
+cn	glist/dict.c	/^    char *cn;$/;"	m	language:C	struct:node_t	file:
+cn	glist/glist.c	/^    char *cn;$/;"	m	language:C	struct:node_t	file:
+cn	glist_dict/dict.c	/^    char *cn;$/;"	m	language:C	struct:node_t	file:
+cn	glist_dict/glist.c	/^    char *cn;$/;"	m	language:C	struct:node_t	file:
+count	1_tree.c	/^int count(struct node_t *root)$/;"	f	language:C	signature:(struct node_t *root)
+count	t1.c	/^int count(struct node_t *)$/;"	f	language:C	signature:(struct node_t *)
+d	glist/dict.c	/^static int d = 0;$/;"	v	language:C	file:
+d	glist_dict/dict.c	/^static int d = 0;$/;"	v	language:C	file:
+data	1_tree.c	/^    int data;$/;"	m	language:C	struct:node_t	file:
+data	t1.c	/^    int data;$/;"	m	language:C	struct:node_t	file:
+delete	1_tree.c	/^int delete(int key, struct node_t **root)$/;"	f	language:C	signature:(int key, struct node_t **root)
+delete	t1.c	/^int delete(int key, struct node_t **)$/;"	f	language:C	signature:(int key, struct node_t **)
+depth	1_tree.c	/^int depth(struct node_t *root)$/;"	f	language:C	signature:(struct node_t *root)
+depth	t1.c	/^int depth(struct node_t *)$/;"	f	language:C	signature:(struct node_t *)
+destroy	1_tree.c	/^void destroy(struct node_t *root)$/;"	f	language:C	signature:(struct node_t *root)
+destroy	glist/glist.c	/^void destroy(struct node_t *head)$/;"	f	language:C	signature:(struct node_t *head)
+destroy	glist_dict/glist.c	/^void destroy(struct node_t *head)$/;"	f	language:C	signature:(struct node_t *head)
+destroy	t1.c	/^void destroy(struct node_t *)$/;"	f	language:C	signature:(struct node_t *)
+dict_exit	glist/dict.c	/^void dict_exit(struct node_t *handle)$/;"	f	language:C	signature:(struct node_t *handle)
+dict_exit	glist_dict/dict.c	/^void dict_exit(struct node_t *handle)$/;"	f	language:C	signature:(struct node_t *handle)
+dict_init	glist/dict.c	/^struct node_t *dict_init(const char *path)$/;"	f	language:C	signature:(const char *path)
+dict_init	glist_dict/dict.c	/^struct node_t *dict_init(const char *path)$/;"	f	language:C	signature:(const char *path)
+draw_box	glist/vt.c	/^void draw_box(int x, int y, int w, int h, int color, int ch)$/;"	f	language:C	signature:(int x, int y, int w, int h, int color, int ch)
+draw_box	glist_dict/vt.c	/^void draw_box(int x, int y, int w, int h, int color, int ch)$/;"	f	language:C	signature:(int x, int y, int w, int h, int color, int ch)
+draw_rect	glist/vt.c	/^void draw_rect(int x, int y, int w, int h, int color, int ch)$/;"	f	language:C	signature:(int x, int y, int w, int h, int color, int ch)
+draw_rect	glist_dict/vt.c	/^void draw_rect(int x, int y, int w, int h, int color, int ch)$/;"	f	language:C	signature:(int x, int y, int w, int h, int color, int ch)
+en	2_glist.c	/^    char en;$/;"	m	language:C	struct:node_t	file:
+en	glist/dict.c	/^    char en;$/;"	m	language:C	struct:node_t	file:
+en	glist/glist.c	/^    char en;$/;"	m	language:C	struct:node_t	file:
+en	glist_dict/dict.c	/^    char en;$/;"	m	language:C	struct:node_t	file:
+en	glist_dict/glist.c	/^    char en;$/;"	m	language:C	struct:node_t	file:
+end	1_tree.c	/^void end(struct node_t *root)$/;"	f	language:C	signature:(struct node_t *root)
+end	t1.c	/^void end(struct node_t *)$/;"	f	language:C	signature:(struct node_t *)
+find	1_tree.c	/^int find(int key, struct node_t *root)$/;"	f	language:C	signature:(int key, struct node_t *root)
+find	2_glist.c	/^char *find(const char *en, struct node_t *head)$/;"	f	language:C	signature:(const char *en, struct node_t *head)
+find	glist/glist.c	/^char *find(char *en, struct node_t *head)$/;"	f	language:C	signature:(char *en, struct node_t *head)
+find	glist_dict/glist.c	/^char *find(char *en, struct node_t *head)$/;"	f	language:C	signature:(char *en, struct node_t *head)
+find	t1.c	/^int find(int key, struct node_t *)$/;"	f	language:C	signature:(int key, struct node_t *)
+fro	1_tree.c	/^void fro(struct node_t *root)$/;"	f	language:C	signature:(struct node_t *root)
+fro	t1.c	/^void fro(struct node_t *root)$/;"	f	language:C	signature:(struct node_t *root)
+get_input	glist/dict.c	/^int get_input(void)$/;"	f	language:C	signature:(void)
+get_input	glist_dict/dict.c	/^int get_input(void)$/;"	f	language:C	signature:(void)
+glist_destroy	glist/dict.c	/^void glist_destroy(struct node_t *head)$/;"	f	language:C	signature:(struct node_t *head)
+glist_destroy	glist_dict/dict.c	/^void glist_destroy(struct node_t *head)$/;"	f	language:C	signature:(struct node_t *head)
+glist_find	glist/dict.c	/^struct node_t *glist_find(char *en, struct node_t *head)$/;"	f	language:C	signature:(char *en, struct node_t *head)
+glist_find	glist_dict/dict.c	/^struct node_t *glist_find(char *en, struct node_t *head)$/;"	f	language:C	signature:(char *en, struct node_t *head)
+glist_insert	glist/dict.c	/^void glist_insert(char *en, char *cn, struct node_t **p)$/;"	f	language:C	signature:(char *en, char *cn, struct node_t **p)
+glist_insert	glist_dict/dict.c	/^void glist_insert(char *en, char *cn, struct node_t **p)$/;"	f	language:C	signature:(char *en, char *cn, struct node_t **p)
+gotoxy	glist/vt.c	/^void gotoxy(int x, int y)$/;"	f	language:C	signature:(int x, int y)
+gotoxy	glist_dict/vt.c	/^void gotoxy(int x, int y)$/;"	f	language:C	signature:(int x, int y)
+hide_cur	glist/vt.c	/^void hide_cur(void)$/;"	f	language:C	signature:(void)
+hide_cur	glist_dict/vt.c	/^void hide_cur(void)$/;"	f	language:C	signature:(void)
+insert	1_tree.c	/^int insert(int data, struct node_t **root)$/;"	f	language:C	signature:(int data, struct node_t **root)
+insert	2_glist.c	/^int insert(char *en, char *cn, struct node_t **p)$/;"	f	language:C	signature:(char *en, char *cn, struct node_t **p)
+insert	glist/glist.c	/^void insert(char *en, char *cn, struct node_t **p)$/;"	f	language:C	signature:(char *en, char *cn, struct node_t **p)
+insert	glist_dict/glist.c	/^void insert(char *en, char *cn, struct node_t **p)$/;"	f	language:C	signature:(char *en, char *cn, struct node_t **p)
+left	1_tree.c	/^    struct node_t *left;$/;"	m	language:C	struct:node_t	typeref:struct:node_t::node_t	file:
+left	t1.c	/^    struct node_t *left;$/;"	m	language:C	struct:node_t	typeref:struct:node_t::node_t	file:
+lev	1_tree.c	/^void lev(struct node_t *root)$/;"	f	language:C	signature:(struct node_t *root)
+lev	t1.c	/^void lev(struct node_t *)$/;"	f	language:C	signature:(struct node_t *)
+load_cur	glist/vt.c	/^void load_cur(void)$/;"	f	language:C	signature:(void)
+load_cur	glist_dict/vt.c	/^void load_cur(void)$/;"	f	language:C	signature:(void)
+main	1_tree.c	/^int main(void)$/;"	f	language:C	signature:(void)
+main	2_glist.c	/^int main(void)$/;"	f	language:C	signature:(void)
+main	glist/dict.c	/^int main(void)$/;"	f	language:C	signature:(void)
+main	glist/glist.c	/^int main(void)$/;"	f	language:C	signature:(void)
+main	glist/key.c	/^int main(void)$/;"	f	language:C	signature:(void)
+main	glist_dict/dict.c	/^int main(void)$/;"	f	language:C	signature:(void)
+main	glist_dict/glist.c	/^int main(void)$/;"	f	language:C	signature:(void)
+main	glist_dict/key.c	/^int main(void)$/;"	f	language:C	signature:(void)
+main	t1.c	/^int main(void)$/;"	f	language:C	signature:(void)
+max	1_tree.c	/^struct node_t *max(struct node_t *root)$/;"	f	language:C	signature:(struct node_t *root)
+max	t1.c	/^struct node_t *max(struct node_t *root)$/;"	f	language:C	signature:(struct node_t *root)
+mid	1_tree.c	/^void mid(struct node_t *root)$/;"	f	language:C	signature:(struct node_t *root)
+mid	t1.c	/^void mid(struct node_t *)$/;"	f	language:C	signature:(struct node_t *)
+min	1_tree.c	/^struct node_t *min(struct node_t *root)$/;"	f	language:C	signature:(struct node_t *root)
+min	t1.c	/^struct node_t *min(struct node_t *root)$/;"	f	language:C	signature:(struct node_t *root)
+move_down	glist/vt.c	/^void move_down(int step)$/;"	f	language:C	signature:(int step)
+move_down	glist_dict/vt.c	/^void move_down(int step)$/;"	f	language:C	signature:(int step)
+move_left	glist/vt.c	/^void move_left(int step)$/;"	f	language:C	signature:(int step)
+move_left	glist_dict/vt.c	/^void move_left(int step)$/;"	f	language:C	signature:(int step)
+move_right	glist/vt.c	/^void move_right(int step)$/;"	f	language:C	signature:(int step)
+move_right	glist_dict/vt.c	/^void move_right(int step)$/;"	f	language:C	signature:(int step)
+move_up	glist/vt.c	/^void move_up(int step)$/;"	f	language:C	signature:(int step)
+move_up	glist_dict/vt.c	/^void move_up(int step)$/;"	f	language:C	signature:(int step)
+next	2_glist.c	/^    struct node_t *next;$/;"	m	language:C	struct:node_t	typeref:struct:node_t::node_t	file:
+next	glist/dict.c	/^    struct node_t *next;$/;"	m	language:C	struct:node_t	typeref:struct:node_t::node_t	file:
+next	glist/glist.c	/^    struct node_t *next;$/;"	m	language:C	struct:node_t	typeref:struct:node_t::node_t	file:
+next	glist_dict/dict.c	/^    struct node_t *next;$/;"	m	language:C	struct:node_t	typeref:struct:node_t::node_t	file:
+next	glist_dict/glist.c	/^    struct node_t *next;$/;"	m	language:C	struct:node_t	typeref:struct:node_t::node_t	file:
+node_t	1_tree.c	/^struct node_t {$/;"	s	language:C	file:
+node_t	2_glist.c	/^struct node_t {$/;"	s	language:C	file:
+node_t	glist/dict.c	/^struct node_t {$/;"	s	language:C	file:
+node_t	glist/glist.c	/^struct node_t {$/;"	s	language:C	file:
+node_t	glist_dict/dict.c	/^struct node_t {$/;"	s	language:C	file:
+node_t	glist_dict/glist.c	/^struct node_t {$/;"	s	language:C	file:
+node_t	t1.c	/^struct node_t {$/;"	s	language:C	file:
+putch	glist/vt.c	/^void putch(int fcolor, int bcolor, int ch)$/;"	f	language:C	signature:(int fcolor, int bcolor, int ch)
+putch	glist_dict/vt.c	/^void putch(int fcolor, int bcolor, int ch)$/;"	f	language:C	signature:(int fcolor, int bcolor, int ch)
+putstr	glist/vt.c	/^void putstr(int fcolor, int bcolor, char *s)$/;"	f	language:C	signature:(int fcolor, int bcolor, char *s)
+putstr	glist_dict/vt.c	/^void putstr(int fcolor, int bcolor, char *s)$/;"	f	language:C	signature:(int fcolor, int bcolor, char *s)
+right	1_tree.c	/^    struct node_t *right;$/;"	m	language:C	struct:node_t	typeref:struct:node_t::node_t	file:
+right	t1.c	/^    struct node_t *right;$/;"	m	language:C	struct:node_t	typeref:struct:node_t::node_t	file:
+save_cur	glist/vt.c	/^void save_cur(void)$/;"	f	language:C	signature:(void)
+save_cur	glist_dict/vt.c	/^void save_cur(void)$/;"	f	language:C	signature:(void)
+show	1_tree.c	/^void show(struct node_t *root) $/;"	f	language:C	signature:(struct node_t *root)
+show	t1.c	/^void show(struct node_t *)$/;"	f	language:C	signature:(struct node_t *)
+show_cur	glist/vt.c	/^void show_cur(void)$/;"	f	language:C	signature:(void)
+show_cur	glist_dict/vt.c	/^void show_cur(void)$/;"	f	language:C	signature:(void)
+show_find	glist/dict.c	/^void show_find(char *key, struct node_t *handle)$/;"	f	language:C	signature:(char *key, struct node_t *handle)
+show_find	glist_dict/dict.c	/^void show_find(char *key, struct node_t *handle)$/;"	f	language:C	signature:(char *key, struct node_t *handle)
+show_word	glist/dict.c	/^void show_word(char *key, struct node_t *handle)$/;"	f	language:C	signature:(char *key, struct node_t *handle)
+show_word	glist_dict/dict.c	/^void show_word(char *key, struct node_t *handle)$/;"	f	language:C	signature:(char *key, struct node_t *handle)
+sublist	2_glist.c	/^    struct node_t *sublist;$/;"	m	language:C	struct:node_t	typeref:struct:node_t::node_t	file:
+sublist	glist/dict.c	/^    struct node_t *sublist;$/;"	m	language:C	struct:node_t	typeref:struct:node_t::node_t	file:
+sublist	glist/glist.c	/^    struct node_t *sublist;$/;"	m	language:C	struct:node_t	typeref:struct:node_t::node_t	file:
+sublist	glist_dict/dict.c	/^    struct node_t *sublist;$/;"	m	language:C	struct:node_t	typeref:struct:node_t::node_t	file:
+sublist	glist_dict/glist.c	/^    struct node_t *sublist;$/;"	m	language:C	struct:node_t	typeref:struct:node_t::node_t	file:
+travel	1_tree.c	/^void travel(struct node_t *root, int flag)$/;"	f	language:C	signature:(struct node_t *root, int flag)
+travel	glist/glist.c	/^void travel(struct node_t *head)$/;"	f	language:C	signature:(struct node_t *head)
+travel	glist_dict/glist.c	/^void travel(struct node_t *head)$/;"	f	language:C	signature:(struct node_t *head)
+travel	t1.c	/^void travel(struct node_t *, int flag)$/;"	f	language:C	signature:(struct node_t *, int flag)
+turn_left	1_tree.c	/^void turn_left(struct node_t **root)$/;"	f	language:C	signature:(struct node_t **root)
+turn_left	t1.c	/^void turn_left(struct node_t **root)$/;"	f	language:C	signature:(struct node_t **root)
+turn_right	1_tree.c	/^void turn_right(struct node_t **root)$/;"	f	language:C	signature:(struct node_t **root)
+turn_right	t1.c	/^void turn_right(struct node_t **root)$/;"	f	language:C	signature:(struct node_t **root)
+word	glist/dict.c	/^static char word[MAX][500];$/;"	v	language:C	file:
+word	glist_dict/dict.c	/^static char word[MAX][500];$/;"	v	language:C	file:

@@ -1,0 +1,525 @@
+一、rpm软件包的管理、安装
+    
+    rpm         全名：red hat packages management
+
+        网站：
+            http://www.rpmfind.net
+            http://rpm.pbone.net
+
+        软件命名:
+            chmlib-0.40-2.fc12.i686.rpm         包名-版本号-CPU体系.rpm
+            xhtml1-dtds-1.0-7.1.1.noarch.rpm    支持任意平台的rpm包
+            chmlib-0.40-2.fc12.src.rpm          rpm源码包
+
+--------------------------------------------------------------------------------
+    
+    rpm包的安装
+        
+        rpm -ivh VMware-workstation-6.0.2-59824.i386.rpm
+            -i      安装
+            -v      显示安装进度
+            -h      校验hash
+
+
+--------------------------------------------------------------------------------
+
+    rpm -ivh wget-1.11.4-2.el5.i386.rpm 
+        warning: wget-1.11.4-2.el5.i386.rpm: Header V3 DSA signature: NOKEY, key ID 37017186
+        Preparing...                ########################################### [100%]
+            package wget-1.11.4-2.el5.i386 is already installed --已经安装过此包
+
+
+--------------------------------------------------------------------------------
+
+    rpm -ivh bind-9.3.6-4.P1.el5.i386.rpm 
+        warning: bind-9.3.6-4.P1.el5.i386.rpm: Header V3 DSA signature: NOKEY, key ID 37017186
+        Preparing...                ########################################### [100%]
+        1:bind                   ########################################### [100%]
+        --成功安装一个包
+
+
+--------------------------------------------------------------------------------
+
+    rpm -ivh perl-*         支持通配符一次性安装多个包
+
+--------------------------------------------------------------------------------
+
+    安装rpm源码包
+        
+        rpm -ivh stardict-3.0.0-3.fc7.src.rpm       
+
+        完成后cd /usr/src/redhat/SOURCES/  会产生stardict的源码包
+
+
+        rpmbulid --rebuild stardict-3.0.0-3.fc7.src.rpm
+
+        重新编译生成RPM安装包,默认在/usr/src/redhat/RPMS/i386/里
+
+
+
+--------------------------------------------------------------------------------
+
+    依赖关系
+
+       rpm -ivh oracleasm-2.6.18-128.el5-2.0.5-1.el5.i686.rpm
+            warning: oracleasm-2.6.18-128.el5-2.0.5-1.el5.i686.rpm: Header V3 DSA signature: NOKEY, key ID 1e5e0159
+            error: Failed dependencies:  《－－安装出错，出现依赖包
+            oracleasm-support >= 2.0.0 is needed by oracleasm-2.6.18-128.el5-2.0.5-1.el5.i686
+
+        所以先要安装 oracleasm-support这个包，再安装oracleasm-2.6.18-128.el5-2.0.5-1.el5.i686.rpm
+
+    
+--------------------------------------------------------------------------------
+
+    安装包冲突
+        
+        如果安装一个包，有一个老版本的已经安装了，现在再安装一个新版本，就会出现冲突，报错里有conflicts这样的关键字
+
+        解决方法：
+            把老版本删除，再安装新版本
+
+
+--------------------------------------------------------------------------------
+
+
+    rpm另外的安装参数
+        
+        rpm -U      升级安装，不管原来系统上是否安装了旧版本，都是进行升级安装
+        rpm -F      强制安装，原来如果没有安装过这个软件任何版本，就不能用这个参数进行安装，如果原来已经有一个新的或者旧的版本，用这个参数安装的软件都会替换原来的版本
+        
+
+        rpm --replacefiles  某个文件已经安装在系统上，或者冲突，可以用此命令去覆盖
+        rpm --replacepkgs   重新安装某个已经安装过的包
+
+        rpm --force     强行安装，强烈建议不要使用,相当于--replacefiles和--replacepkgs
+        rpm --nodeps    跳过依赖关系的检测，不建议使用
+        rpm --nopre     跳过安装包前的脚本检测，也不建议使用
+        rpm --nomd5     不检验md5值
+        rpm --test      测试是否能安装到你的系统中
+
+        rpm --prefix    手工指定安装路径，一般默认路径安装
+
+
+--------------------------------------------------------------------------------
+
+    缺命令，需要找到某个命令来自哪个软件包
+
+        rpm -qf /usr/bin/rpmbuild
+            
+            rpm-build-4.4.2.3-9.el5
+
+--------------------------------------------------------------------------------
+
+    想查看是否安装了某个软件包
+
+        rpm -qa vmware
+        
+            VMwareWorkstation-6.0.2-59824
+
+--------------------------------------------------------------------------------
+
+    查看某个已经安装的软件包，安装后到底释放哪些文件
+        
+        rpm -ql rpm-build-4.4.2.3-9.el5
+
+    查看某个已经安装的软件包配置相关的文件
+        
+        rpm -qc rpm-build-4.4.2.3-9.el5
+
+    查看某个已经安装的软件包文档文件
+
+        rpm -qd rpm-build-4.4.2.3-9.el5
+
+    查看某个已经安装的软件包信息
+
+        rpm -qi rpm-build-4.4.2.3-9.el5
+
+    如果要查看没有安装的软件包信息
+
+        rpm -qip wget-1.11.4-2.el5.i386.rpm
+
+    查看该包的依赖的组件
+        
+        rpm -qR wget-1.11.4.-2.el5.i386.rpm
+
+        
+
+--------------------------------------------------------------------------------
+
+    安装之前，查看准备安装的软件包，到底包含什么文件
+
+        rpm -qlp chmsee-1.0.1-6.fc9.i386.rpm
+
+--------------------------------------------------------------------------------
+
+    卸载包
+        
+        rpm -qa wget  / rpm -qf `which wget`
+            
+            wget-1.11.4-2.el5       得到要卸载包的包名，不是我的全包
+
+        rpm -e wget-1.11.4-2.el5
+
+--------------------------------------------------------------------------------
+
+    二进制包的安装
+        
+        ./RealPlayer11GOLD.bin      安装
+            
+            realplay            再用命令打开，配置完毕就可以使用
+
+    
+================================================================================
+
+
+二、linux打包、压缩、解压
+    
+    压缩使文件更小，有利于网络传输，另一情况是有大量小文件时，最好打一个包有利于网络传输
+
+    windows  下压缩工具
+        
+        winrar      后缀名.rar
+        winzip      后缀名.zip
+
+    linux   下压缩工具
+        
+        compress    后缀名.Z
+        gzip        后缀名.gz
+        bzip2       后缀名.bz2
+        tar         后缀名.tar          打包工具，不压缩
+        
+        后缀名.tar.gz   先用tar打包，再用gzip工具压缩
+        后缀名.tar.bz2  先用tar打包，再用bzip2工具压缩
+
+
+--------------------------------------------------------------------------------
+
+    compress    压缩工具        淘汰了，现在很少见
+        
+        rpm -ivh  ncompress-4.2.4-47.i386.rpm       安装这个包才会有compress命令
+        
+        compress fstab                  直接压缩，原文件会被删除，产生fstab.Z文件
+        compress -d fstab.Z             解压
+        compress -c fstab > fstab.Z     保留原文件，并产生压缩文件fstab.Z
+
+
+--------------------------------------------------------------------------------
+
+    gzip        压缩工具        使用广泛，能解压gz,Z,zip结尾的压缩包
+        
+        gzip fstab                      直接压缩，原文件删除，会产生fstab.gz文件
+        zcat fstab.gz                   查看压缩包的内容
+        gzip -d fstab.gz                解压
+        gzip -c fstab > fstab.gz        保留原文件压缩
+        zless  fstab.gz                 逐行显示压缩包内容
+        diff   fstab.gz fstab2.gz       报告两个压缩包的差异内容
+        zcmp   fstab.gz fstab2.gz       报告两个压缩包的差异处
+
+        unzip   fstab.zip -d /usr/src/  zip包可以用linux下的unzip命令来解压，-d选项代表指定解压路径
+
+
+--------------------------------------------------------------------------------
+
+    bzip2       压缩工具       它用来替代gzip，拥有更好的压缩比率
+        
+        bzip2 fstab                     直接压缩，原文件删除，会产生fstab.bz2文件
+        bzcat fstab.bz2                 查看压缩包的内容
+        bzip2 -d fstab.bz2              解压
+        bzip2 -c fstab > fstab.bz2      保留原文件压缩
+        bzless  fstab.bz2               逐行显示压缩包内容
+        bdiff   fstab.bz2 fstab2.bz2    报告两个压缩包的差异内容
+        bzcmp   fstab.bz2 fstab2.bz2    报告两个压缩包的差异处
+
+--------------------------------------------------------------------------------
+    
+    rar         压缩工具        linux默认不支持.rar压缩包的解压和压缩，需要安装第三方软件包
+        
+        tar -xvf rarlinux-3.7.1.tar.gz -C /usr/src
+        
+        cd /usr/src/rar/
+            
+        make
+
+        安装完成后会产生rar命令
+
+            rar a fstab.rar fstab       压缩
+            rar e fstab.rar             解压，会全部解压到当前目录
+            rar d fstab.rar             解压，会产生fstab目录
+
+
+--------------------------------------------------------------------------------
+
+    tar        打包工具     
+
+        -c      打包
+        -r      添加到包里
+        -v      显示过程
+        -f      接文件
+        -j      调用bzip2进行压缩或解压
+        -z      调用gzip进行压缩或解压
+        -x      解包
+        -C      指定解压路径
+        -t      查看包内容
+
+        tar cvf etc.tar etc/            打包注意源和目的的位置
+        tar czvf etc.tar.gz etc/        打包并且使用gzip压缩
+        tar cjvf etc.tar.bz2 etc/       打包并且使用bzip2压缩
+
+        tar xvf etc.tar                 解包，解到当前目录
+        tar xzvf etc.tar.gz             对于gzip压缩的解包
+        tar xjvf etc.tar.bz2            对于bzip2压缩的解包
+
+        tar xvf etc.tar.bz2 -C /usr/src/    指定解压包位置/usr/src/下
+
+        tar tvf etc.tar.bz2             查看包内的内容
+
+        tar rf etc.tar yum/             把yum目录添加到etc.tar包里
+        
+        万能解压参数
+            
+            tar xvf                     会自动调用gzip或bzip2来解压缩
+
+        关于gzip和bzip2压缩率的比较
+            
+            bzip2压缩比率更好，一般文件越大越能体现，但从上面看到，在小文件的压缩上反而是gzip压的更小，对于目录的压缩一般都是打包成tar再压缩
+
+
+        tar的特殊应用
+            
+            tar tvf etc.tar | grep  inittab         查看压缩里是否有某个文件
+
+            tar xvf etc.tar etc/inittab             解压单一文件
+
+            tar cvf etc1.tar etc/ --exclude=etc/inittab   排除单一文件或目录打包
+
+            tar cvf etc2.tar etc/ --exclude=etc/inittab --exclude=etc/fstab   排除多个文件或目录打包
+
+            tar cvf etc3.tar etc/ --exclude=etc/*.conf  支持使用通配符排除文件或目录打包
+
+            tar cvf -etc | tar xvf - -C /root/Desktop/      打包etc目录并且解压到/root/Desktop目录下
+
+
+
+================================================================================
+
+三、源码包的安装
+    
+    1.解压源码包到指定路径，并进去到该解压后的目录里
+        
+        tar xvf arp-scan-1.6.tar.gz -C /usr/src/
+        cd /usr/src/arp-scan-1.6/
+
+    2.查看编译帮助
+        
+        INSTALL     \       README          帮助文档，介绍文档
+
+    3.查看具体的编译参数，来对软件的功能进行自定义取舍
+        
+        ./configure --help > help.txt
+        vim help.txt
+
+    4. ./configure 根据你传给的参数，来对编译进行控制，产生符合要求的程序，也会同时检查本机是否满足安装这个软件的基本条件，检查通过就会产生Makefile （编译规则）
+
+    5. make     根据上一步产生的Makefile文件，进行源码编译
+
+    6. make install     把编译好的程序或文件进行安装
+        
+        一般源码包的安装核心步骤是4，5，6这三步
+    
+    7. arp-sacn -l      安装好后使用下面命令扫描同一网段内的所有主机的信息
+
+
+--------------------------------------------------------------------------------
+
+    安装ntfs包，让系统支持ntfs格式
+        
+    第一步：解压这两个包
+        tar -xvf fuse-2.7.4.tar.gz -C /usr/src/
+        tar -xvf ntfs-3g-2009.4.4.tgz -C /usr/src/
+
+    第二步：安装fuse包
+        cd /usr/src/fuse-2.7.4/
+        ./configure ; make ; make install
+        modprobe fuse       fuse包独有的需要加裁fuse模块
+
+    第三步：安装ntfs-3g包
+        cd /usr/src/ntfs-3g-2009.4.4/
+        ./configure  && make && make install
+
+    使用方法：
+        mount -t ntfs-3g /dev/sdb1 /mnt     或
+        mount.ntfs-3g /dev/sdb1 /mnt                挂载ntfs格式设备
+
+
+================================================================================
+
+四、yum的使用
+    
+    rpm 包有依赖性，所以为了解决此问题，yum客户端出现了
+
+    配置文件
+        /etc/yum.repos.d/       此目录下以.repo结尾的文件都是
+        vim /etc/yum.repos.d/rhel-debuginfo.repo        默认的配置文件
+
+            [rhel-debuginfo]                                            仓库标识名
+            name=Red Hat Enterprise Linux $releasever - $basearch -Debug    标识名
+            baseurl=filt://ftp.redhat.com/.....                         软件仓库地址
+            enabled=0                                                   是否启动
+            gpgcheck=1                                                  gpg验证是否启动
+            gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release   gpg验证地址
+        
+
+        注意：/etc/yum.repos.d/目录里可以存在多个repo文件，但是不能重复仓库标识名，而且配置文件里内容全要顶首行写，否则yum list不出现新建仓库里的包
+    
+    red hat光盘内的目录结构
+        
+        Server              常用软件包
+        cluster             集群软件包
+        clusterstorage      集群存储软件包
+        VT                  虚拟技术有关的软件包
+
+
+--------------------------------------------------------------------------------
+
+    本地软件仓库的搭建
+        
+        mkdir /yum              创建软件仓库文件夹
+        mount -o loop /iso/rhel5.5.iso /yum     挂载光盘到yum目录
+
+        如果要搭建固定的yum源，最好新建文件夹把rhel5.5.iso内容复制出来
+
+        vim /etc/yum.repo.d/file.repo
+
+        [Server]
+        name=server
+        baseurl=file:///yum/Server	--注意本地路径写法 file:///  有三个/
+        enabled=1
+        gpgcheck=1
+        gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+
+        [Cluster]
+        name=cluster
+        baseurl=file:///yum/Cluster
+        enabled=1
+        gpgcheck=1
+        gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+
+        [ClusterStorage]
+        name=clusterstorage
+        baseurl=file:///yum/ClusterStorage
+        enabled=1
+        gpgcheck=1
+        gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+
+        [VT]
+        name=vt
+        baseurl=file:///yum/VT
+        enabled=1
+        gpgcheck=1
+        gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+
+
+
+--------------------------------------------------------------------------------
+
+    远程yum的写法
+
+        [Server]
+        name=server
+        baseurl=ftp://2.2.2.1/Server	--注意ftp://  有二个/, 也可以是http://或者本地远程混合使用
+        enabled=1
+        gpgcheck=0
+
+        [Cluster]
+        name=cluster
+        baseurl=ftp://2.2.2.1/Cluster
+        enabled=1
+        gpgcheck=0
+
+        [ClusterStorage]
+        name=clusterstorage
+        baseurl=ftp://2.2.2.1/ClusterStorage
+        enabled=1
+        gpgcheck=0
+
+        [VT]
+        name=vt
+        baseurl=ftp://2.2.2.1/VT
+        enabled=1
+        gpgcheck=0
+
+
+
+--------------------------------------------------------------------------------
+
+    yum 命令的使用
+        
+        yum clean all               擦除保存的信息
+
+        yum list                    列出软件仓库的软件列表，第一次yum list会去扫描软件仓库
+                
+            --installed 表示已经安装了，别的就是分别指出属于哪个软件仓库
+
+        yum install rpm-build       安装rpm-build包
+
+        yum install mysql*          可以支持通配符安装
+
+        yum install rpm-build -y    -y选项是不需要用户确认是否安装，直接安装
+
+        yum erase rpm-build     或
+        yum remove rpm-build        卸载软件包
+
+
+        yum grouplist               列出组的信息，与安装系统时选软件包的组是一致的
+            
+            Installed Groups:           安装过的组
+                Development Libraries
+                Development Tools
+
+            Available Groups:           未安装过的组
+
+            如果中文显示，可以输入export LANG=en_US.UTF-8修改当前文本语言环境
+
+            组名中间有空格，所以要加双引号，要不然就用转义符
+
+        yum groupinstall "Development Libraries"    安装一个组
+
+        yum grouperase "Development Libraries"      删除一个组
+
+        yum groupinstall "Development Libraries","Development Tools"   安装多个组，中间用逗号分开
+
+        或者用鼠标点击应用程序- 添加/删除程序   可以点击选中是否安装
+
+
+-------------------------------------------------------------------
+
+        当出现关于gpg key方面的报错，而导致安装不成功时，导入gpg key使系统支持非本系统的包：
+            rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+
+            
+            yum install wget --nogpgcheck   跳过检测key安装
+
+-------------------------------------------------------------------
+
+    手动建立自己的rpm包软件仓库
+    
+        例： /yum           目录里全是rpm包
+
+        vim /etc/yum.repos.d/kyo.repo
+        
+        [yum]
+        name=yum
+        baseurl=file:///yum
+        enabled=1
+        gpgcheck=0
+
+        保存退出运行yum list会报下面的错，因为软件仓库里还要有一个repodata目录保存软件信息
+
+            file:///yum/repodata/repomd.xml.......
+
+        到光盘找到createrepo包安装，会产生createrepo命令
+
+        createrepo /yum         创建repomd.xml信息
+
+        然后再yum list就可以看到/yum的rpm包
+

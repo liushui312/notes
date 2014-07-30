@@ -1,0 +1,133 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+BC	chess.h	33;"	d	language:C++
+BG	chess.h	32;"	d	language:C++
+BPP	chess.h	19;"	d	language:C++
+COL	chess.h	22;"	d	language:C++
+CONN	chess.h	51;"	d	language:C++
+CONN_ACK	chess.h	52;"	d	language:C++
+CONN_ERR	chess.h	53;"	d	language:C++
+DATA	chess.h	57;"	d	language:C++
+DATA_ACK	chess.h	58;"	d	language:C++
+DEBUG	chess.h	60;"	d	language:C++
+DEBUG0	sdl.h	31;"	d	language:C++
+DEBUG1	sdl.h	32;"	d	language:C++
+DEBUG2	sdl.h	33;"	d	language:C++
+ERRP	sdl.h	35;"	d	language:C++
+ERR_INIT	sdl.h	12;"	d	language:C++
+ERR_MIXER	sdl.h	15;"	d	language:C++
+ERR_TTF	sdl.h	14;"	d	language:C++
+ERR_VIDEO	sdl.h	13;"	d	language:C++
+EXIT	chess.h	37;"	d	language:C++
+FALSE	sdl.h	10;"	d	language:C++
+FIND	chess.h	49;"	d	language:C++
+FIND_ACK	chess.h	50;"	d	language:C++
+GETS	net.c	3;"	d	language:C	file:
+H	chess.h	27;"	d	language:C++
+HE	chess.h	40;"	d	language:C++
+HEIGHT	chess.h	18;"	d	language:C++
+MIXER_CHUNK	sdl.h	29;"	d	language:C++
+MIXER_DISABLE	sdl.h	27;"	d	language:C++
+MIXER_MUSIC	sdl.h	28;"	d	language:C++
+NONE	chess.h	36;"	d	language:C++
+PACKET_MAX	chess.h	47;"	d	language:C++
+PORT	chess.h	46;"	d	language:C++
+R	chess.h	29;"	d	language:C++
+RET	chess.h	41;"	d	language:C++
+ROW	chess.h	21;"	d	language:C++
+SINGLE	chess.h	42;"	d	language:C++
+SPACE	chess.h	30;"	d	language:C++
+START	chess.h	54;"	d	language:C++
+START_ACK	chess.h	55;"	d	language:C++
+START_ERR	chess.h	56;"	d	language:C++
+SUCCESS	chess.h	38;"	d	language:C++
+TRUE	sdl.h	9;"	d	language:C++
+W	chess.h	26;"	d	language:C++
+WC	chess.h	34;"	d	language:C++
+WIDTH	chess.h	17;"	d	language:C++
+WIN	chess.h	39;"	d	language:C++
+X	chess.h	24;"	d	language:C++
+Y	chess.h	25;"	d	language:C++
+__KYO_CHESS_H__	chess.h	2;"	d	language:C++
+__KYO_SDL_H__	sdl.h	2;"	d	language:C++
+add_node	net.c	/^int add_node(struct srv_msg_t *msg, struct node_t *head)$/;"	f	language:C	signature:(struct srv_msg_t *msg, struct node_t *head)
+board	chess.h	/^    char board[ROW][COL];$/;"	m	language:C++	struct:chess_data_t
+board	chess.h	/^    char board[ROW][COL];$/;"	m	language:C++	struct:chess_t
+bpp	sdl.h	/^    Uint32 bpp;$/;"	m	language:C++	struct:sdl_t
+check_win	chess.c	/^int check_win(char (*board)[COL], int x, int y, int *flag)$/;"	f	language:C	signature:(char (*board)[COL], int x, int y, int *flag)
+chess_data_t	chess.h	/^struct chess_data_t {$/;"	s	language:C++
+chess_exit	main.c	/^void chess_exit(struct chess_t *chess)$/;"	f	language:C	signature:(struct chess_t *chess)
+chess_handle	main.c	/^int chess_handle(struct chess_t *chess)$/;"	f	language:C	signature:(struct chess_t *chess)
+chess_init	main.c	/^int chess_init(struct chess_t *chess)$/;"	f	language:C	signature:(struct chess_t *chess)
+chess_menu	net.c	/^int chess_menu(struct chess_t *chess)$/;"	f	language:C	signature:(struct chess_t *chess)
+chess_t	chess.h	/^struct chess_t {$/;"	s	language:C++
+cli	chess.h	/^    in_addr_t cli;                  \/\/用于记录对战客户机$/;"	m	language:C++	struct:chess_t
+cli_list	chess.h	/^    struct sockaddr_in *cli_list;   \/\/用于记录连接的所有客户机的信息$/;"	m	language:C++	struct:chess_t	typeref:struct:chess_t::sockaddr_in
+cli_recv	net.c	/^int cli_recv(void *data)$/;"	f	language:C	signature:(void *data)
+cli_send_data	main.c	/^int cli_send_data(struct chess_t *chess)$/;"	f	language:C	signature:(struct chess_t *chess)
+conn	chess.h	/^    SDL_Thread *conn;               \/\/用于保存服务器\/客户端接收网络信息线程ID$/;"	m	language:C++	struct:chess_t
+create_chess	net.c	/^int create_chess(struct chess_t *chess)$/;"	f	language:C	signature:(struct chess_t *chess)
+data	chess.h	/^    char data[0];$/;"	m	language:C++	struct:packet_t
+destroy_list	net.c	/^void destroy_list(struct node_t *head)$/;"	f	language:C	signature:(struct node_t *head)
+draw_board	gui.c	/^void draw_board(SDL_Surface *screen)$/;"	f	language:C	signature:(SDL_Surface *screen)
+draw_box	sdl.c	/^void draw_box(SDL_Surface *dst, Uint32 x, Uint32 y, Uint32 w, Uint32 h, Uint32 border, Uint32 color, Uint32 border_color)$/;"	f	language:C	signature:(SDL_Surface *dst, Uint32 x, Uint32 y, Uint32 w, Uint32 h, Uint32 border, Uint32 color, Uint32 border_color)
+draw_circle	sdl.c	/^void draw_circle(SDL_Surface *dst, Uint32 x, Uint32 y, Uint32 r, Uint32 color)$/;"	f	language:C	signature:(SDL_Surface *dst, Uint32 x, Uint32 y, Uint32 r, Uint32 color)
+draw_cur	gui.c	/^void draw_cur(SDL_Surface *dst, int vx, int vy)$/;"	f	language:C	signature:(SDL_Surface *dst, int vx, int vy)
+draw_pixel	sdl.c	/^void draw_pixel(SDL_Surface *dst, Uint32 x, Uint32 y, Uint32 size, Uint32 color)$/;"	f	language:C	signature:(SDL_Surface *dst, Uint32 x, Uint32 y, Uint32 size, Uint32 color)
+draw_rect	sdl.c	/^void draw_rect(SDL_Surface *dst, Uint32 x, Uint32 y, Uint32 w, Uint32 h, Uint32 color)$/;"	f	language:C	signature:(SDL_Surface *dst, Uint32 x, Uint32 y, Uint32 w, Uint32 h, Uint32 color)
+eth_id	chess.h	/^    int eth_id;                     \/\/指定第几张网卡，用于取IP地址$/;"	m	language:C++	struct:chess_t
+fd	chess.h	/^    int fd;                         \/\/用于保存创建socket返回的套接字描述符$/;"	m	language:C++	struct:chess_t
+find_srv_list	net.c	/^int find_srv_list(struct chess_t *chess)$/;"	f	language:C	signature:(struct chess_t *chess)
+flag	chess.h	/^    int flag;$/;"	m	language:C++	struct:chess_data_t
+flag	chess.h	/^    int flag;$/;"	m	language:C++	struct:chess_t
+fullscreen	sdl.h	/^    Uint32 fullscreen:1;$/;"	m	language:C++	struct:sdl_t
+get_local_int_ip	net.c	/^int get_local_int_ip(int fd, int eth_id)$/;"	f	language:C	signature:(int fd, int eth_id)
+get_local_ip	net.c	/^int get_local_ip(int fd, int eth_id, char *ip)$/;"	f	language:C	signature:(int fd, int eth_id, char *ip)
+height	sdl.h	/^    Uint32 height;$/;"	m	language:C++	struct:sdl_t
+ip	chess.h	/^    char ip[16];                    \/\/服务器IP地址$/;"	m	language:C++	struct:srv_msg_t
+join_chess	net.c	/^int join_chess(struct chess_t *chess)$/;"	f	language:C	signature:(struct chess_t *chess)
+join_srv	net.c	/^int join_srv(struct chess_t *chess)$/;"	f	language:C	signature:(struct chess_t *chess)
+key_handle	chess.c	/^int key_handle(struct chess_t *chess, Uint32 key)$/;"	f	language:C	signature:(struct chess_t *chess, Uint32 key)
+look_max	chess.h	/^    int look_max;                   \/\/服务器连接客户端最大数$/;"	m	language:C++	struct:srv_msg_t
+look_num	chess.h	/^    int look_num;                   \/\/服务器连接了多少个客户端$/;"	m	language:C++	struct:srv_msg_t
+main	main.c	/^int main(int argc, char *argv[])$/;"	f	language:C	signature:(int argc, char *argv[])
+main	test/1_select.c	/^int main(void)$/;"	f	language:C	signature:(void)
+mixer	sdl.h	/^    Uint32 mixer:2;$/;"	m	language:C++	struct:sdl_t
+msg	chess.h	/^    struct srv_msg_t msg;           \/\/记录服务器信息$/;"	m	language:C++	struct:chess_t	typeref:struct:chess_t::srv_msg_t
+msg	chess.h	/^    struct srv_msg_t msg;$/;"	m	language:C++	struct:node_t	typeref:struct:node_t::srv_msg_t
+net_flag	chess.h	/^    int net_flag;                   \/\/用于区分单机\/网络版本  1为网络  0为单机$/;"	m	language:C++	struct:chess_t
+next	chess.h	/^    struct node_t *next;$/;"	m	language:C++	struct:node_t	typeref:struct:node_t::node_t
+node_t	chess.h	/^struct node_t {$/;"	s	language:C++
+p_flag	chess.h	/^    int p_flag;                     \/\/用于区分按键\/网络所产生游戏数据改变  1为网络  0为按键$/;"	m	language:C++	struct:chess_t
+packet	chess.h	/^    struct packet_t *packet;        \/\/用于接收发送数据存储空间$/;"	m	language:C++	struct:chess_t	typeref:struct:chess_t::packet_t
+packet_t	chess.h	/^struct packet_t {$/;"	s	language:C++
+pic_load	sdl.c	/^SDL_Surface *pic_load(const char *path)$/;"	f	language:C	signature:(const char *path)
+pos_op	gui.c	/^int pos_op(int x, int y, struct chess_t *chess)$/;"	f	language:C	signature:(int x, int y, struct chess_t *chess)
+press_chess	chess.c	/^int press_chess(char (*board)[COL], int x, int y, int *flag)$/;"	f	language:C	signature:(char (*board)[COL], int x, int y, int *flag)
+prev	chess.h	/^    struct node_t *prev;$/;"	m	language:C++	struct:node_t	typeref:struct:node_t::node_t
+print_board	main.c	/^void print_board(char board[][COL])$/;"	f	language:C	signature:(char board[][COL])
+screen	sdl.h	/^    SDL_Surface *screen;$/;"	m	language:C++	struct:sdl_t
+sdl	chess.h	/^    struct sdl_t sdl;$/;"	m	language:C++	struct:chess_t	typeref:struct:chess_t::sdl_t
+sdl_exit	sdl.c	/^void sdl_exit(struct sdl_t *sdl)$/;"	f	language:C	signature:(struct sdl_t *sdl)
+sdl_init	sdl.c	/^int sdl_init(struct sdl_t *sdl)$/;"	f	language:C	signature:(struct sdl_t *sdl)
+sdl_t	sdl.h	/^struct sdl_t {$/;"	s	language:C++
+select_srv	net.c	/^struct srv_msg_t *select_srv(struct node_t *head)$/;"	f	language:C	signature:(struct node_t *head)
+show_board	gui.c	/^void show_board(struct chess_t *chess)$/;"	f	language:C	signature:(struct chess_t *chess)
+srv_list	chess.h	/^    struct node_t srv_list;         \/\/用于保存客户端查询在线服务器列表$/;"	m	language:C++	struct:chess_t	typeref:struct:chess_t::node_t
+srv_msg_t	chess.h	/^struct srv_msg_t {$/;"	s	language:C++
+srv_recv	net.c	/^int srv_recv(void *data)$/;"	f	language:C	signature:(void *data)
+srv_send_data	main.c	/^int srv_send_data(struct chess_t *chess)$/;"	f	language:C	signature:(struct chess_t *chess)
+start_game	net.c	/^int start_game(struct chess_t *chess)$/;"	f	language:C	signature:(struct chess_t *chess)
+status	chess.h	/^    int status;                     \/\/服务器状态，0为待战 1为在战$/;"	m	language:C++	struct:srv_msg_t
+ttf	sdl.h	/^    Uint32 ttf:1;$/;"	m	language:C++	struct:sdl_t
+type	chess.h	/^    char type;$/;"	m	language:C++	struct:packet_t
+who	chess.h	/^    int who;                        \/\/用于记录本机是服务器\/客户端 1为服务噐 2为对战客户端$/;"	m	language:C++	struct:chess_t
+width	sdl.h	/^    Uint32 width;$/;"	m	language:C++	struct:sdl_t
+x	chess.h	/^    int x;$/;"	m	language:C++	struct:chess_data_t
+x	chess.h	/^    int x;$/;"	m	language:C++	struct:chess_t
+y	chess.h	/^    int y;$/;"	m	language:C++	struct:chess_data_t
+y	chess.h	/^    int y;$/;"	m	language:C++	struct:chess_t

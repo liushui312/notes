@@ -1,0 +1,9 @@
+
+repo status
+repo branch
+repo forall -p -v -c 'git diff remotes/exdroid/kitkat-a23'
+make installclean
+
+repo status
+repo branch
+repo forall -p -v -c 'git diff remotes/lichee/sunxi-kitkat-a23'

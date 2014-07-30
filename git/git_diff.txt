@@ -1,0 +1,6 @@
+
+
+git diff                                工作区和暂存区的差异
+git diff HEAD                           工作区和HEAD(当前分支)的差异
+git diff --cached/--staged              暂存区和版本库的差异
+git diff remotes/[remotename]/[branch]  

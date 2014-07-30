@@ -1,0 +1,27 @@
+
+
+用grub4doc引导ubuntu简单说下步骤
+
+1.复制grub4doc里面的grldr和grldr.mbr文件到c盘根目录
+
+2.新建menu.lst内容如下：(复制)
+
+    default 0
+    timeout 10
+    title Ubuntu 10.04 32bit desktop
+    root   (hd0,3)
+    linux /boot/vmlinuz-2.6.32-28-generic root=UUID=49a29e6e-4a19-4924-8f10-a81c8a408c7e ro   quiet splash
+    initrd /boot/initrd.img-2.6.32-28-generic
+
+    解释下
+        root(hd0,3) ubuntu系统所在位置，自己找吧，不行一个个试
+        /boot/vmlinuz-2.6.32-28-generic    内核版本，不能写错，必须与你当前ubuntu系统内核一致
+        UUID=49a29e6e-4a19-4924-8f10-a81c8a408c7e     ubuntu系统所在硬盘的uuid
+
+    以上信息不要发愁，推荐下载软件linux分区阅读器，可以直接打开linux分区，找到boot/grup/grub.cfg
+    或者menu.lst在这个文件里有相应配置信息
+
+3.修改boot.ini，在最后一行加入c:\grldr.mbr=”grub4dos”然后重启系统。
+
+好了用windows XP系统引导ubuntu启动完成，以后再也不怕xp重装了。嘿嘿
+

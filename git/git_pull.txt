@@ -1,0 +1,2 @@
+拉取远程仓库：
+$ git pull [remoteName] [localBranchName]

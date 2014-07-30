@@ -1,0 +1,105 @@
+#include <llist.h>
+
+#define GETLINES(string, buf)   do                  \
+            {                                       \
+                printf(string);                     \
+                fgets(buf, sizeof(buf), stdin);     \
+                if (buf[strlen(buf) - 1] == '\n')   \
+                    buf[strlen(buf) - 1] = '\0';    \
+                else                                \
+                    while (getchar() != '\n')       \
+                        continue;                   \
+            } while (0)
+
+
+
+struct dict_t {
+    char *en;
+    char *cn;
+};
+
+void destroy(const void *data)
+{
+    struct dict_t *dict = (struct dict_t *)data;
+    free(dict->en);
+    free(dict->cn);
+}
+
+LLIST *dict_init(const char *path)
+{
+    LLIST *handle = NULL;
+    FILE *fp = NULL;
+    struct dict_t dict;
+    char buf[1024];
+    char *val = NULL;
+    int len, flag = 1;
+
+    handle = llist_create(sizeof(struct dict_t), destroy, NULL, NULL);
+    ERRP(NULL == handle, goto ERR1, 1, "llist_create!\n");
+
+    fp = fopen(path, "r");
+    ERRP(NULL == fp, goto ERR2, 1, "fopen!\n");
+
+    while (fgets(buf, sizeof(buf), fp) != NULL)
+    {
+        len = strlen(buf);
+        if (buf[len - 1] == '\n')
+            buf[len - 1] = '\0';
+
+        val = (char *)malloc(strlen(buf) + 1);
+        strcpy(val, buf);
+
+        if (flag)
+            dict.en = val;
+        else
+        {
+            dict.cn = val; 
+            llist_append(&dict, handle);
+        }
+        flag = !flag;
+    }
+
+    fclose(fp);
+
+    return handle;
+ERR2:
+    free(handle);
+ERR1:
+    return NULL;
+}
+
+int cmp_en(const void *d1, const void *d2)
+{
+    return strcmp((char *)d1, ((struct dict_t *)d2)->en);
+}
+
+int main(void)
+{
+    LLIST *handle = NULL;
+    struct dict_t *dict = NULL;
+    char buf[1024];
+
+    handle = dict_init("./ciku.dict");
+    if (NULL == handle)
+        return 0;
+
+    while (1)
+    {
+        GETLINES("please input key : ", buf);
+        if (!strcmp(buf, "exit"))
+            break;
+
+        dict = llist_find(buf, cmp_en, handle);
+        if (dict == NULL)
+            printf("%s not!\n", buf);
+        else
+        {
+            printf("en : %s\n", dict->en);
+            printf("cn : %s\n", dict->cn);
+        }
+    }
+
+    llist_destroy(&handle);
+
+    return 0;
+}

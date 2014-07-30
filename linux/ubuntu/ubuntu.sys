@@ -1,0 +1,78 @@
+﻿netstat –apn | grep 8080
+
+--------------------------------------
+ubuntu下不能输入中文
+  确保系统已经安装ibus，如无，则 sudo apt-get install ibus ibus-qt4 ibus-gtk
+  按下面的文件来修改配置文件 sudo vim /etc/X11/xinit/xinput.d/default
+    XIM=ibus
+    XIM_PROGRAM=/usr/bin/ibus-daemon
+    XIM_ARGS="--xim"
+    GTK_IM_MODULE=ibus
+    QT_IM_MODULE=ibus
+    DEPENDS="ibus, ibus-gtk, ibus-qt4"
+ 
+  安装fcitx
+   rime中州韵
+    sudo add-apt-repository ppa:fcitx-team/nightly && sudo apt-get update
+    sudo apt-get install fcitx-rime
+----------------------------------------------
+截图，KSnapshot
+----------------------------------------------
+gconf-editor 为GNOME桌面环境下的一个配置编辑软件
+ubuntu12.04 应该是dconf-tools
+----------------------------------------------------
+find . -name "*.o"  | xargs rm -f
+
+----------------------------------------------------
+备份源列表
+    sudo cp /etc/apt/sources.list /etc/apt/sources.list_backup
+
+更改源列表
+    sudo vim /etc/apt/sources.list
+
+    Ubuntu 官方更新服务器（欧洲，此为官方源，国内较慢，但无同步延迟问题，电信、移动/铁通、联通等公网用户可以使用)： 
+        deb http://archive.ubuntu.com/ubuntu/ raring main restricted universe multiverse
+        deb http://archive.ubuntu.com/ubuntu/ raring-security main restricted universe multiverse
+        deb http://archive.ubuntu.com/ubuntu/ raring-updates main restricted universe multiverse
+        deb http://archive.ubuntu.com/ubuntu/ raring-proposed main restricted universe multiverse
+        deb http://archive.ubuntu.com/ubuntu/ raring-backports main restricted universe multiverse
+        deb-src http://archive.ubuntu.com/ubuntu/ raring main restricted universe multiverse
+        deb-src http://archive.ubuntu.com/ubuntu/ raring-security main restricted universe multiverse
+        deb-src http://archive.ubuntu.com/ubuntu/ raring-updates main restricted universe multiverse
+        deb-src http://archive.ubuntu.com/ubuntu/ raring-proposed main restricted universe multiverse
+        deb-src http://archive.ubuntu.com/ubuntu/ raring-backports main restricted universe multiverse
+     Ubuntu官方提供的其他软件（第三方闭源软件等）： 
+        deb http://archive.canonical.com/ubuntu/ raring partner
+        deb http://extras.ubuntu.com/ubuntu/ raring main
+     骨头兄亲自搭建并维护的 Ubuntu 源（该源位于浙江杭州百兆共享宽带的电信机房):
+        deb http://ubuntu.srt.cn/ubuntu/ raring main restricted universe multiverse
+        deb http://ubuntu.srt.cn/ubuntu/ raring-security main restricted universe multiverse
+        deb http://ubuntu.srt.cn/ubuntu/ raring-updates main restricted universe multiverse
+        deb http://ubuntu.srt.cn/ubuntu/ raring-proposed main restricted universe multiverse
+        deb http://ubuntu.srt.cn/ubuntu/ raring-backports main restricted universe multiverse
+        deb-src http://ubuntu.srt.cn/ubuntu/ raring main restricted universe multiverse
+        deb-src http://ubuntu.srt.cn/ubuntu/ raring-security main restricted universe multiverse
+        deb-src http://ubuntu.srt.cn/ubuntu/ raring-updates main restricted universe multiverse
+        deb-src http://ubuntu.srt.cn/ubuntu/ raring-proposed main restricted universe multiverse
+        deb-src http://ubuntu.srt.cn/ubuntu/ raring-backports main restricted universe multiverse
+     网易163更新服务器
+        deb http://mirrors.163.com/ubuntu/ raring main restricted universe multiverse
+        deb http://mirrors.163.com/ubuntu/ raring-security main restricted universe multiverse
+        deb http://mirrors.163.com/ubuntu/ raring-updates main restricted universe multiverse
+        deb http://mirrors.163.com/ubuntu/ raring-proposed main restricted universe multiverse
+        deb http://mirrors.163.com/ubuntu/ raring-backports main restricted universe multiverse
+        deb-src http://mirrors.163.com/ubuntu/ raring main restricted universe multiverse
+        deb-src http://mirrors.163.com/ubuntu/ raring-security main restricted universe multiverse
+        deb-src http://mirrors.163.com/ubuntu/ raring-updates main restricted universe multiverse
+        deb-src http://mirrors.163.com/ubuntu/ raring-proposed main restricted universe multiverse
+        deb-src http://mirrors.163.com/ubuntu/ raring-backports main restricted universe multiverse
+
+刷新列表: 
+    sudo apt-get update
+
+
+
+
+
+
+

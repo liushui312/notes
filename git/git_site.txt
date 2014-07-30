@@ -1,0 +1,4 @@
+
+ltp    ：https://github.com/linux-test-project/ltp.git
+ltp-ddt：git://arago-project.org/git/projects/test-automation/ltp-ddt.git
+busybox：git://git.busybox.net/busybox

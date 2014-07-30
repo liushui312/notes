@@ -1,0 +1,61 @@
+
+0x00000000-0x00040000 : "Bootloader"         ==> /dev/mtdblock0                                             
+0x00040000-0x00400000 : "Kernel"             ==> /dev/mtdblock1                                                 
+0x00400000-0x05400000 : "Rootfs"             ==> /dev/mtdblock2                                                 
+0x05400000-0x10000000 : "File System"	     ==> /dev/mtdblock3
+
+######################################################################################
+
+u-boot操作:
+
+
+写u-boot到nand flash:
+	nand erase 0 0x40000			
+	tftp 0x50000000 u-boot-nand.bin
+	nand write 0x50000000 0 0x40000
+
+
+写内核到nand flash:
+	nand erase 0x40000 0x300000
+	tftp 0x50000000 zImage
+	nand write 0x50000000 0x40000 0x220000
+
+
+从nand flash读内核到内存:
+	nand read 0x50008000 0x40000 0x220000
+
+
+启动内核:
+	bootm 0x50008000
+
+
+自动启动:
+	setenv bootcmd nand read 0x50008000 0x40000 0x220000\; bootm 0x50008000
+	save
+
+
+######################################################################################
+
+写根文件系统到nand flash:
+	主机操作:
+		cp ~/up6410/src/qt_rootfs.tar /nfsroot
+		or
+		cd /rootfs
+		tar cjf rootfs.tar.bz2 *
+
+	u-boot操作:
+		nand erase 0x400000 0xfc00000
+							  0x5000000
+					 4M		  80M	
+	板子linux操作:
+		mount -t yaffs2 /dev/mtdblock2 /mnt
+		tar xf qt_rootfs.tar -C /mnt
+		or
+		tar xf rootfs.tar.bz2 -C /mnt
+		sync
+		
+	u-boot操作:
+		setenv bootargs "root=/dev/mtdblock2 rw console=ttySAC0,115200"
+		save
+
+

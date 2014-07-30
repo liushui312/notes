@@ -1,0 +1,155 @@
+
+
+###############################################################################
+
+主机操作:
+
+安装编译器:
+	mkdir /usr/local/arm
+	tar jxf ~/up6410/src/arm-linux-gcc-4.3.2.tar.bz2 -C /usr/local/arm
+
+	vim ~/.bashrc	
+		export PATH=/usr/local/arm/4.3.2/bin:$PATH	
+	or
+	vim ~/.bash_profile
+			PATH=/usr/local/arm/4.3.2/bin:$PATH	
+
+	source  ~/.bash_profile 或 注销
+
+
+1. 配置(要编译那些东西); config
+2. 怎么编译(arm-linux-);
+3. 开始编译(make)
+
+编译u-boot:
+	tar jxf u-boot-1.1.6.tar.bz2
+	cd u-boot-1.1.6
+
+    1.配置:include/configs/<board_name>.h
+             include/configs/up6410_sd.h
+             include/configs/up6410_nand.h
+
+    Configuration Options:
+        CUP Type:
+        Board Type:
+        Intel Monahans options:
+        Linux Kernel Interface:
+        Serial Port:
+        Console Interface:
+        Console Bandrate:
+        Interrupt driven serial port input:
+        Console UART number:
+        Boot Delay:
+        Autoboot Command:
+        Pre-boot Commands:
+        Serial Download Echo Mode:
+        Monitor Functions:
+        Watchdog:
+        u-boot version:
+        RTC:
+        Timestamp support:
+        partition support:
+        IDE reset mode:
+        ATAPI support:
+        LBA48 support:
+        SCSI support:
+        NETWORK support (PCI):
+        NETWORK support (other):
+        USB support:
+        MMC support:
+        Journaling Flash filesystem support:
+        KeyBoard support:
+        video support:
+        LCD support:
+        ...
+
+	2.编译
+        修改Makefile文件:
+            增加编译项: <board_name>_config: unconfig
+                        @$(MKCONFIG) $(@:_config=) ......
+            更改CROSS_COMPILE =  arm-linux-
+        
+        make <board_name>_config
+                ->include/config.mk config.h        
+            make up6410_sd_config 
+	        make up6410_nand_config
+					
+    3.make
+
+        "u-boot.bin" is a raw binary image
+        "u-boot" is an image in ELF binary format
+        "u-boot.srec" is in Motorola S-Record format
+
+	  cp u-boot.bin /tftpboot/u-boot-sd.bin
+	  cp u-boot.bin /tftpboot/u-boot-nand.bin
+
+
+编译内核:
+	cd ~/up6410/src
+	tar jxf linux-2.6.28.tar.bz2
+	cd linux-2.6.28
+
+	cp up6410_config .config
+	make zImage
+	cp arch/arm/boot/zImage /tftpboot
+
+	make help
+
+	vmlinux.o -> ld -> vmlinux -> objcopy -> Image
+					-> gzip -> zImage 
+
+uImage:         U-boot专用的映像文件
+	[ HEAD   ]
+	[ 自解压 ] 0x40
+	[ Image  ]
+
+zImage: 
+	[ 自解压 ] 
+	[ Image  ]
+
+zImage 不能超过512KB，bzImage 即bigzImage ，二者的内核都是gzip压缩的
+
+============================================================================
+
+制作根文件系统:
+	tar jxf busybox-1.19.4.tar.bz2
+	cd busybox-1.19.4
+
+	vim Makefile
+	164:CROSS_COMPILE ?= arm-linux-
+	190:ARCH ?= arm
+
+	make defconfig or menuconfig
+	make busybox
+
+	mkdir /nfsroot
+	chmod 777 /nfsroot
+	
+	make install CONFIG_PREFIX=/nfsroot
+	make install --> _install
+
+	cd /nfsroot
+	mkdir dev etc lib proc sys tmp mnt
+	mkdir -p lib/modules/2.6.28.6 #for rmmod 
+
+	mknod dev/console c 5 1
+
+	cp /usr/local/arm/4.3.2/arm-none-linux-gnueabi/libc/lib/* lib/	
+
+	vim etc/fstab
+		proc    /proc   proc    defaults        0       0
+		sysfs   /sys    sysfs   defaults        0       0
+		tmpfs   /tmp    tmpfs   defaults        0       0
+		tmpfs   /dev    tmpfs   defaults        0       0
+
+	mkdir etc/init.d
+	vim etc/init.d/rcS
+		#!/bin/sh
+		mount -a
+		echo "/sbin/mdev" > /proc/sys/kernel/hotplug
+		mdev -s
+	chmod +x etc/init.d/rcS
+
+	tar cf ../mini_rootfs.tar *
+
+

@@ -1,0 +1,31 @@
+1. 创建10个进程,分别分段计算1000到6000之间的回文数个数
+
+2. 实现简单shell程序
+    system函数
+    测试exec家族函数
+    void my_system(const char *command);
+    kyo#
+
+3. 实现su命令
+    su/su -/su kyo/su - kyo
+    pstree -p | grep bash
+
+    su          切换root用户
+    su -        切换root用户, 修改环境变量
+    su kyo      切换kyo用户
+    su - kyo    切换kyo用户, 修改环境变量
+
+    1. 加-区别 
+        切换路径
+        改变环境变量 PATH
+
+    2. 验证用户是否存在 getpwnam
+
+    3. root切换其它用户不需要密码,其它用户切换任何都需要密码验证
+
+    4. 修改用户权限 setuid  setgid initgroups
+
+    5. 创建新进程,执行一个新的shell
+
+    pstree -p | grep bash
+    id

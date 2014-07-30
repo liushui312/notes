@@ -1,0 +1,533 @@
+一、系统启动流程
+    
+    启动流程
+        上电开机-- BOIS实现硬件自检初始化-- 找到启动设备的编号 -- 找到MBR(主引导记录，在硬盘的0磁道的0扇区) -- 启动grub程序 -- 通过grub设置找到vmlinuz并加裁到内存里运行 -- 启动内核会加载initrd(随机内存盘，小型文件系统，作用：能够让内核认出系统所在的哪个设备上,临时驱动) -- 运行产生第一个进程init -- init进程会读取/etc/inittab根据配置文件，判断系统进去运行在哪个级别并进入相对应级别启动相应服务 -- /etc/rc.sysinit 系统环境初始化，获取主机网络环境，测试或者载入设备，设置时间... -- /etc/rc.local开机后要运行的脚本
+
+        /etc/inittab
+            
+            0               关机
+            1               单用户模式
+            2               没有网络的文本模式
+            3               有网络的文本模式
+            4               保留
+            5               图形模式
+            6               重启
+
+            id:5:initdefault:           默认开机后进入的系统级别
+
+            l0:0:wait:/etc/rc.d/rc 0
+            .......
+            l6:6:wait:/etc/rc.d/rc 6    定义六个级别启动的服务脚本
+
+            ca::ctrlaltdel:/sbin/shutdown -t3 -r now    定义ctrl+alt+del三键重启功能，在tty模式有效，在图形模式下无效，这个还会受到内核参数的影响
+
+            1:2345:respawn:/sbin/mingetty tty1
+            .....
+            6:2345:respawn:/sbin/mingetty tty6      定义了6个虚拟终端
+
+            x:5:respawn:/etc/X11/prefdm -nodaemon   启动图形
+
+
+            x:5:once:/bin/su root -l -c "/bin/bash --login -c startx >& /dev/null"  自动用root登录图形
+
+            respawn     代表什么时候终止都重新启动命令
+            once        代表运行这个命令一次
+
+        
+        /etc/rc.local   linux启动最后阶段，系统会执行/etc/rc.local脚本
+
+        /etc/X11/xinit/xinitrc.d/   此目录里可以放置图形界面开启自动运行的脚本
+
+=================================================================================
+
+二、GRUB启动加载器
+    
+    cd /boot/grub
+        
+        stage1              MBR中的bootloader备份文件
+
+        stage2              grub的核心文件
+
+        device.map          grub与linux的硬盘符号映射表
+
+        splash.xmp.gz       grub的背景图片
+
+        grub.conf           grub的配置
+        
+--------------------------------------------------------------------------------
+
+    vim /boot/grub/grub.conf        配置文件
+        
+        default=0               默认启动的操作系统(0代表第一个title....)
+
+        timeout=5               5秒后自动启动default操作系统
+
+        splashimage=            指定背景图片的路径
+
+        hiddenmenu              隐藏开机选项
+
+        password --md5          设置启动参数密码，grub-md5-crypt产生
+
+        title                   操作系统名称
+            
+            password --md5      设置启动操作系统密码
+
+            root                指定kernel和initrd所在的分区,(hd0,0)，表示第一块硬盘，第一个分区
+
+            kernel              指定kernel路径，内核启动参数
+
+            initrd              指定initrd路径
+
+            rootnoverify        指定其它操作系统(windows)
+
+            chainloader +1      链接加载到第一扇区(windows)
+
+
+
+--------------------------------------------------------------------------------
+
+     grub背景图片制作
+        
+            convert 源图片 -resize 640x480! -colors 14 test.xpm     修改颜色数和分辩率
+            
+            convert没有此命令：
+                
+                imagemagick 找此关键字安装
+                
+
+--------------------------------------------------------------------------------
+    
+    grub命令
+        
+        help                    列出命令
+        
+        quit                    退出
+        
+        root(hd0,1)             指定第一个硬盘第二个分区为grub文件所在的分区
+        
+        setup(hd0)              安装grub到第一个硬盘上
+            
+            把grub安装到硬盘第一扇区： grub-install /dev/sda
+
+        boot                    启动系统
+
+        grub.conf中title下的命令都一样
+
+--------------------------------------------------------------------------------
+
+    kernel 启动参数
+        
+        ro                      以只读的方式加载内核，默认rw
+
+        root=LABEL=/            指定卷标是/的分区为根分区，也可以直接指定设备文件
+
+        rhgb                    图形启动时以图形方式显示启动信息
+
+        quiet                   启动时不显示检查硬件的信息
+
+        [0-6]                   1启动单用户模式....
+        
+        vga=792                 指定终端的分辩率为1024x768
+
+        panic=n                 内核崩溃n秒后重新启动
+
+        iso-scan/filename=/0.91.iso 指定根分区为iso镜像
+
+        boot=casper             启动iso默认访问的文件夹
+
+--------------------------------------------------------------------------------
+    
+    initrd作用
+        
+        initrd提供的目录当作kernel的暂时目录，该文件系统主要提供内核启动时需要的驱动，ext3文件系统驱动，如果没有该驱动就不能挂载根分区，没有挂载根分区就不能读取根分区中的ext3驱动，所以要有一个临时的initrd提供驱动
+    
+--------------------------------------------------------------------------------
+
+    打开initrd
+        
+        file initrd-*           检查到该文件为gzip文件，不要相信扩展名
+
+        mv initrd initrd.gz     改变扩展名
+
+        gzip -d initrd.gz       解压gz文件
+
+        file initrd             检查到该文件为cpio文件
+
+        cpio -im < initrd       解压cpio文件
+
+    
+    打包initrd
+        
+        find | cpio -co | gzip -9 > initrd-new.img
+
+
+--------------------------------------------------------------------------------
+
+grub   排错引导
+
+如果grub丢失，或者grub写的有错误等情况，进系统时有可能会直接到一个grub>的界面（也就是黑屏幕上就一个grub >的提示符）
+
+grub> root (hd0,0)	--进入到/boot分区
+
+grub> kernel /vmlinuz-xxxxxx     ro   root=LABEL=/  --根分区可以用label,也可以用/dev/sdax来代替
+
+grub> initrd /initrd-xxxxxx
+
+grub> boot 	--boot代表启动
+
+
+如果能启动，就修改好你的grub
+
+如果启动出现kernel panic 的错误，表示是上面写错了，再试试，不行就用linux rescue去修复
+
+=================================================================================
+
+三、模块管理
+
+    /lib/modules/`uname -r`/            模块存放位置
+
+    lsmod                               列出当前系统装载的模块
+
+    rmmod                               卸载当前系统装载的模块
+        
+        rmmod 8139too                   卸载8139too模块
+
+    modinfo                             列出模块的信息
+        
+        modinfo 8139too.ko              查看8139too模块信息
+
+    insmod                              装载模块
+
+        insmod 8139too.ko               装载8139too.ko模块
+
+    modprobe                            装载模块，会问题模块依赖问题
+        
+        modprobe 8139too                装载8139too模块，并且把8139too依赖的模块按顺序装载
+
+
+================================================================================
+
+四、内核编译
+    
+    内核就是给上层应用程序提供运行环境的程序，主要包括内存管理，进程调度，网络功能，文件管理等
+
+    www.kernel.org                                  内核官网
+
+    tar -xvjf linux-2.6.37.tar.bz2 -C /usr/src/     解压内核源码
+
+    cd /usr/src/linux-2.6.37/                       进入内核源码目录
+
+    内核源码目录树
+        
+        tree                        打印目录树
+            
+            -L                      指定几级目录
+
+        tree -L 2 > tree.txt        导出内核2级目录树
+
+            COPYING                 版权
+            CREDITS                 人员
+            Documentation           文档，Kernel帮助文档
+            Makefile                顶级的makefile
+            README                  介绍功能
+            arch                    支持的体系结构
+                i386                80x86, AMD, Intel
+                ia64                64位，Itanium工作站，服务器或大型机
+                m32r                M32R处理器
+                m68K                Motorola 32位处理器
+                mk68nommu           不支持mmu的32位处理器
+                mips                32位RISC，嵌入式流行的CPU
+                parisc              HP9000工作站
+                ppc                 PowerPC,老Apple的处理器
+                ppc64               64位PowerPC
+                s390                IBM大型机
+                sh                  SuperH 嵌入式处理器
+                sparc               Sun工作站
+                sparc64             Sun64位工作站
+                v850                NEC V850
+                x86_64              AMD，Intel 64位
+                ...
+            crypto                  实现了常用的加密算法
+            drivers                 实现设备驱动的代码
+                acpi                电源管理
+                base                公共的
+                block               块设备
+                char                字符设备
+                cpufreq             实现CPU频率
+                crypto              加密算法
+                firmware            Pc机用的软硬件
+                ide                 IDE硬件接口
+                i2c                 i2c接口
+                input               输入设备，键盘等
+                l3                  音频总线
+                misc                混杂类设备
+                mmc                 SD卡实现
+                mtd                 flash驱动
+                net                 网卡设备驱动
+                parport             并口驱动
+                PCI                 pic总线
+                serial              串口
+                USB                 USB
+                video               视频相关
+            fs                      文件系统的实现
+            include                 头文件
+                acpi                电源
+                asm-                对应体系结构的硬件代码相对就
+                asm-generic         体系结构通用的
+                linux               kernel编程最多的
+            init                    内核启动代码，关中断，设置mmu等
+                内核的入口就是从main.c开始看起
+
+            ipc                     实现进程间通讯的代码
+            kernel                  实现核心的东西，进程调度等
+            lib                     内核实现的一些库
+            mm                      内存管理
+            net                     实现网络协议栈
+            scripts                 脚本工具，为编译内核使用的工具
+            security                安全方面
+            sound                   声卡，2.6内核还没有完善声卡
+            usr                     用户态的东西
+
+
+
+    编译内核的步骤
+        
+        make clean                  删除生成目标文件
+        make mrproper               删除包括.config在内的生成的目标文件
+        make defconfig              使用默认的config配置文件，在对应体系结构目录的configs目录下的config
+        make config                 传统的文本配置界面，不推荐使用，用户要一个一个的去选择确认
+        make menuconfig             图形配置，打不开原因终端窗口不够大，不然就是缺包,装ncurses-devel包
+        make xconfig                基于x windows的图形配置界面，要装qt-devel包
+
+        
+        make                        编译
+        make modules_install        把编译后模块复制到/lib/modules/内核版本,以后可以用insmod或modprobe加载扩展内核功能
+        make install                会拷贝vmlinuz和initrd到/boot下，并且自动修改grub
+
+    
+    制作initrd
+        
+        进入boot目录，在原有initrd文件基础上加新内核版本
+        
+        mkinitrd initrd-2.6.18-194.el5 2.6.28.10
+
+        
+    内核配置
+        
+        make menuconfig
+            
+            *           代表编入内核
+            M           代表编成模块
+            空          代表不编
+
+
+    2.6.30以上内核启动不了？
+
+        make menuconfig
+
+            General setup 
+
+                enable deprecated sysfs features to support old userspace tools     选中
+
+
+================================================================================
+
+五、字符处理工具
+    
+    wc                                      统计命令
+        
+        wc -c /etc/passwd                   统计/etc/passwd文件里有多少个字符
+
+        wc -w /etc/passwd                   统计/etc/passwd文件里有多少个单词
+
+        wc -l /etc/passwd                   统计/etc/passwd文件里有多少行
+
+
+    sort                                    排序命令
+        
+        sort -f /etc/passwd                 忽略大小写排序 
+
+        sort -b /etc/passwd                 忽略最前面的空格符部分
+
+        sort -n /etc/passwd                 按数字大小排序
+
+        sort -u /etc/passwd                 去除重复行显示
+
+        sort -r /etc/passwd                 反向排序
+
+        sort -n -k5 /etc/passwd             指定第五列进行按数字大小排序
+
+        sort -t: -n -k5 /etc/passwd         以:为分隔符指定第五列按数字大小排序
+
+
+    cut                                     字段截取
+        
+        cut -f1 /etc/passwd                 只显示第一列数据
+
+        cut -f1,2,5 /etc/passwd             只显示第一列，第二列，第五列的数据
+
+        cut -d: -f1,2 /etc/passwd           以:为分隔符只显示第一列，第二列的数据
+
+
+    uniq                                    去除文件中相邻的重复行
+        
+        uniq -u /etc/passwd                 只显示没有被重复过的行
+        
+        uniq -d /etc/passwd                 只显示被重复过的行
+
+        uniq -i /etc/passwd                 忽略大小定去除文件中相邻的重复行
+
+        uniq -c /etc/passwd                 统计相邻重复行数
+
+
+    diff                                    比较文件差异
+        
+        diff -B /etc/passwd passwd          忽略空行造成的不同
+
+   
+    grep                                    搜索文本
+        
+        grep -a hello /bin/ls               将二进制文件以文本文件的方式搜索hello
+        
+        grep -i hello /etc/passwd           在/etc/passwd文件里找hello并且忽略大小写查找
+
+        grep -n hello /etc/passwd           搜索hello结果并显示在文件里出现的行号
+
+        grep -w hello /etc/passwd           搜索完全匹配hello单词的行
+
+        grep -v hello /etc/passwd           显示出在/etc/passwd文件里没有hello的行
+
+        grep -r hello /etc/                 在/etc/目录里所有文件里找hello并显示结果
+
+
+    tr                                      替换字符
+
+        cat /etc/passwd | tr a b            查看/etc/passwd文件并把里面的a替换成b
+
+        tr a-z A-Z /etc/passwd              把/etc/passwd文件里的小写全转成大写
+
+=================================================================================
+
+六、查找命令
+
+    which                           查找$PATH变量指定的目录里的命令
+
+        which ifconfig              查出ifconfig命令的路径
+
+    whereis                         查找命令，显示命令更多的信息
+        
+        whereis ifconfig            命令路径，帮助文档等
+
+
+    locate                          文件查找命令
+        
+        速度快，通过系统自带的一个数据库去查找
+            
+            /var/lib/mlocate/mlocate.db
+
+        locate hello                查找带hello的文件,如果hello是刚刚新建的就找不到，因为数据库还没有没保存现在的信息
+
+        updatedb                    手动更新查找数据库，然后再查找就会很快找到刚刚新建的hello文件
+        
+
+    find                            文件查找命令，功能最强大，速度慢，因为会扫描整个硬盘
+
+        find /etc -name grub.conf   查找/etc目录下的grub.conf文件
+
+        find / -name "*.conf"       查找/下所有.conf文件
+
+        find  / -iname grub.conf    查找/目录下的grub.conf文件，忽略大小写
+
+        find / -maxdepth 2 -name grub.conf     可以使用-maxdepath参数来控制查找的层次，就是说只查当前目录和子目录,最多查2级目录
+        find / -mindepth 2 -name grub.conf     最少查二级目录
+
+        find /etc -type d           查找/etc/下所有的目录
+
+        find /etc -type f           查找/etc/下的所有普通文件
+
+        find /etc -type l -name *.conf      查找/etc/下软链接文件是.conf结尾的文件
+
+        find /etc -type s           查找/etc/下所有socket文件
+
+        find /etc -type c           查找/etc/下的所有字符设备文件
+
+        find /etc -type p           查找/etc/下所有管道文件
+
+        find /etc -user root        查找/etc/所属用户是root的文件
+
+        find /etc -group root       查找/etc/所属用户组是root的文件
+
+        find /etc -uid 500          查找/etc/下uid是500的文件,和-user类似
+
+        find /etc -gid 500          查找/etc/下gid是500的文件,和-group类似
+
+        find /etc -nouser           查找没有所属用户的文件
+
+        find /etc -nogroup          查找没有所属用户组的文件
+
+        find /etc -perm 777 -type d    查找/etc/下权限为777的目录
+
+        find . -perm  111           查找权限是111的文件
+
+        find . -size +10M           查找当前目录下大于10M的文件，单位可以有K,M,G,b等
+
+        find / -size -2M            查找根目录下少于2M的文件
+
+        find / -mtime 1             查找根目录下1小时以前修改的所有文件
+
+        find / -mtime +2            查找根目录下2个多小时以前修改的所有文件
+
+        find / -mtime -3            查找根目录下最近3小时内修改的所有文件
+
+        find / -atime 1             查找根目录下1天以前访问或读过的所有文件
+
+        find / -atime -1            查找根目录下最近1天内读过或访问的文件
+
+        find / -ctime -3            查找根目录下最近3天内状态发生改变的文件
+
+        find / -cmin -3             查找根目录下最近3分钟内状态发生改变的文件
+
+        find / -empty               查找根目录下所有空白文件或者空目录
+
+        find / -false               查找根目录下总是错误的文件
+
+        find / -false -exec ls -l {} \;   查找根目录下总是错误的文件并且用ls -l查看
+
+=================================================================================
+
+七、Ubuntu Linux 操作系统源配置
+
+    root用户登录
+        
+        sudo passwd root                        修改root用户密码
+
+        sudo gedit /etc/gdm/gdm.schemas         修改使root在登录窗口可见
+            
+            greeter/Include                     找到greeter/include字段 
+            ...
+            <default>root</default>             把用户root添加进来 
+
+            greeter/Exclude                     同样把root加入<default></default>里
+        
+--------------------------------------------------------------------------------
+    
+    源
+        
+        gedit /etc/apt/sources.list             软件仓库源
+
+            deb http://2.2.2.1/ubuntu/ lucid main restricted universe multiverse
+            deb http://2.2.2.1/ubuntu/ lucid-security main restricted universe multiverse
+            deb http://2.2.2.1/ubuntu/ lucid-updates main restricted universe multiverse
+            deb http://2.2.2.1/ubuntu/ lucid-backports main restricted universe multiverse
+            deb http://2.2.2.1/ubuntu/ lucid-proposed main restricted universe multiverse
+
+            deb-src http://2.2.2.1/ubuntu/ lucid main restricted universe multiverse
+            deb-src http://2.2.2.1/ubuntu/ lucid-security main restricted universe multiverse
+            deb-src http://2.2.2.1/ubuntu/ lucid-updates main restricted universe multiverse
+            deb-src http://2.2.2.1/ubuntu/ lucid-backports main restricted universe multiverse
+            deb-src http://2.2.2.1/ubuntu/ lucid-proposed main restricted universe multiverse            
+
+        
+            apt-get update                      刷新软件仓库索引
+
+

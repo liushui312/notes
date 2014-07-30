@@ -1,0 +1,9 @@
+
+git shortlog
+
+返回 git repository 下每个用户进行 commit 的次数，以及每次 commit 的注释。
+
+-s 参数省略每次 commit 的注释，仅仅返回一个简单的统计。
+-n 参数按照 commit 数量从多到少的顺利对用户进行排序。
+
+git shortlog -s -n

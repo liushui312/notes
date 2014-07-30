@@ -1,0 +1,37 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.6	//
+APPEND	darr.h	26;"	d	language:C++
+DARR	darr.h	/^}DARR;$/;"	t	language:C++	typeref:struct:darr_t
+DEBUG0	darr.h	14;"	d	language:C++
+DEBUG1	darr.h	15;"	d	language:C++
+ERRP	darr.h	17;"	d	language:C++
+PREPEND	darr.h	27;"	d	language:C++
+__DARR_H__	darr.h	2;"	d	language:C++
+cmp	test.c	/^int cmp(const void *d1, const void *d2)$/;"	f	language:C	signature:(const void *d1, const void *d2)
+darr_append	darr.c	/^int darr_append(void *data, DARR *handle)$/;"	f	language:C	signature:(void *data, DARR *handle)
+darr_cmp_t	darr.h	/^typedef int (darr_cmp_t)(const void *, const void *);$/;"	t	language:C++
+darr_create	darr.c	/^DARR *darr_create(int size)$/;"	f	language:C	signature:(int size)
+darr_delete	darr.c	/^int darr_delete(void *key, darr_cmp_t *cmp, DARR *handle)$/;"	f	language:C	signature:(void *key, darr_cmp_t *cmp, DARR *handle)
+darr_destroy	darr.c	/^void darr_destroy(DARR **handle)$/;"	f	language:C	signature:(DARR **handle)
+darr_find	darr.c	/^void *darr_find(void *key, darr_cmp_t *cmp, DARR *handle)$/;"	f	language:C	signature:(void *key, darr_cmp_t *cmp, DARR *handle)
+darr_ind	darr.c	/^void *darr_ind(int index, DARR *handle)$/;"	f	language:C	signature:(int index, DARR *handle)
+darr_ind_del	darr.c	/^int darr_ind_del(int index, DARR *handle)$/;"	f	language:C	signature:(int index, DARR *handle)
+darr_insert	darr.c	/^int darr_insert(void *data, int index, DARR *handle)$/;"	f	language:C	signature:(void *data, int index, DARR *handle)
+darr_load	darr.c	/^DARR *darr_load(const char *path)$/;"	f	language:C	signature:(const char *path)
+darr_num	darr.c	/^int darr_num(DARR *handle)$/;"	f	language:C	signature:(DARR *handle)
+darr_op_t	darr.h	/^typedef void (darr_op_t)(const void *);$/;"	t	language:C++
+darr_prepend	darr.c	/^int darr_prepend(void *data, DARR *handle)$/;"	f	language:C	signature:(void *data, DARR *handle)
+darr_size	darr.c	/^int darr_size(DARR *handle)$/;"	f	language:C	signature:(DARR *handle)
+darr_sort	darr.c	/^void darr_sort(darr_cmp_t *cmp, DARR *handle)$/;"	f	language:C	signature:(darr_cmp_t *cmp, DARR *handle)
+darr_store	darr.c	/^int darr_store(const char *path, DARR *handle)$/;"	f	language:C	signature:(const char *path, DARR *handle)
+darr_t	darr.h	/^typedef struct darr_t {$/;"	s	language:C++
+darr_travel	darr.c	/^void darr_travel(darr_op_t *op, DARR *handle)$/;"	f	language:C	signature:(darr_op_t *op, DARR *handle)
+data	darr.h	/^    void *data; $/;"	m	language:C++	struct:darr_t
+ls	test.c	/^void ls(const void *data)$/;"	f	language:C	signature:(const void *data)
+main	test.c	/^int main(void)$/;"	f	language:C	signature:(void)
+num	darr.h	/^    int num;$/;"	m	language:C++	struct:darr_t
+size	darr.h	/^    int size;$/;"	m	language:C++	struct:darr_t

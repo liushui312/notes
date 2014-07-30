@@ -1,0 +1,58 @@
+1.adb安装
+
+方法一：
+    sudo apt-get install android-tools-adb 
+
+方法二：
+    设置PATH，/path/to/android-sdk/platform-tools/
+
+2.设备连接
+1) lsusb 查看usb设备的idVendor
+2）mkdir ~/.android/
+   vim ~/.android/adb_usb.ini 添加:idVendor，0x1f3a
+
+issue: 
+1）error: insufficient permissions for device
+  手动解决:	sudo adb kill-server
+	        sudo adb start-server
+  永久解决: 
+    1）sudo vim /etc/udev/rules.d/51-android.rules
+        加入：SUBSYSTEM=="usb", ATTR{idVendor}=="0bb4", MODE="0666"
+
+    2）chmod a+r /etc/udev/rules.d/51-android.rules
+
+3. adb使用
+
+选项：
+  -s <specific device> directs     command to the device or emulator with the given
+                                   serial number or qualifier.
+
+  adb -s <specific device> <cmd>
+
+命令：
+  adb shell am start apk_package_name           启动apk
+  adb shell am force-stop apk_package_name      关闭apk
+
+------------------------------------------------------------
+# AW    1f3a
+SUBSYSTEM=="usb", ATTR{idVendor}=="1f3a", MODE="0666"
+
+# HTC   0bb4
+SUBSYSTEM=="usb", ATTR{idVendor}=="0bb4", MODE="0666"
+
+# Huawei    12d1
+SUBSYSTEM=="usb", ATTR{idVendor}=="12d1", MODE="0666"
+
+# Samsung   04e8
+SUBSYSTEM=="usb", ATTR{idVendor}=="04e8", MODE="0666"
+
+# 小米 18d1
+SUBSYSTEM=="usb", ATTR{idVendor}=="18d1", MODE="0666"
+---------------------------------------------------------------------------
+lsusb
+sudo /etc/udev/rules.d/70-persistent-cd.rules 添加:
+SUBSYSTEM=="usb", ATTRS{idVendor}=="18d1", ATTRS{idProduct}=="0003", MODE="0666"
+sudo service udev restart
+adb kill-server
+adb devices
+---------------------------------------------------------------------------

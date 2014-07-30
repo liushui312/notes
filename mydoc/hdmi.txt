@@ -1,0 +1,47 @@
+1. 系统上电后，接入HDMI线，电视机开机没有显示，可能是什么原因造成的？
+答：a）HDMI线松了，没有插好；b）电视机的输入源没有切换到正确的HDMI
+IN端口；c）芯片的HDMI TX端口受到损害；d）系统没有跑起来，死机了；e）系统运行了错误的程序
+
+2. 电视机有显示，但画面总是不停的闪烁，可能是什么原因造成的？
+答：a）HDMI线松了，没有插好；b）芯片的HDMI TX端口受到损害；c）HDMI线材质量太差了
+
+3. 选择播放了一个视频文件，但是功放的声音总是打顿，可能是系统什么地方出现问题了？
+答：a）Audio供电纹波较大；b）Audio驱动没有正确设定；c）HDMI驱动没有正确设定
+
+4. 右侧图像没有显示完整，右边、下边均黑屏。此时如何修改使其正确显示？
+答：这个是由于APK中的Setting->Display->HDMI Output Mode Setting执行了错误的脚本代码。
+可参考别的项目中的对如下节点的操作：
+/sys/class/display/axis
+/sys/class/graphics/fb[n]/free_scale 
+/sys/class/graphics/fb[n]/scale_width
+/sys/class/graphics/fb[n]/scale_height
+
+----------------------------------------------------------------------------------------
+hdmi 源码：
+[KernelRoot]/arch/arm/mach-meson[n]/hdmi_tx_hw —— IP相关
+[KernelRoot]/drivers/amlogic/hdmi/hdmi_tx
+  hdmi_tx.c —— 入口文件，注册设备、节点
+  hdmi_tx_video.c —— 设定Video参数
+  hdmi_tx_audio.c —— 设定Audio参数
+  hdmi_tx_edid.c —— 解析EDID
+  hdmi_tx_cec.c —— 控制CEC
+  hdmi_tx_hdcp.c —— 控制HDCP
+
+----------------------------------------------------------------------------------------
+HDMI debug
+
+读HDMI寄存器
+  echo rhREG > /sys/class/amhdmitx/amhdmitx0/debug
+写HDMI寄存器
+  echo whREG VAL > /sys/class/amhdmitx/amhdmitx0/debug
+查看电视机支持的视频模式
+  cat /sys/class/amhdmitx/amhdmitx0/disp_cap
+查看电视机支持的视频3D模式
+  cat /sys/class/amhdmitx/amhdmitx0/disp_cap_3d
+查看电视机支持的音频格式
+  cat /sys/class/amhdmitx/amhdmitx0/aud_cap
+
+
+
+
+

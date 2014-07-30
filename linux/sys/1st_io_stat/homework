@@ -1,0 +1,8 @@
+熟悉txt里函数
+
+1. 实现ls -l功能 (单个文件) stat
+    ls -l 1_fopen.c
+
+2. 实现函数 通过uid获取用户名
+    /etc/passwd
+    char *getname(uid_t id);

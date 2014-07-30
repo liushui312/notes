@@ -1,0 +1,11 @@
+#!/bin/bash
+
+ip=172.20.1.86
+name=zhengjinyong
+
+if ping $ip -c 2 >& /dev/null
+then
+    ssh $name:@$ip
+else
+    echo no link!
+fi

@@ -1,0 +1,31 @@
+
+common目录:
+1. 添加设备树文件
+    arch/arm/boot/dts/amlogic/
+
+
+device目录:
+1. AndroidProducts.mk & project_name.mk
+
+project_name.mk
+    PRODUCT_NAME 
+    PRODUCT_DEVICE
+    PRODUCT_MODEL
+    
+2. init.amlogic.board.rc  (wifi-bt模组)
+
+3. kernel.mk              (wifi-bt模组)
+    KERNEL_DEVICETREE
+
+4. lowmemorykiller.txt    (DDR不同可能需要修改)
+
+5. quick_build_kernel.sh
+    PROJECT_NAME
+    PROJECT_DT
+
+6. system.prop
+
+7. vendorsetup.sh   
+    修改lunch menu
+
+

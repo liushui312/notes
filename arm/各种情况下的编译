@@ -1,0 +1,112 @@
+
+
+汇编程序的入口标签是_start, 而C程序的入口标签是main函数。
+
+
+（1）
+
+C程序的编译过程：
+
+	gcc main.c -o main
+
+		过程：
+			预处理：    gcc -E main.c -o main.i
+			编译:       gcc -S main.i -o main.s
+			汇编:       gcc -c main.s -o main.o
+			连接：      gcc main.o -o main
+
+	最后一步是进行连接，我们只提供了main.o，如果我们用gcc直接进行连接输出的话(gcc main.o -o main），实际上，gcc已经默认帮我们连接加上了启动代码和动态连接库。因为我们程序真正的入口是_start,而我们的C程序只提供了一个main入口，因此，需要_start来调用我们的main,这个调用程序就在我们的启动程序中的crt1.o中。完整的连接如下：
+	gcc main.o -o main相当于如下：
+			
+	ld /usr/lib/crt1.o /usr/lib/crti.o /usr/lib/crtn.o main.o -o main -lc --dynamic-linker /lib/ld-linux.so.2
+
+	-lc表示连接C库，gcc里面会默认连接c库，我们单独用ld连接的话就需要我们手动加上-lc， -dynamic-linker指定动态连接加载器。(实际上在arm平台下不同的编译器有些还不只要连接这些目标文件）
+
+
+（2）
+
+由于我们编译C程序的前两步是把C语言编译成汇编语言。main函数在汇编语言中就变成了一个符号标签。因此，我们也可以直接写汇编程序，（比如main.s），	然后让gcc去连接。因此，我们如果直接写我们的汇编代码，不包括启动代码的情况，我们的汇编代码一样应该从main标签开始。例如：
+
+    	.section .rodata
+        .align 2
+.HL:
+        .string "Hello world.\n\000"
+
+        .text
+        .align 2
+        .global main
+        .type main, %function
+main:
+        stmfd sp!, {fp, lr}
+        add fp, sp, #4
+        sub sp, sp, #8
+
+        ldr r0, =.HL
+        bl printf
+
+        sub sp, fp, #4
+        ldmfd sp!, {fp, lr}
+        bx lr
+
+
+	比如把上面代码保存为main.s。 我们可以直接用arm-linux-gcc main.s -o main生成可执行文件。
+
+（3）
+
+如果我们直接写纯汇编代码并生成可执行的文件而不需要启动代码的话，我们就需要自己写_start，也就是我们的汇编程序的入口是_start，同时它也是整个程序的起始标签。比如下面代码:
+	
+	     .text
+        .align 2
+
+        .global _start
+_start:
+		die_loop:
+			b die_loop
+
+这个程序进入就开始一直死循环。比如我们保存它为start.s，则编译成可执行文件的步骤为：
+
+	arm-linux-gcc start.s -c -o start.o
+	arm-linux-ld start.o -o start
+	然后执行./start，后死循环。
+
+
+我们在纯汇编程序中不能这样直接调用printf，qsort等函数，因为这些函数以来其他外部环境和库，但是我们可以调用那些不依赖外部环境就可以直接实现了并且已经在c库里面实现了的函数，并且在连接的时候用静态连接，比如下面程序：
+
+	     .text
+        .align 2
+        .global _start
+        .type _start, %function
+_start:
+        sub sp, sp, #16
+
+        mov r0, sp
+        mov r1, #0
+        mov r2, #16
+        bl memset
+
+	die_loop:
+		b die_loop
+
+上面程序现在栈上分配了16个字节的空间，并且调用memset函数把这16个字节清0。由于我们这里调用了memset这个C函数，而memset函数不依赖其他任何环境所以，我们只需要静态连接C库就可以了，可以把libc.a拷到当前目录，也可以直接链接libc.a所在目录。下面把libc.a拷到当前目录并连接的命令行：
+	
+		假如上面代码保存为start.s，编译命令行为：（上面程序如果要正常退出的话，需要调用系统调用exit）
+		
+		arm-linux-gcc ./start.s -c -o start.o
+		arm-linux-ld ./start.o ./libc.a start.o -o start
+		
+
+反汇编命令：
+
+	arm-linux-objdump -d ./start.o		: 反汇编输出包含指令的汇编段。.text
+	arm-linux-objdump -D ./start.o		: 反汇编目标文件中的全部段。  all
+
+	将二进制文件转换成为反汇编文件：
+
+	arm-linux-objdump -D -b binary -m arm bin_file > dis_file
+	因为二进制文件中没有任何标识平台信息的数据，所以我们需要手动通过-m 指定硬件的平台。
+	
+二进制拷贝：	
+
+	arm-linux-objcopy -O binary start.o start.bin	: 把目标文件start.o中的指令的二进制码输出到start.bin中。
+
+	

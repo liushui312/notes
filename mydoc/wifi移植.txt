@@ -1,0 +1,113 @@
+
+device目录:
+1. project_name.mk
+
+wifi & bluetooth 部分
+
+2. init.amlogic.board.rc
+
+3. kernel.mk
+
+4. quick_build_kernel.sh
+
+-------------------------------------
+USB:
+    rtl8188eu
+    rtl8192
+
+SDIO:
+    AP6330(bcn40183)
+    AP6210(bcm40181)
+    AP6335
+    AP6181()
+
+    WL212
+
+WL211(40181)
+WL212(40183)
+AP6181(40181)
+AP6210(40181+20710) (wifi+BT)
+AP6330(4330 dual band)
+AP6476(40181+2076) (wifi+BT+FM+GPS)
+AP6493(40183+20793) (wifi+BT+FM+NFC)
+
+--------------------------------------
+
+1. wifi 打不开
+
+1) 确认硬件
+  USB wifi: 
+    lsusb 看是否存在
+
+2) 确认驱动已加载
+  
+  打开wifi，在串口输入lsmod
+
+  如果没有相应驱动，查看 /system/lib 目录下是否有相应ko文件
+    1) 有。
+        首先确保其权限至少为-rw-r--r--(644)
+        手动加载: insmod 8192cu.ko
+            a）加载成功：说明UI加载不成功应该是系统配置文件不对，没有加载到指定路径的驱动。
+                wifi.mk 文件中：WIFI_DRIVER_MODULE_PATH 和 WIFI_DRIVER_MODULE_NAME
+
+            b）不成功： 看log，找原因 (没有将cfg80211协议编进去等)
+
+    2）没有。 
+
+ 如果有相应驱动，进入3）
+
+3）wpa_supplicant分析
+
+    确认平台/system/bin/下wpa_supplicant存在，同时确保文件操作属性至少为-rwxr-xr-x (755)
+
+    确认init.amlogic.board.rc 中存在如下 service
+        service p2p_supplicant
+        service wpa_supplicant 
+
+    确认平台/data/misc/wifi/目录下是否存在wpa_supplicant.conf和p2p_supplicant.conf文件，并确认这些文件操作权限
+
+
+
+-------------------------------------------------------------------------------    
+insmod dhd.ko 错误分析:
+  
+1. [aml_sdio_print_err] sdio: Timeout error,
+    
+    硬件有问题，电源没起来
+
+2. dhdsdio_download_code_file: Open firmware file failed /etc/wifi/40183/fw_bcm40181a2.bin
+    
+    修改wifi配置后，touch hardware/libhardware_legacy/wifi/wifi.c; mm -B;
+
+有列表但连不上:
+1. connect failed event=0 e->status 1 e->reason 0
+
+    wifi 加天线
+
+-------------------------------------------------------------------------------
+
+wifi 引脚:
+
+WL_REG_ON       regulators power enable/disable                 (WIFI_PWREN)
+WL_HOST_WAKE    WLAN to wake-up HOST 
+SDIO_DATA_0
+SDIO_DATA_1
+SDIO_DATA_2
+SDIO_DATA_3
+SDIO_DATA_CMD
+SDIO_DATA_CLK
+LPO             External Low Power Clock input (32.768KHz)      (wifi_32k)
+TCXO_IN         Reference clock input                           (MCLK_IN -- WIFI_24M)
+
+
+GPIOX_0 ~ GPIOX_3  <==> SDIO_DATA_0 ~ SDIO_DATA_3
+GPIOX_8                 SDIO_DATA_CLK      
+GPIOX_9                 SDIO_DATA_CMD
+GPIOX_10                LPO
+GPIOX_11                TCXO_IN
+GPIOX_21                WL_HOST_WAKE
+GPIOAO_6                WL_REG_ON
+
+
+
+
