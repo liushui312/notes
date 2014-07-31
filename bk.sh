@@ -11,5 +11,5 @@ FILES=`ls`
 #    tar vcf $CUR_FILE_PATH/../note.tar $CUR_FILE_PATH/$FILES .gitignore
 #fi
 
-rm $CUR_FILE_PATH/../note.tar
-tar vcf $CUR_FILE_PATH/../note.tar $CUR_FILE_PATH/$FILES .gitignore
+rm $CUR_FILE_PATH/../notes.tar
+tar vcf $CUR_FILE_PATH/../notes.tar $CUR_FILE_PATH/$FILES .gitignore
