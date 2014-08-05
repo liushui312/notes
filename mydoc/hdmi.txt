@@ -18,7 +18,7 @@ IN端口；c）芯片的HDMI TX端口受到损害；d）系统没有跑起来，
 
 ----------------------------------------------------------------------------------------
 hdmi 源码：
-[KernelRoot]/arch/arm/mach-meson[n]/hdmi_tx_hw —— IP相关
+[KernelRoot]/arch/arm/mach-meson[n]/hdmi_tx_hw  --- IP相关
 [KernelRoot]/drivers/amlogic/hdmi/hdmi_tx
   hdmi_tx.c —— 入口文件，注册设备、节点
   hdmi_tx_video.c —— 设定Video参数
@@ -27,6 +27,15 @@ hdmi 源码：
   hdmi_tx_cec.c —— 控制CEC
   hdmi_tx_hdcp.c —— 控制HDCP
 
+hdmi 最佳分辨率上层代码：
+    frameworks/base/services/java/com/android/server/MboxOutputModeService.java
+      public String getBestMatchResolution() 函数 //通过读取/sys/class/amhdmitx/amhdmitx0/disp_cap 节点
+
+
+    这个地方最终被packages/amlogic/MboxSettings调用到.
+
+
+
 ----------------------------------------------------------------------------------------
 HDMI debug
 
@@ -34,8 +43,10 @@ HDMI debug
   echo rhREG > /sys/class/amhdmitx/amhdmitx0/debug
 写HDMI寄存器
   echo whREG VAL > /sys/class/amhdmitx/amhdmitx0/debug
-查看电视机支持的视频模式
-  cat /sys/class/amhdmitx/amhdmitx0/disp_cap
+
+查看电视机支持的分辨率:
+  cat /sys/class/amhdmitx/amhdmitx0/disp_cap (带＊的为最佳分辨率)
+
 查看电视机支持的视频3D模式
   cat /sys/class/amhdmitx/amhdmitx0/disp_cap_3d
 查看电视机支持的音频格式

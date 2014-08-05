@@ -1,0 +1,21 @@
+
+撤销未提交的改变
+    git checkout [files]  
+        files 可用通配符
+
+    git checkout .   撤销所有
+
+
+git rm --cache files
+
+------------------------------------------------------------------
+git revert
+
+撤销某次操作，此次操作之前和之后的commit和history都会保留，并且把这次撤销
+作为一次最新的提交
+    git revert HEAD                撤销前一次 commit
+    git revert HEAD^               撤销前前一次 commit
+    git revert commit-id
+        （比如：fa042ce57ebbe5bb9c8db709f719cec2c58ee7ff）撤销指定的版本，撤销也会作为一次提交进行保存。
+    git revert是提交一个新的版本，将需要revert的版本的内容再反向修改回去，版本会递增，不影响之前提交的内容
+
