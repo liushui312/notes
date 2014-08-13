@@ -100,3 +100,6 @@
 22、Ctrl+F11 运行当前Project F11 调试当前Project
 
 23、Alt+Enter 快速查看项目的属
+
+乱码：
+    选中项目右键-properties-resource Text file encoding -> other ==> GBK

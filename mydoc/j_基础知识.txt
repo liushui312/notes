@@ -1,0 +1,27 @@
+遥控器：在remote.conf修改键值，相对照Vendor_0001_Product_0001.kl
+
+开机logo/动画更换修改：amlogic/mx_1225/out/target/product/g18ref/system/media/bootanimation.zip
+
+开机播放视频:
+    system.prop，里面找一个service.bootvideo=0的属性，改成1
+    开机视频放在system/etc/bootvideo 这个文件
+
+HDMI,MboxLauncher2解压后编译还是出错，修改哪个文件？
+  修改：mx_1225/vendor/amlogic/prebuilt/Android.mk
+  设置：mx_1225/package/amlogic/MboxSetting/src/com/mbx/settingsmbox  
+  	vi HdmiManager.java
+
+--------------------------------------------------------------------
+
+破解root：
+    vi system/extras/su/su.c 注释掉语句块
+
+    /*
+       myuid = getuid();
+       if (myuid != AID_ROOT && myuid != AID_SHELL) {
+       fprintf(stderr,"su: uid %d not allowed to su\n", myuid);
+       return 1;
+       }
+     */
+
+--------------------------------------------------------------------

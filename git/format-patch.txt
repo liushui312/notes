@@ -1,0 +1,6 @@
+
+git format-patch commitID
+
+git format-patch HEAD^ 
+
+git format-patch branch name 

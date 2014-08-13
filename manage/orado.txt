@@ -1,7 +1,7 @@
 ORADO
 
 object:      smart原则 
-review:      目标是否与团队一致，与上司、同事确认 
+review:      目标是否与团队一致，与上司、同事确认
 altertive:   可选的方案
 decision:    做出决定
 operation:   PDCA原则

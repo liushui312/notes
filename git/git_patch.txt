@@ -1,0 +1,18 @@
+
+
+生成patch:
+    git format-patch HEAD^
+
+    git format-patch commit1..commit2
+
+    git format-patch -n master
+
+    git 
+
+
+打patch:
+    git am --ignore-whitespace --3way xxx.patch
+    失败：git am --abort
+
+
+    git apply

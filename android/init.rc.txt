@@ -1,0 +1,193 @@
+android系统启动流程之init.rc详细分析笔记
+http://www.shangxueba.com/jingyan/1848446.html
+
+关于init.rc的几点说明：
+
+1）在android源码目录下面 system/core/init/readme.txt文件中有init.rc语法的详细定义
+
+注意：readme.txt没有和android的版本一起更新，所以在新版本的android中，增加了一些commands、options等，在readme.txt中没有介绍。 还是看init目录下面的源码最为准确
+
+2）解析init.rc，init.xx.rc的相关文件目录system/core/init/
+
+3）init.c 、init.rc init.xx.rc 等最终会编译到ramdisk.img(根文件系统），和kernel一起打包成boot.img。android启动后每次都会从boot.img中解压出init.c等文件到内存，所以要修改必须修改替换boot.img。
+
+4）在init.rc中启动的服务，都是以一个进程的形式运行，属于android的本地服务。通过在终端输入PS命令可以查看在运行的相应进程，他们的ppid都为1，代表init进程。init进程也是android系统启动的第一个应用进程
+
+5）init.rc中所有的语句都是以行为单位的（每个语句都是单独写在一行里面）
+
+6）注释行以“#”开头
+
+7）Actions 和 Services表示一个新的段落section的开始。
+  所有的commands和options 都是归属于上方最近的一个段落。在第一个段落之前的commands和options是无效的。
+
+8）Actions and Services
+    不能重名，如果重名，后面的定义会被忽略（readme.txt说明）但是实际项目中同一个init.xx.rc中有重名的action，也可以正常使用。多个init.xx.rc中action也允许有重名，比如 boot，init 等在多个rc文件中出现。services应该不能重名
+
+-------------------------------------------------------------------------
+init.rc （Android Init Language）法详解：
+
+1.init语法的四个组成原件：
+
+Actions ：动作，使用格式：
+    on <triger_name>
+       <command>
+       <command>
+
+Services ：服务，使用格式：
+    service <name> <pathname> [ <argument> ]* 
+            <option>
+            <option>
+
+2.init.rc中三大模块：
+
+1）import 导入其他的init.xx.rc文件。
+  在init进程解析rc脚本时，会将所有rc脚本中的配置在安装执行阶段一并解析。即：init.rc中的early-init与init.${hardware}.rc中的early-init是一并解析的。
+
+2） 以action动作为触发点的一系列命令
+
+3） 带有各种Options的一系列services的定义
+
+import /init.${ro.hardware}.rc
+
+通过cat proc/cpuinfo可以查看ro.hardware的值=Hardware的值
+
+3.对Actions官方描述的一些理解
+  当action的trigger被匹配后，action会被加入到动作执行队列中，在队列中的action按队列顺序被执行，每个action下面的command也是按顺序执行。按这个理论，在init.rc中action、command、service的执行顺序主要是和它们的触发时间有关，如果都是开机启动时执行，应该也和代码顺序有关。（有兴趣可以验证一下、想深入了解解析过程，可以查看源码目录init下面的init_parser.c等文件）
+
+4.Triggers
+ 跟在on后面的动作名，用来触发action下面command的执行
+
+1）android常用的triggers的名字：
+  early-init，init，early-fs，fs，post-fs，early-boot，boot
+（这些都是在init.c中触发）
+
+2）可以自定义一些triggers，并选择合适的触发方式
+（例如：关机充电功能，可以只启动charger服务进程）
+
+3）=形式，如：on property:ro.debuggable=1
+
+4） device-added-
+    device-removed-
+
+Triggers of these forms occur when a device node is added or removed
+一个设备节点/dev/XXX添加或者删除时可以触发一个action，这个可以很好的去利用
+
+5）service-exited-
+
+Triggers of this form occur when the specified service exits.
+当某个服务退出时，可以触发一个action
+
+4.option 选项：(用于services下面）
+  android 新版本上增加的一些options可以通过源码查看对应作用
+
+  init_parser.c --> lookup_keyword(const char*s）--> parse_line_service（）
+   或者--> parse_line_action（）
+
+  1）class：说明服务属于class_name这个类。缺省值service属于“default”类。同一个class下面的服务可以一起启动或停止
+
+  2）disabled：表示当这个服务所在的class启动的时候，服务不会自动启动，要用start server_name 或
+  property_set("ctl.start", server_name）才能启动。
+
+  3）oneshot：当服务退出后，不会再重新启动，如果没有加这个option，则服务默认退出后又会重新重启
+
+  4）user：执行服务之前，先声明服务的用户名，缺省值应该为root用户.
+  如果你的进程要求具有linux内核能力，必须保证它的用户为root（没有完全明白，实例？）
+
+  5）group：执行服务之前，先声明服务所属组名，可以一次声明属于多个组。
+  声明多个组时，除第一个组名外，其他的为服务的补充组名(调用接口 setgroups()
+
+  6）onrestart + <command>：服务重启的时，会执行onrestart后面的command.
+
+  eg：onrestart restart media
+  重启名为media的服务
+
+  7）setenv：在当前服务进程中设置环境变量name的值为value。
+
+  注意：setenv定义的环境变量仅在本进程内生效，退出该进程，或者关闭相应的程序运行窗口，该环境变量即无效
+程序中可通过getenv("name"）口获取这个环境变量的值
+
+  setenv和export的区别：
+    setenv csh ，本进程生效，退出后，变量无效
+    export bash，全局生效，一直存在
+
+  格式：export key=value
+        setenv key value
+
+  8）critical：声明为设备的循环服务。如果服务在四分钟内退出了四次，则设备会进入recovery模式
+    使用实例servicemanager、ueventd等服务
+
+  9）socket  <name><type> <perm> [ <user> [ <group> ]]：创建名为/dev/socket/的unix domain
+  socket，并把它的句柄fd传给本服务进程，<type> 必须为"dgram","stream" or "seqpacket".用户和组默认是0。
+
+6.command：（action下面的一系列命令）
+
+常用命令：
+  1）import 导入init.XX.rc、xxx.conf等文件
+
+  2）chmod
+
+  3）chown
+
+  4）chdir
+
+  5）chroot 改变进程根目录
+
+  6）insmod
+
+  7）start: Start a service running if it is not already running.
+
+  8）stop:  Stop a service from running if it is currently running.
+
+  9）class_start: Start all services of the specified class if they are not already running.
+
+  10）class_stop
+      class_reset   //重启class下面所有的服务
+
+  11）setprop: Set system property to.
+    通过getprop命令可以查看当前系统的属性值
+
+  12）export:  设置全局环境变量，这个变量值可以被所有进程访问（全局的，一直存在）
+  在代码中通过value=getenv("name"）口可以获取这个环境变量的值
+
+  13）mkdir [mode] [owner] [group]
+  创建目录，后面项缺省值为
+  mode，owner，group：0755 root root
+
+  14）trigger: Trigger an action. Used to queue an action from another action.
+
+  例：trigger post-fs-data
+
+  15）exec[]* : 执行指定的Program，并可以带有执行参数。
+
+  exec在调用进程内部执行一个可执行文件，并会阻塞当前进程，直到运行完成。
+  最好避免和那些builtin commands一样使用exec命令，否则容易造成阻塞
+
+  16）ifup: 启动某个网络接口，使其为up状态，通过netcfg可以查看，ifup eth0
+   等价于 netcfg eth0 up
+
+  17）hostname: 设置设备的主机名，一般默认设置为localhost，可以在终端通过hostname
+   new_name进行修改
+
+  18）domainname: 设置网络域名localdomain
+
+  19）mount  <type> <device> <dir> [<mountoption>]*: 把device挂接到dir目录下面，文件系统类型为type。
+
+   "ro",
+   "rw",
+   "remount",
+   "noatime",
+   “nosuid”......，具体可查看linux的mount命令说明
+
+  20）setkey
+
+  21）setrlimit <resource> <cur> <max>: 设置本服务进程的资源上限值。
+
+  22）symlink <target> <path>: 创建一个指向<path>的软连接<target>。
+
+  23）sysclktz : 设置系统时区(0 if system clock ticks in GMT）
+
+  24）wait <path> [<timeout> ]: 等待一个文件是否存在，当文件存在时立即返回，或到<timeout>指定的超时时间后返回，如果不指定<timeout>，默认超时时间是5秒。
+
+  25）write <path> <string> [ <string> ]* : 打开一个文件，利用write命令写入一个或多个字符串
+
+  26）setcon
