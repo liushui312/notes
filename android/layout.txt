@@ -1,1 +1,75 @@
 http://www.cnblogs.com/yejiurui/archive/2014/05/13/3725884.html
+
+
+
+android: layout_width, layout_height > layout_weight (剩余空间分配)
+
+实现比例: 将每个元件的 layout_width layout_height 设成 0dp，再设 layout_weight
+此时，每个元件比例= 单个/总
+
+layout_width， layout_height 覆盖时，剩余空间是负的，此时若设定layout_weight
+则按比例减去空间
+
+--------------------------------------------------------------------------------
+相对布局 RelativeLayout
+  允许子元素指定它们相对于其父元素或兄弟元素的位置，这是实际布局中最常用的布局方式之一。
+它灵活性大很多，当然属性也多，操作难度也大，属性之间产生冲突的的可能性也大，使用相对布局时要多做些测试。
+
+RelativeLayout用到的一些重要的属性：
+  第一类:属性值为true或false
+    android:layout_centerHorizontal 水平居中
+    android:layout_centerVertical   垂直居中
+    android:layout_centerInparent   相对于父元素完全居中
+    android:layout_alignParentBottom 贴紧父元素的下边缘
+    android:layout_alignParentLeft   贴紧父元素的左边缘
+    android:layout_alignParentRight  贴紧父元素的右边缘
+    android:layout_alignParentTop    贴紧父元素的上边缘
+    android:layout_alignWithParentIfMissing
+    如果对应的兄弟元素找不到的话就以父元素做参照物
+  
+  第二类：属性值必须为id的引用名“@id/id-name”
+  android:layout_below      在某元素的下方
+  android:layout_above      在某元素的的上方
+  android:layout_toLeftOf   在某元素的左边
+  android:layout_toRightOf  在某元素的右边
+  
+  android:layout_alignTop    本元素的上边缘和某元素的的上边缘对齐
+  android:layout_alignLeft   本元素的左边缘和某元素的的左边缘对齐
+  android:layout_alignBottom 本元素的下边缘和某元素的的下边缘对齐
+  android:layout_alignRight  本元素的右边缘和某元素的的右边缘对齐
+  
+  第三类：属性值为具体的像素值，如30dip，40px
+  android:layout_marginBottom   离某元素底边缘的距离
+  android:layout_marginLeft     离某元素左边缘的距离
+  android:layout_marginRight    离某元素右边缘的距离
+  android:layout_marginTop      离某元素上边缘的距离
+
+
+EditText的android:hint          设置EditText为空时输入框内的提示信息。
+android:gravity　               对该view 内容的限定
+android:layout_gravity          设置该view相对与父view 的位置
+
+android:scaleType   控制图片如何resized/moved来匹对ImageView的size。
+
+ImageView.ScaleType/ android:scaleType值的意义区别：
+
+  CENTER /center: 按图片的原来size居中显示，当图片长/宽超过View的长/宽，则截取图片的居中部分显示
+  CENTER_CROP / centerCrop: 按比例扩大图片的size居中显示，使得图片长(宽)等于或大于View的长(宽)
+
+CENTER_INSIDE / centerInside
+将图片的内容完整居中显示，通过按比例缩小或原来的size使得图片长/宽等于或小于View的长/宽
+
+FIT_CENTER / fitCenter 把图片按比例扩大/缩小到View的宽度，居中显示
+
+FIT_END / fitEnd 把图片按比例扩大/缩小到View的宽度，显示在View的下部分位置
+
+FIT_START / fitStart 把图片按比例扩大/缩小到View的宽度，显示在View的上部分位置
+
+FIT_XY / fitXY 把图不按比例扩大/缩小到View的大小显示
+
+MATRIX / matrix 用矩阵来绘制，动态缩小放大图片来显示。
+
+** 要注意一点，Drawable文件夹里面的图片命名是不能大写的
+
+
+

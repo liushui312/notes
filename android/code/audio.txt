@@ -1,0 +1,73 @@
+
+Audio的JAVA部分：
+    frameworks/base/media/java/android/media/
+主要包含:
+    AudioSystem.java
+    AudioTrack.java
+    AudioRecorder.java
+    AudioFormat.java
+    AudioManager.java (用来对音量大小，声音模式的管理，注册“插入耳机”时的广播接收者) 
+
+---------------------------------------------------------------------------
+Media库（libmedia.so）的Audio部分的目录中：
+    frameworks/av/include/media/
+    frameworks/av/media/libmedia/
+
+上层接口: 主要实现(调用Ixxx接口) :
+            AudioSystem.cpp
+            AudioTrack.cpp 
+            AudioRecorder.cpp 
+
+下层接口：提供了
+            IAudioFlinger.cpp 接口类
+            IAudioTrack.cpp
+            IAudioRecorder.cpp
+
+            IAudioPolicyService.cpp
+
+Ixxx的接口通过AudioFlinger来实现，其他接口通过JNI向上层提供接口。
+
+----------------------------------------------------------------------------
+Audio的JNI部分：
+    frameworks/base/core/jni
+实现：
+    android_media_AudioSystem.cpp
+    android_media_AudioTrack.cpp
+    android_media_AudioRecord.cpp
+
+----------------------------------------------------------------------------
+Audio Flinger (libaudioflinger.so)：
+    frameworks/av/services/audioflinger/
+
+核心文件是AudioFlinger.h和AudioFlinger.cpp，提供了类AudioFlinger，这个类是一个IAudioFlinger的实现。
+
+
+---------------------------------------------------------------------
+Audio硬件抽象层的接口：
+    hardware/libhardware_legacy/include/hardware/
+    hardware/libhardware_legacy/audio/
+
+  Audio的硬件抽象层是AudioFlinger和Audio硬件的接口。可以基于Linux标准的Alsa或OSS实现，
+也可以基于私有的Audio驱动接口来实现。
+
+主要文件：
+    AudioHardwareInterface.h 定义了类：AudioStreamOut AudioStreamIn AudioHardwareInterface
+    AudioHardwareBase.h      定义了类： AudioHardwareBase，它继承AudioHardwareInterface
+
+    AudioPolicyInterface.h    定义了类：AudioPolicyInterface、AudioPolicyClientInterface
+    AudioPolicyManagerBase.h  定义了类：AudioPolicyManagerBase，它继承AudioPolicyInterface
+
+    AudioPolicyManagerBase.cpp
+
+在AudioFlinger的实现中，以下几个文件提供了Audio系统的通用实现：
+    AudioHardwareGeneric.cpp
+    AudioHardwareStub.cpp
+    AudioDumpInterface.cpp
+这些代码将编译成静态库libaudiointerface.so，这作为Audio系统的通用实现来完成。
+
+  实际的Audio硬件抽象层，通常可以基于Linux中的OSS驱动程序和ALSA驱动程序来实现。
+基于OSS的硬件抽象层的实现类似AudioGeneric的实现，但是增加了控制接口。基于ALSA的
+硬件抽象层的实现需要构建于用户空间的ALSA库上，目前在Android已经有了成熟的应用。
+    
+    如：external/tinyalsa   (libtinyalsa.so)
+--------------------------------------------------------------------------------------------    

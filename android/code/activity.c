@@ -4,86 +4,83 @@ java.lang.Object
       android.view.ContextThemeWrapper
         android.app.Activity
 
-ÖØÒªµÄ·½·¨£º
+é‡è¦çš„æ–¹æ³•ï¼š
   setRequestedOrientation();
-  setContentView(); //¼ÓÔØ²¼¾ÖÎÄ¼ş
+  setContentView();             //åŠ è½½å¸ƒå±€æ–‡ä»¶
   findViewById();
   getSystemService();
 
 
-ActivityµÄÉúÃüÖÜÆÚ(7¸ö·½·¨¡¢3¸ö½×¶Î)
-
-onCreate
-onStart
-onRestart
-onResume
-onPause
-onStop
-onDestroy
+Activityçš„ç”Ÿå‘½å‘¨æœŸ(7ä¸ªæ–¹æ³•ã€3ä¸ªé˜¶æ®µ)
+    onCreate
+    onStart
+    onRestart
+    onResume
+    onPause
+    onStop
+    onDestroy
 --------------------------------------
-¿ªÊ¼Activity
+å¼€å§‹Activity
 onCreate -> onStart -> onResume
 
-½áÊøActivity
+ç»“æŸActivity
 onPause -> onStop -> onDestroy
 
-ÖØĞÂ»ñÈ¡½¹µã
+é‡æ–°è·å–ç„¦ç‚¹
 onRestart -> onStart -> onResume
-
 --------------------------------------
-½¹µãÉúÃüÖÜÆÚ£ºActivityÊ¼ÖÕ¿É¼û
+ç„¦ç‚¹ç”Ÿå‘½å‘¨æœŸï¼šActivityå§‹ç»ˆå¯è§
 onPause -> onResume -> onPause
 
-ÉúÃüÖÜÆÚ£º
+ç”Ÿå‘½å‘¨æœŸï¼š
 onStart -> onRestart -> onResume -> onPause -> onStop -> onStart
-
 --------------------------------------
-Activity Ö®¼ä´«µİÊı¾İ
+Activity ä¹‹é—´ä¼ é€’æ•°æ®
 
 1. Intent
 
   Intent Structure
-    1.action£º
+    1.actionï¼š
     ACTION_MAIN         <==> android.intent.action.MAIN
     ACTION_EDIT 
     ACTION_VIEW
     ACTION_PICK
     ACTION_GET_CONTENT
     
-    2.category£ºÀà±ğ£¬ Gives additional information about the action.
+    2.categoryï¼šç±»åˆ«ï¼Œ Gives additional information about the action.
     
     CATEGORY_LAUNCHER   <==> android.intent.category.LAUNCHER 
     CATEGORY_DEFAULT
     CATEGORY_ALTERNATIVE
     
-    3.data£ºuriĞÎÊ½
+    3.dataï¼šuriå½¢å¼
         
-    4.type £º Specifies an explicit type (a MIME type) of the intent data.
+    4.type ï¼š Specifies an explicit type (a MIME type) of the intent data.
     
-    5.component: ÈôÒÔÉÏÕÒ²»µ½£¬ÔòÖ¸¶¨×é¼ş¡£
+    5.component: è‹¥ä»¥ä¸Šæ‰¾ä¸åˆ°ï¼Œåˆ™æŒ‡å®šç»„ä»¶ã€‚
     
-    6.extras£ºThis is a Bundle of any additional information.
+    6.extrasï¼šThis is a Bundle of any additional information.
 
-Intent µÄ¹¹Ôìº¯Êı
+Intent çš„æ„é€ å‡½æ•°
     1. Intent(String action);
     2. Intent(String action, Uri uri);
     3. Intent(Context packageContext, class);
     4. Intent(String action, Uri uri, Context packageContext, class)
 
-eg:  Í¨¹ı¾²Ì¬±äÁ¿´«µİÊı¾İ
-    //Ñ¡ÔñÖ¸¶¨×é¼şµÄ·½·¨
+eg:  é€šè¿‡é™æ€å˜é‡ä¼ é€’æ•°æ®
+    //é€‰æ‹©æŒ‡å®šç»„ä»¶çš„æ–¹æ³•
     Intent intent = new Intent(main.this, otherActivity.class);
-    Intent.putExtra("name", "ÕÅÈı");
+    Intent.putExtra("name", "å¼ ä¸‰");
     Intent.putExtra("age","23");
     startActivity(intent);
 
-    È¡Êı¾İ
-    ÔÚotherActivityÀàÖĞ£º
+    å–æ•°æ®
+    åœ¨otherActivityç±»ä¸­ï¼š
     Intent intent = getIntent();
     String name = intent.getStringExtra("name");
     int age = intent.getStringExtra("age");
 
-eg:  Í¨¹ı¼ôÇĞ°å´«µİÊı¾İ
+eg:  é€šè¿‡å‰ªåˆ‡æ¿ä¼ é€’æ•°æ®
 
 
 ========================================================================

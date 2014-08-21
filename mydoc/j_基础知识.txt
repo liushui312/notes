@@ -25,3 +25,8 @@ HDMI,MboxLauncher2解压后编译还是出错，修改哪个文件？
      */
 
 --------------------------------------------------------------------
+烧录u-boot.bin可以插u盘:
+    fatload usb 0 12000000 u-boot.bin
+    store erase boot
+    store rom_write 12000000 0 60000
+

@@ -1,73 +1,72 @@
+Handlerã€Looperã€MessageQueue å¼‚æ­¥æ¶ˆæ¯å¤„ç†æœºåˆ¶
 
-Handler¡¢Looper¡¢MessageQueue Òì²½ÏûÏ¢´¦Àí»úÖÆ
+åŠŸèƒ½ï¼šå®ç°çº¿ç¨‹é—´é€šä¿¡
 
-¹¦ÄÜ£ºÊµÏÖÏß³Ì¼äÍ¨ĞÅ
+HandleræŠŠæ¶ˆæ¯å¯¹è±¡åŠ å…¥æ¶ˆæ¯é˜Ÿåˆ—
+Looperä¸åœä»æ¶ˆæ¯é˜Ÿåˆ—ä¸­å–å‡ºå¯¹è±¡ï¼Œæ²¡æœ‰å¯¹è±¡åˆ™ç­‰å¾…
+æ¯å–å‡ºä¸€ä¸ªæ¶ˆæ¯Looperè°ƒç”¨äº¤ç»™Handlerå»å¤„ç†
 
-Handler°ÑÏûÏ¢¶ÔÏó¼ÓÈëÏûÏ¢¶ÓÁĞ
-Looper²»Í£´ÓÏûÏ¢¶ÓÁĞÖĞÈ¡³ö¶ÔÏó£¬Ã»ÓĞ¶ÔÏóÔòµÈ´ı
-Ã¿È¡³öÒ»¸öÏûÏ¢Looperµ÷ÓÃ½»¸øHandlerÈ¥´¦Àí
-
-ÖØÒª·½·¨£º
+é‡è¦æ–¹æ³•ï¼š
     @Override
     public void handleMessage(Message msg);
 
-Ê¹ÓÃ£º
-  1. Ö÷Ïß³Ì´´½¨Ò»¸öÀà ¼Ì³Ğ handlerÀà£¬ ¸´Ğ´ handleMeassage(Message msg) Èç´òÓ¡ÏûÏ¢µÈ
-  2. Ö÷Ïß³Ì´´½¨Æä¶ÔÏó handler
-  3. ¹¤×÷Ïß³Ì´´½¨Message¶ÔÏó£º 
+ä½¿ç”¨ï¼š
+  1. ä¸»çº¿ç¨‹åˆ›å»ºä¸€ä¸ªç±» ç»§æ‰¿ handlerç±»ï¼Œ å¤å†™ handleMeassage(Message msg) å¦‚æ‰“å°æ¶ˆæ¯ç­‰
+  2. ä¸»çº¿ç¨‹åˆ›å»ºå…¶å¯¹è±¡ handler
+  3. å·¥ä½œçº¿ç¨‹åˆ›å»ºMessageå¯¹è±¡ï¼š 
         Message msg = handler.obtainMessage();
 		msg.what = 2;
-		handler.sendMessages(msg); //½«ÏûÏ¢·ÅÈëÏûÏ¢¶ÓÁĞ
-					     //Looper½«»áÈ¡³ömsg£¬ÕÒ³öÓëÖ®¶ÔÓ¦µÄhandler
-					     //Looper½«»áµ÷ÓÃÆähandler.handleMessage(Message msg);
+		handler.sendMessages(msg); //å°†æ¶ˆæ¯æ”¾å…¥æ¶ˆæ¯é˜Ÿåˆ—
+					     //Looperå°†ä¼šå–å‡ºmsgï¼Œæ‰¾å‡ºä¸ä¹‹å¯¹åº”çš„handler
+					     //Looperå°†ä¼šè°ƒç”¨å…¶handler.handleMessage(Message msg);
 
 eg:
-    ÄÚ²¿ÀàNetworkThread¼Ì³ĞThread£¬¸´Ğ´run·½·¨¡£ĞİÃß2Ãë£¬sµÄÖµÄ£Äâ´ÓÍøÂçÖĞ»ñÈ¡µÄÊı¾İ¡£
-sµÄÖµ·Åµ½textviewÖĞ£¬²»ÄÜÖ±½ÓÔÚ¸ÄÏß³ÌÖĞ¸üĞÂuiµÄÄÚÈİ¡£
+    å†…éƒ¨ç±»NetworkThreadç»§æ‰¿Threadï¼Œå¤å†™runæ–¹æ³•ã€‚ä¼‘çœ 2ç§’ï¼Œsçš„å€¼æ¨¡æ‹Ÿä»ç½‘ç»œä¸­è·å–çš„æ•°æ®ã€‚
+sçš„å€¼æ”¾åˆ°textviewä¸­ï¼Œä¸èƒ½ç›´æ¥åœ¨æ”¹çº¿ç¨‹ä¸­æ›´æ–°uiçš„å†…å®¹ã€‚
 
-button¼àÌıÆ÷µÄonClickListener·½·¨ÖĞ£¬¶¨ÒåNetworkThreadÏß³Ì¶ÔÏó²¢Æô¶¯
+buttonç›‘å¬å™¨çš„onClickListeneræ–¹æ³•ä¸­ï¼Œå®šä¹‰NetworkThreadçº¿ç¨‹å¯¹è±¡å¹¶å¯åŠ¨
 
-¶¨ÒåÒ»¸öHandlerµÄÊµÏÖÀà¼Ì³ĞHandler,ÊµÏÖhandleMessage£¨£©·½·¨¡£
+å®šä¹‰ä¸€ä¸ªHandlerçš„å®ç°ç±»ç»§æ‰¿Handler,å®ç°handleMessageï¼ˆï¼‰æ–¹æ³•ã€‚
 
-ÓÃMyHandler¶¨Òåhandler¶ÔÏó¡£
+ç”¨MyHandlerå®šä¹‰handlerå¯¹è±¡ã€‚
 
-ÍøÂçÏß³ÌÖĞ¶¨Òåmsg£¬handler.obtionMessage£¨£©Éú³É£¬·¢ËÍÏûÏ¢£¨handler.sendMessage£¨£©£©£¬msg×÷Îª²ÎÊı´«Èë¡£sendMessage£¨£©·½·¨ÔÚÖ÷Ïß³Ì»òWorkerThreadÖĞ·¢ËÍ¶¼ÊÇ¿ÉÒÔµÄ¡£
+ç½‘ç»œçº¿ç¨‹ä¸­å®šä¹‰msgï¼Œhandler.obtionMessageï¼ˆï¼‰ç”Ÿæˆï¼Œå‘é€æ¶ˆæ¯ï¼ˆhandler.sendMessageï¼ˆï¼‰ï¼‰ï¼Œmsgä½œä¸ºå‚æ•°ä¼ å…¥ã€‚sendMessageï¼ˆï¼‰æ–¹æ³•åœ¨ä¸»çº¿ç¨‹æˆ–WorkerThreadä¸­å‘é€éƒ½æ˜¯å¯ä»¥çš„ã€‚
 
-Ö÷Ïß³ÌÖĞ½ÓÊÕÏûÏ¢--handlerÔÚÖ÷Ïß³ÌÖĞ¶¨Òå£¬handleMessage´¦ÀíÏûÏ¢Ò²ÊÇÔÚÖ÷Ïß³Ì¡£½¨Á¢ÆğÁ½¸öÏß³ÌÖ®¼äµÄÍ¨µÀ¡£
+ä¸»çº¿ç¨‹ä¸­æ¥æ”¶æ¶ˆæ¯--handleråœ¨ä¸»çº¿ç¨‹ä¸­å®šä¹‰ï¼ŒhandleMessageå¤„ç†æ¶ˆæ¯ä¹Ÿæ˜¯åœ¨ä¸»çº¿ç¨‹ã€‚å»ºç«‹èµ·ä¸¤ä¸ªçº¿ç¨‹ä¹‹é—´çš„é€šé“ã€‚
 
 
 
-Ïà·´Àı×Ó£º´ÓmainthreadÏòworkerthread·¢ËÍÏûÏ¢¡£
+ç›¸åä¾‹å­ï¼šä»mainthreadå‘workerthreadå‘é€æ¶ˆæ¯ã€‚
 
-1 ×¼±¸looper¶ÔÏó
+1 å‡†å¤‡looperå¯¹è±¡
 
-2 ÔÚWorkerThreadµ±ÖĞÉú³ÉHandler¶ÔÏó
+2 åœ¨WorkerThreadå½“ä¸­ç”ŸæˆHandlerå¯¹è±¡
 
-3 ÔÚMainThreadµ±ÖĞ·¢ËÍÏûÏ¢
+3 åœ¨MainThreadå½“ä¸­å‘é€æ¶ˆæ¯
 
-ÔÚWorkerThreadµÄrun·½·¨ÖĞÖ´ĞĞLooper.prepare£¨£©£»¾ÍÉú³ÉÒ»¸öLooper¶ÔÏó£¬²¢Íê³É¸Ã¶ÔÏóµÄ³õÊ¼»¯¹¤×÷¡£
+åœ¨WorkerThreadçš„runæ–¹æ³•ä¸­æ‰§è¡ŒLooper.prepareï¼ˆï¼‰ï¼›å°±ç”Ÿæˆä¸€ä¸ªLooperå¯¹è±¡ï¼Œå¹¶å®Œæˆè¯¥å¯¹è±¡çš„åˆå§‹åŒ–å·¥ä½œã€‚
 
-ÔÚWorkerThreadÖĞÉú³Éhandler¶ÔÏó¡£ÓÃÄäÃûÄÚ²¿Àà¡£handler = new Handler(){
+åœ¨WorkerThreadä¸­ç”Ÿæˆhandlerå¯¹è±¡ã€‚ç”¨åŒ¿åå†…éƒ¨ç±»ã€‚handler = new Handler(){
 						public void handleMessages(Message msg){ }
 						}
 
-Looperµ÷ÓÃloop£¨£©·½·¨¡£Ö®ºó£¬looper¶ÔÏó½«²»¶Ï´ÓÏûÏ¢¶ÓÁĞÖĞÈ¡³öÏûÏ¢¶ÔÏó¡£È»ºóµ÷ÓÃhandlerµÄhandleMessage£¨£©·½·¨´¦ÀíÏûÏ¢¶ÔÏó£¨ÔÚworker threadÖĞ£©¡£Èç¹ûÏûÏ¢¶ÓÁĞÖĞÃ»ÓĞ¶ÔÏó£¬Ôò¸ÃÏß³Ì×èÈû¡£
+Looperè°ƒç”¨loopï¼ˆï¼‰æ–¹æ³•ã€‚ä¹‹åï¼Œlooperå¯¹è±¡å°†ä¸æ–­ä»æ¶ˆæ¯é˜Ÿåˆ—ä¸­å–å‡ºæ¶ˆæ¯å¯¹è±¡ã€‚ç„¶åè°ƒç”¨handlerçš„handleMessageï¼ˆï¼‰æ–¹æ³•å¤„ç†æ¶ˆæ¯å¯¹è±¡ï¼ˆåœ¨worker threadä¸­ï¼‰ã€‚å¦‚æœæ¶ˆæ¯é˜Ÿåˆ—ä¸­æ²¡æœ‰å¯¹è±¡ï¼Œåˆ™è¯¥çº¿ç¨‹é˜»å¡ã€‚
 
-Ö÷Ïß³ÌÖĞ¶¨Òåworkerthread²¢Æô¶¯¡£
+ä¸»çº¿ç¨‹ä¸­å®šä¹‰workerthreadå¹¶å¯åŠ¨ã€‚
 
-button¼àÌıÆ÷µÄonClick()·½·¨£¬Éú³ÉmsgºÍ·¢ËÍÏûÏ¢¡£
+buttonç›‘å¬å™¨çš„onClick()æ–¹æ³•ï¼Œç”Ÿæˆmsgå’Œå‘é€æ¶ˆæ¯ã€‚
 
 Looper.loop();
 
-onClickÔËĞĞÔÚÖ÷Ïß³Ì£¬handleMessageÔËĞĞÔÚworker thread£¬·¢ËÍ¡¢½ÓÊÕÏûÏ¢ÔÚ²»Í¬Ïß³Ì¡£
+onClickè¿è¡Œåœ¨ä¸»çº¿ç¨‹ï¼ŒhandleMessageè¿è¡Œåœ¨worker threadï¼Œå‘é€ã€æ¥æ”¶æ¶ˆæ¯åœ¨ä¸åŒçº¿ç¨‹ã€‚
 
-ÔÚÄÄ¸öÏß³ÌÖĞÊµÏÖhandler¶ÔÏónew Handler£¨£©---ÊµÀı»¯£¬²¢¸´Ğ´handleMessage£¨£©·½·¨£¬¾ÍÔÚÄÄ¸öÏß³ÌÖĞ´¦ÀíÏûÏ¢¡£handler¶¨ÒåÔÚÖ÷Ïß³Ì¡£
+åœ¨å“ªä¸ªçº¿ç¨‹ä¸­å®ç°handlerå¯¹è±¡new Handlerï¼ˆï¼‰---å®ä¾‹åŒ–ï¼Œå¹¶å¤å†™handleMessageï¼ˆï¼‰æ–¹æ³•ï¼Œå°±åœ¨å“ªä¸ªçº¿ç¨‹ä¸­å¤„ç†æ¶ˆæ¯ã€‚handlerå®šä¹‰åœ¨ä¸»çº¿ç¨‹ã€‚
 
-´ÓÖ÷Ïß³ÌÏòworker thread·¢ËÍÏûÏ¢£¬worker threadÖĞrun·½·¨Àï¹Ì¶¨Èı¸ö²½Öè£º
+ä»ä¸»çº¿ç¨‹å‘worker threadå‘é€æ¶ˆæ¯ï¼Œworker threadä¸­runæ–¹æ³•é‡Œå›ºå®šä¸‰ä¸ªæ­¥éª¤ï¼š
 
-£¨1£©Looper.prepare£»
+ï¼ˆ1ï¼‰Looper.prepareï¼›
 
-£¨2£©handler = new MyHandler£¨£©£»£¨»òÕßÓÃÄäÃûÄÚ²¿Àànew Handler£¨£©{}£©
+ï¼ˆ2ï¼‰handler = new MyHandlerï¼ˆï¼‰ï¼›ï¼ˆæˆ–è€…ç”¨åŒ¿åå†…éƒ¨ç±»new Handlerï¼ˆï¼‰{}ï¼‰
 
-£¨3£©Looper.loop£¨£©£»
+ï¼ˆ3ï¼‰Looper.loopï¼ˆï¼‰ï¼›
 

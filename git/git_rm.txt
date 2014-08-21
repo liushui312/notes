@@ -1,12 +1,13 @@
 
-撤销未提交的改变
-    git checkout [files]  
-        files 可用通配符
+1.撤销未提交的改变
+    git checkout [file]     files 可用通配符
+    git checkout .          撤销所有
 
-    git checkout .   撤销所有
+2.删除已提交的改变 
+    git rm --cache files
 
-
-git rm --cache files
+3.删除未提交的新文件
+    git clean -df
 
 ------------------------------------------------------------------
 git revert
