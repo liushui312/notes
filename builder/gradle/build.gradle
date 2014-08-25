@@ -1,0 +1,33 @@
+println "the project name is $name"
+task hello << {
+    println "the current task name is $name"
+    println "hello world"
+}
+
+task printSysProps << {
+    println System.properties['system']
+}
+
+projectProperties="extprojectProperties-value"
+task printExtProps << {
+    taskProperties="ext.task.properties-value"
+    if(project.hasProperty('projectProperties')){
+        println "ext.projectPropertiesvalues is " + projectProperties  
+    }
+    if(printExtProps.hasProperty('taskProperties')){
+        println "task has defined ext.taskProperties value is " + taskProperties  
+    }
+}
+
+//copyFile将xml文件夹中的所有内容拷贝到destination文件夹中。
+//这里的两个文件夹都是相对于当前Project而言的，即build.gradle文件所在的目录。
+
+//task copyFile(type: Copy) {   
+//    from 'xml'   
+//    into 'destination'
+//}
+//
+//
+//task taskA(dependsOn: taskB) {   
+//  //do something
+//}

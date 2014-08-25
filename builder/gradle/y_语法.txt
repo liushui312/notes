@@ -1,0 +1,55 @@
+
+注释： //
+
+import 
+
+
+http://www.davenkin.me/post/2013-11-12/gradle-first-try
+
+
+创建Task的多种方法
+（1）调用Project的task()方法创建Task
+  在使用Gradle时，创建Task最常见的方式便是：
+    task hello1 << {   
+       println 'hello1'
+    }
+
+通过task()方法创建的Task都被存放在了TaskContainer中，而Project又维护了一个
+TaskContainer类型的属性tasks
+
+task showTasks {   
+    println tasks.class   
+    println tasks.size()
+}
+（2）通过TaskContainer的create()方法创建Task
+
+tasks.create(name: 'hello4') << {   
+   println 'hello4'
+}
+
+（3）声明Task之间的依赖关系
+task hello5(dependsOn:hello4) << {    
+  println 'hello5'
+}
+或者
+task hello6 << {   
+  println 'hello6'
+}
+hello6.dependsOn hello5
+
+（4）配置Task
+一个Task除了执行操作之外，还可以包含多个Property，其中有Gradle为每个Task默认定义的Property，比如description，logger等。另外，每一个特定的Task类型还可以含有特定的Property，比如Copy的from和to等。当然，我们还可以动态地向Task中加入额外的Property。在执行一个Task之前，我们通常都需要先设定Property的值，Gradle提供了多种方法设置Task的Property值。
+
+首先，我们可以在定义Task的时候对Property进行配置：
+task hello7 << {   
+    description = "this is hello7"    
+    println description
+}
+
+我们还可以通过调用Task的configure()方法完成Property的设置：
+task hello9 << {   
+   println description
+}
+hello9.configure {   
+    description = "this is hello9"
+}

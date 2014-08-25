@@ -1,9 +1,17 @@
+线程间通信:
+ 1. Handler、Looper、MessageQueue 异步消息处理机制
+ 2. AsyncTask利用线程任务异步
+ 3. 广播机制 (双向)
+
+一般使用Handler的，多用于子线程处理事务，完成时告知主线程这一类的情况。
+使用AsyncTask的场合像是下载文件这种会严重阻塞主线程的任务就必须放在异步线程里面
+
+
+----------------------------------------------------------------
 Handler、Looper、MessageQueue 异步消息处理机制
 
-功能：实现线程间通信
-
 Handler把消息对象加入消息队列
-Looper不停从消息队列中取出对象，没有对象则等待
+Looper不停从消息队列中取出对象，没有对象则等待，主线程默认创建一个Looper
 每取出一个消息Looper调用交给Handler去处理
 
 重要方法：
@@ -11,14 +19,14 @@ Looper不停从消息队列中取出对象，没有对象则等待
     public void handleMessage(Message msg);
 
 使用：
-  1. 主线程创建一个类 继承 handler类， 复写 handleMeassage(Message msg) 如打印消息等
+  1. 主线程创建一个类MyHander 继承 Handler类， 复写 handleMeassage(Message msg) //处理消息
   2. 主线程创建其对象 handler
   3. 工作线程创建Message对象： 
         Message msg = handler.obtainMessage();
 		msg.what = 2;
 		handler.sendMessages(msg); //将消息放入消息队列
-					     //Looper将会取出msg，找出与之对应的handler
-					     //Looper将会调用其handler.handleMessage(Message msg);
+					               //Looper将会取出msg，找出与之对应的handler
+					               //Looper将会调用其handler.handleMessage(Message msg);
 
 eg:
     内部类NetworkThread继承Thread，复写run方法。休眠2秒，s的值模拟从网络中获取的数据。

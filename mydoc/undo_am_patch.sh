@@ -18,7 +18,7 @@ function am_patch() {
             path=${CUR_FILE_PATH}${project_path}
             echo "project: $project_path"
             rm $path/*.patch ~ > /dev/null 2>&1
-            cp *.patch $path
+            #cp *.patch $path/
             cd $path || \
             {
                 echo "***** cd $path failed! *******"
@@ -26,19 +26,20 @@ function am_patch() {
             }
 
             line=$(cat $CUR_FILE_PATH/patch/targetcommit.log | grep $project_path)
-            targetcommit=${line#*revision=\"}
-            targetcommit=${oldcommit%%\"*}
+            targetcommit=$(echo $line | awk '{print $2}')
+            targetcommit=$(echo $targetcommit | cut -b 10-)
+            git am --abort
             git reset --hard $targetcommit
 
-            for patch in `find ./ -maxdepth 1 -name "*.patch" | sort`
-            do
-                echo "  patch: $patch"
-                git am --ignore-whitespace --3way $patch || \
-                {
-                    echo "*** git am failed! ****" 
-                    return 2
-                }
-            done
+            #for patch in `find ./ -maxdepth 1 -name "*.patch" | sort`
+            #do
+            #    echo "  patch: $patch"
+            #    git am --ignore-whitespace --3way $patch || \
+            #    {
+            #        echo "*** git am failed! ****" 
+            #        return 2
+            #    }
+            #done
         fi
 
         cd ${CUR_FILE_PATH} 
@@ -52,11 +53,10 @@ if [ -f .repo ]; then
 fi
 
 am_patch
-if [ $? -eq 0 -a -e "${CUR_FILE_PATH}/patch/NEWTRUNK" ]; then
-    cp ${CUR_FILE_PATH}/patch/NEWTRUNK/* -rvf $CUR_FILE_PATH
+if [ $? -eq 0 ]; then
+    echo "*********** am patch successful **************"
 else
     echo "************ am patch failed *************"
     exit 2
 fi
 
-echo "*********** am patch successful **************"

@@ -1,4 +1,6 @@
 
+http://www.cnblogs.com/linucos/archive/2012/05/24/2516852.html
+
 Binder 用于进程间通信
 
 Binder 框架：
