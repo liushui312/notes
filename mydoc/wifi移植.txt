@@ -39,6 +39,8 @@ AP6493(40183+20793) (wifi+BT+FM+NFC)
   USB wifi: 
     lsusb 看是否存在
 
+  看log，wifi power on 是否成功, wifi 电源是否起来
+
 2) 确认驱动已加载
   
   打开wifi，在串口输入lsmod
@@ -77,12 +79,20 @@ insmod dhd.ko 错误分析:
 
 2. dhdsdio_download_code_file: Open firmware file failed /etc/wifi/40183/fw_bcm40181a2.bin
     
-    修改wifi配置后，touch hardware/libhardware_legacy/wifi/wifi.c; mm -B;
+    修改wifi配置后，cd hardware/libhardware_legacy/; mm -B;
+                    cd external/wpa_supplicant_8/; mm -B;
 
 有列表但连不上:
 1. connect failed event=0 e->status 1 e->reason 0
 
     wifi 加天线
+
+-------------------------------------------------------------------------------
+insmod /system/lib/dhd.ko
+busybox ifconfig -a
+iwconfig  //查看无线网卡设备名称
+iwlist xxx scan | less  //查看可接入的无线热点
+iwpriv是iwconfig的辅助工具，用来配置无线网络接口的各种私有可选参数。
 
 -------------------------------------------------------------------------------
 

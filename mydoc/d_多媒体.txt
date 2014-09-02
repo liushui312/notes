@@ -1,0 +1,10 @@
+音频：
+
+spdif 输出：
+  dts 文件中音频GPIO配置：
+    audio_pins:audio_pin{...}
+    
+1. 噪声
+查电源的纹波电压
+
+2. 卡顿

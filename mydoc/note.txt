@@ -3,3 +3,5 @@
 
 timehold@yeah.net
 timehold2014
+
+http://27.154.234.214:8000/redmine/login

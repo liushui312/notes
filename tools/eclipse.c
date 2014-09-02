@@ -20,7 +20,7 @@
 3、显示行号：Windows->Preference:General_Editors->Text Editors->Show line numbers。
 
 4、打造更强大的代码提示：Windows->Preference:Java->Editor->Contest assist->auto activation triggers for java_
-    添上abcdefghijklmnopqrstuvwxyz._。
+    添上abcdefghijklmnopqrstuvwxyz._。 手动：Alt + /
 
 5、行注释：Ctrl+/，去除再按一遍；块注释：Ctrl+Shift+/，去除Ctrl+Shift+\。
 

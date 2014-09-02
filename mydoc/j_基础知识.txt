@@ -6,11 +6,6 @@
     system.prop，里面找一个service.bootvideo=0的属性，改成1
     开机视频放在system/etc/bootvideo 这个文件
 
-HDMI,MboxLauncher2解压后编译还是出错，修改哪个文件？
-  修改：mx_1225/vendor/amlogic/prebuilt/Android.mk
-  设置：mx_1225/package/amlogic/MboxSetting/src/com/mbx/settingsmbox  
-  	vi HdmiManager.java
-
 --------------------------------------------------------------------
 
 破解root：
@@ -29,4 +24,7 @@ HDMI,MboxLauncher2解压后编译还是出错，修改哪个文件？
     fatload usb 0 12000000 u-boot.bin
     store erase boot
     store rom_write 12000000 0 60000
+----------------------------------------------------------------
+关闭 adb shell 安全认证机制
+    system.prop 中： ro.adb.secure=0
 

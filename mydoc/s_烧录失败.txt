@@ -1,0 +1,14 @@
+1. run update 失败 run recovery 成功 ?
+  可能是忘记重新制作启动卡
+
+2. failed:Verify Failed with sha1sum
+
+
+3. There is no valid bmp file at the given address
+ERR(v2_common/optimus_progress_ui.c)L123:Fail in run[bmp display <NULL> ],bmpOffsetName=upgrade_upgrading_offset
+
+4. Fail to burn part(system) with in format (sparse) before verify
+
+
+查看硬件是否与该lunch的配置相一致，nand or emmc ?
+DDR 频率过高
