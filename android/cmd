@@ -1,0 +1,4 @@
+adb shell mount -o remount rw /system 
+
+
+logcat -s *:w

@@ -20,11 +20,20 @@
      */
 
 --------------------------------------------------------------------
-烧录u-boot.bin可以插u盘:
-    fatload usb 0 12000000 u-boot.bin
-    store erase boot
-    store rom_write 12000000 0 60000
+烧录u-boot.bin 可以插u盘:
+    fatload usb 0 12000000 u-boot.bin; store erase boot; store rom_write 12000000 0 60000
+
+烧录
+  mmcinfo
+  sdc_burn aml_sdc_burn.ini     // run sdc_burning
+
+
 ----------------------------------------------------------------
 关闭 adb shell 安全认证机制
     system.prop 中： ro.adb.secure=0
 
+---------------------------------------------------------------
+在线修改ether Mac 地址
+  busybox ifconfig eth0 down
+  busybox ifconfig eth0 hw ether 28:79:94:80:1F:87
+  busybox ifconfig eth0 up 
