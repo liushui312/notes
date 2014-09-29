@@ -19,3 +19,11 @@ kernel:
     SET_AOBUS_REG_MASK(AO_GPIO_O_EN_N, 1<<29);
 
   dts 查看GPIO口是否冲突
+
+2）ir led 灯 (kk-timehold-0823 bd0891da)
+    drivers/amlogic/input/new_remote/remote_main.c 中remote_send_key()
+    按下松开可设置led灯
+        
+
+3）网口的led灯 (kk-timehold-0823 bb76a8f)
+    common/drivers/amlogic/ethernet/

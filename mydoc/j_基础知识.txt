@@ -27,6 +27,8 @@
   mmcinfo
   sdc_burn aml_sdc_burn.ini     // run sdc_burning
 
+烧录uboot:
+  sdc_update bootloader u-boot.bin
 
 ----------------------------------------------------------------
 关闭 adb shell 安全认证机制
@@ -37,3 +39,13 @@
   busybox ifconfig eth0 down
   busybox ifconfig eth0 hw ether 28:79:94:80:1F:87
   busybox ifconfig eth0 up 
+
+---------------------------------------------------------------
+修改system/build.prop ,libplayer.livets.softdemux 该值修改成0,可以优化换台速度
+
+---------------------------------------------------------------
+1. storeage.c 里面增加分区
+2. uboot 处理按键并给内核传一个flag
+3. recovery.cpp 中判断此flag, 去解析如/backup/command 的命令, --update_package
+参数的处理, 挂载分区(devices/xx/recovery/recovery.fstab)
+4. 在backup 分区中，放置固件和command
