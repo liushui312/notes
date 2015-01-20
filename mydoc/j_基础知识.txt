@@ -49,3 +49,40 @@
 3. recovery.cpp 中判断此flag, 去解析如/backup/command 的命令, --update_package
 参数的处理, 挂载分区(devices/xx/recovery/recovery.fstab)
 4. 在backup 分区中，放置固件和command
+
+---------------------------------------------------------------
+单独编译logo分区(res-package.img)
+#cd device/amlogic/common
+#mm -B
+
+cat res-package.img > /dev/block/logo
+
+cat boot.img > /dev/block/boot
+cat u-boot.bin > /dev/block/bootloader
+---------------------------------------------------------------
+module    interface
+
+camera      mipi 
+
+lcd 屏      mipi
+
+codec       I2C
+----------------------------------------------------------------
+调屏的命令
+video dev bl_on
+
+----------------------------------------------------------------
+调节遥控器灵敏度
+
+common\drivers\amlogic\input\new_remote\remote_main.h中的
+{LDR_REPEAT,130<<16|110<<0}, // leader repeat改为{LDR_REPEAT,140<<16|105<<0},
+
+{LDR_ACTIVE,((unsigned)477<<16) | ((unsigned)400<<0)},
+改为{LDR_ACTIVE,((unsigned)500<<16) | ((unsigned)400<<0)},
+
+----------------------------------------------------------------
+DLNA
+    http://bbs.hiapk.com/thread-1336357-1-1.html
+
+airplayer
+

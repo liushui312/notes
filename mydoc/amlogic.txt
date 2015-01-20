@@ -1,0 +1,19 @@
+m8:
+
+一个uart 控制器 
+
+uart 设备
+    uart_ao: "GPIOAO_0", "GPIOAO_1"                          
+
+    uart_0: "GPIOX_12", "GPIOX_13", "GPIOX_14", "GPIOX_15"
+
+    uart_1: "GPIOX_16", "GPIOX_17", "GPIOX_18", "GPIOX_19"   
+
+    uart_2:
+
+    uart_3:
+
+
+    串口
+    smartcard
+    蓝牙

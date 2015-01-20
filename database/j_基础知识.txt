@@ -1,0 +1,28 @@
+
+
+关系模型        (就是指二维表格模型, 每一行为一个完整的数据)
+关系型数据库
+SQL             (结构化查询语言, 用于存取数据以及查询、更新和管理关系数据库系统)
+
+
+android sqlite (松散类型)
+
+-SQLiteOpenHelper 是一个抽象类，用来创建、打开和升级数据库的最佳实现模式.
+
+-SQLiteDatabase
+
+-Cursor  每次数据库查询都是作为Cursor 返回
+-SQLCursor
+
+-ContentValues 代表行的对象
+
+1）创建数据库
+创建一个类继承SQLiteOpenHelper, 定义静态变量, 如, DATABASE_NAME DATABASE_VERSION
+
+SQL语句，create table [表格名] (字段名 数据类型 属性, ...)
+
+SQLiteDatabase 类的 beginTransaction() 方法
+                    execSQL(String) 方法
+                    setTransactionSuccessful() 
+
+

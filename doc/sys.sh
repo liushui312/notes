@@ -43,6 +43,6 @@ echo "*********** 动态库 ***********"
 ln -s -f /usr/local/mpc-0.9/lib/libmpc.so.2 /usr/lib/libmpc.so.2
 ln -s -f /usr/local/mpc-0.9/lib/libmpc.so /usr/lib/libmpc.so
 
-#echo ""
-#echo "*********** 安装 oh-my-zsh *************"
-#curl -L https://github.com/liushui312/oh-my-zsh/raw/master/tools/install.sh | sh
+echo ""
+echo "*********** 安装 oh-my-zsh *************"
+curl -L https://github.com/liushui312/oh-my-zsh/raw/master/tools/install.sh | sh
