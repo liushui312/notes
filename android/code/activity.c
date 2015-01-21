@@ -46,6 +46,8 @@ Activity 之间传递数据
     ACTION_VIEW
     ACTION_PICK
     ACTION_GET_CONTENT
+
+    ACTION_SEND_MULTIPLE   发送数据到多个组件，用于分享
     
     2.category：类别， Gives additional information about the action.
     
