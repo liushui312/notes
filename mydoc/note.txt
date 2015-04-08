@@ -7,6 +7,15 @@ timehold2014
 http://27.154.234.214:8000/redmine/login
 
 
+vpn:
 账号：kobechenbin@gmail.com
 密码:7438970
 gla4.astrill.net
+
+
+外网 timehold.wicp.net
+内网 192.168.2.4
+外网端口 7878
+内网端口 22
+用户名 zhengjinyong
+默认密码 0000

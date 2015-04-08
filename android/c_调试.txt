@@ -1,0 +1,10 @@
+
+make recoveryimage;
+make bootimage;
+make systemimage; or make snod;
+make; 
+make otapackage;
+
+mm -B 
+--------------------------------------------------------
+

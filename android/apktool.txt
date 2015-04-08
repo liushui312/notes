@@ -1,0 +1,6 @@
+Apktool的使用：
+ 
+ *.apk的反编译：apktool d *.apk
+ *.jar的反编译：apktool d *.jar
+ *.apk的回编译：apktool b *.apk
+ *.jar的回编译：apktool b *.jar
