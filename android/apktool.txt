@@ -4,3 +4,13 @@ Apktool的使用：
  *.jar的反编译：apktool d *.jar
  *.apk的回编译：apktool b *.apk
  *.jar的回编译：apktool b *.jar
+
+Apktool安装：
+ 将 apktool apktool.jar dex2jar jd-gui 放到~/bin/ 目录下 
+
+1. apktool或者其他工具进行反编译包含smalijava字节码汇编和xml图片文件。 
+2. apkzip解压。
+3. 反编译dex成java文件。
+4. 查找对应修改的smali文件或者xml(一般广告链接)
+5. Apktool打包成apk文件
+6. 用autosign进行签名。
