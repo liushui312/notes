@@ -19,3 +19,10 @@ android.os.Process.setThreadPriority （int priority）
   long  blockSize = sf.getBlockSize();
   long  blockCount = sf.getBlockCount();
   long size = blockSize*blockCount/1024/1024/1024; // bit: GB
+
+3. 调用java堆栈
+StackTraceElement[] elements = Thread.currentThread().getStackTrace();
+for(StackTraceElement ele:elements)
+{
+         Log.i("TAG",ele.toString());
+}
